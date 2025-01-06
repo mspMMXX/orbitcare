@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">orbitcare</string>
+    <string name="note_text_sign_up">Notieren Sie sich die Organisation-ID. Diese wird für die Registrierung der Mitarbeiter benötigt.</string>
+</resources>
