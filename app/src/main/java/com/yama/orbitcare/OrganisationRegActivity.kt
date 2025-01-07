@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class SignInActivity : AppCompatActivity() {
+class OrganisationRegActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_signin)
+        setContentView(R.layout.activity_organisation_reg)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -20,15 +20,15 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    // Button - opens OrgSignUpActivity
-    fun goToOrgClick(view: View) {
-        val goToOrg = Intent(this, OrgSignUpActivity::class.java)
-        startActivity(goToOrg)
-    }
+    // Button - öffnet die MitarbeiterRegActivity
+    fun mitarbeiterRegButton(view: View) {
+        val mitarbeiterRegActivity = Intent(this, MitarbeiterRegActivity::class.java)
+        startActivity(mitarbeiterRegActivity)
 
-    // Button - opens EmployeeSignUpActivity
-    fun goToEmplClick(view:View) {
-        val goToEmpl = Intent(this, EmployeeSignUpActivity::class.java)
-        startActivity(goToEmpl)
+    }
+    // Button - öffnet die AnmeldenActivity
+    fun anmeldenButton(view: View) {
+        val anmeldenActivity = Intent(this, AnmeldenActivity::class.java)
+        startActivity(anmeldenActivity)
     }
 }

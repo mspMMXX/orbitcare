@@ -5,101 +5,103 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInActivity">
+    tools:context=".AnmeldenActivity">
 
     <ImageView
-    android:id="@+id/logo"
+    android:id="@+id/logoImageView"
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:layout_marginStart="70dp"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="70dp"
     android:src="@mipmap/ic_orbitcare_logo_round"
+    android:contentDescription="@null"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
+        android:id="@+id/emailEditText"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
-        android:inputType="text"
-        android:hint="E-Mail"
+        android:textSize="16sp"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email_text"
+        android:autofillHints="emailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
 
     <EditText
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
+        android:id="@+id/passwortEditText"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:inputType="textPassword"
         android:importantForAutofill="no"
         android:imeOptions="actionDone"
-        android:hint="Passwort bestätigen"
+        android:hint="@string/passwort_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
 
     <Button
-        android:id="@+id/signInButton"
-        android:layout_width="300dp"
+        android:id="@+id/anmeldenButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
-        android:text="Anmelden"
+        android:text="@string/anmelden_button_titel"
         android:background="@color/orbitBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/passwortEditText" />
 
     <Button
-        android:id="@+id/goToOrgSignUpButton"
+        android:id="@+id/orgRegButton"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="70dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:text="Organisation Registrieren"
-        android:onClick="goToOrgClick"
+        android:text="@string/org_reg_button_titel"
+        android:onClick="orgRegButton"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signInButton" />
+        app:layout_constraintTop_toBottomOf="@+id/anmeldenButton" />
 
     <Button
-        android:id="@+id/goToEmployeeSignUpButton"
+        android:id="@+id/mitarbeiterRegButton"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="70dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:text="Mitarbeiter Registrieren"
-        android:onClick="goToEmplClick"
+        android:text="@string/mitarbeiter_reg_button_titel"
+        android:onClick="mitarbeiterRegButton"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goToOrgSignUpButton" />
+        app:layout_constraintTop_toBottomOf="@+id/orgRegButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">orbitcare</string>
-    <string name="note_text_sign_up">Notieren Sie sich die Organisation-ID. Diese wird für die Registrierung der Mitarbeiter benötigt.</string>
+    <string name="anmelden_button_titel">Anmelden</string>
+    <string name="mitarbeiter_reg_button_titel">Mitarbeiter Registrieren</string>
+    <string name="org_reg_button_titel">Organisation Registrieren</string>
+    <string name="org_id_hint_text">Organisation-ID</string>
+    <string name="org_name_text">Organisation-Name</string>
+    <string name="strasse_text">Straße</string>
+    <string name="hausnummer_text">Hausnummer</string>
+    <string name="plz_text">PLZ</string>
+    <string name="ort_text">Ort</string>
+
+    <string name="vorname_text">Vorname</string>
+    <string name="nachname_text">Nachname</string>
+    <string name="telefonnumer_text">Telefonnummer</string>
+    <string name="email_text">E-Mail</string>
+    <string name="passwort_text">Passwort</string>
+    <string name="passwort_bestaetigen_text">Passwort bestätigen</string>
+    <string name="regButtonTitel">Registrieren</string>
+    <string name="hinweis_text_sign_up">Notieren Sie sich die Organisation-ID. Diese wird für die Registrierung der Mitarbeiter benötigt.</string>
 </resources>

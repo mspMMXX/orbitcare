@@ -5,178 +5,187 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OrgSignUpActivity">
+    tools:context=".MitarbeiterRegActivity">
 
     <ImageView
-        android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="70dp"
-        android:src="@mipmap/ic_orbitcare_logo_round"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:id="@+id/logoImageView"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_marginStart="70dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="70dp"
+    android:contentDescription="@null"
+    android:src="@mipmap/ic_orbitcare_logo_round"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/noteText"
+    <EditText
+        android:id="@+id/organisationIDEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:gravity="center"
-        android:text="@string/note_text_sign_up"
-        android:textColor="#CA1212"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
-
-    <EditText
-        android:id="@+id/organisationID"
-        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:inputType="text"
-        android:hint="Organisation-ID"
+        android:hint="@string/org_id_hint_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteText" />
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
 
     <EditText
-        android:id="@+id/organisationName"
-        android:layout_width="wrap_content"
+        android:id="@+id/vornameEditText"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:inputType="text"
-        android:hint="Organisation-Name"
+        android:hint="@string/vorname_text"
+        android:autofillHints="name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/organisationID" />
+        app:layout_constraintTop_toBottomOf="@+id/organisationIDEditText" />
 
     <EditText
-        android:id="@+id/street"
-        android:layout_width="wrap_content"
+        android:id="@+id/nachnameEditText"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:inputType="text"
-        android:hint="Straße"
+        android:hint="@string/nachname_text"
+        android:autofillHints="name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/organisationName" />
+        app:layout_constraintTop_toBottomOf="@+id/vornameEditText" />
 
     <EditText
-        android:id="@+id/houseNumber"
-        android:layout_width="wrap_content"
+        android:id="@+id/telefonEditText"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:inputType="text"
-        android:hint="Hausnummer"
+        android:hint="@string/telefonnumer_text"
+        android:autofillHints="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/street" />
+        app:layout_constraintTop_toBottomOf="@+id/nachnameEditText" />
 
     <EditText
-        android:id="@+id/plz"
-        android:layout_width="wrap_content"
+        android:id="@+id/emailEditText"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
-        android:inputType="text"
-        android:hint="PLZ"
+        android:textSize="16sp"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email_text"
+        android:autofillHints="emailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/houseNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/telefonEditText" />
 
     <EditText
-        android:id="@+id/city"
-        android:layout_width="wrap_content"
+        android:id="@+id/passwortEditText"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:ems="16"
-        android:textSize="16dp"
-        android:inputType="text"
-        android:hint="Ort"
+        android:textSize="16sp"
+        android:inputType="textPassword"
+        android:importantForAutofill="no"
+        android:imeOptions="actionDone"
+        android:hint="@string/passwort_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plz" />
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+
+    <EditText
+        android:id="@+id/passwortBestaetigenEditText"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="70dp"
+        android:ems="16"
+        android:textSize="16sp"
+        android:inputType="textPassword"
+        android:importantForAutofill="no"
+        android:imeOptions="actionDone"
+        android:hint="@string/passwort_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwortEditText" />
 
     <Button
-        android:id="@+id/signButton"
-        android:layout_width="300dp"
+        android:id="@+id/regButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
-        android:text="Organisation Registrieren"
+        android:text="@string/regButtonTitel"
         android:background="@color/orbitBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/city" />
+        app:layout_constraintTop_toBottomOf="@+id/passwortBestaetigenEditText" />
 
     <Button
-        android:id="@+id/goToEmployeeSignUpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:id="@+id/orgRegButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="onEmployeeSignUpClick"
-        android:text="Mitarbeiter Registrieren"
+        android:text="@string/org_reg_button_titel"
+        android:onClick="orgRegButton"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signButton" />
+        app:layout_constraintTop_toBottomOf="@+id/regButton" />
 
     <Button
-        android:id="@+id/goToSignInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:id="@+id/anmeldenButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="70dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:text="Anmelden"
-        android:onClick="goToSignInButton"
+        android:text="@string/anmelden_button_titel"
+        android:onClick="anmeldenButton"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goToEmployeeSignUpButton" />
-
+        app:layout_constraintTop_toBottomOf="@+id/orgRegButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
