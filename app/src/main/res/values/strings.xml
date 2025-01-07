@@ -1,21 +1,21 @@
 <resources>
     <string name="app_name">orbitcare</string>
-    <string name="anmelden_button_titel">Anmelden</string>
-    <string name="mitarbeiter_reg_button_titel">Mitarbeiter Registrieren</string>
-    <string name="org_reg_button_titel">Organisation Registrieren</string>
-    <string name="org_id_hint_text">Organisation-ID</string>
+    <string name="signin_button_title">Anmelden</string>
+    <string name="employee_signup_button_title">Mitarbeiter Registrieren</string>
+    <string name="organisation_signup_button_title">Organisation Registrieren</string>
+    <string name="organisation_id_hint_text">Organisation-ID</string>
     <string name="org_name_text">Organisation-Name</string>
-    <string name="strasse_text">Straße</string>
-    <string name="hausnummer_text">Hausnummer</string>
+    <string name="street_text">Straße</string>
+    <string name="housenumber_text">Hausnummer</string>
     <string name="plz_text">PLZ</string>
-    <string name="ort_text">Ort</string>
+    <string name="city_text">Ort</string>
 
-    <string name="vorname_text">Vorname</string>
-    <string name="nachname_text">Nachname</string>
-    <string name="telefonnumer_text">Telefonnummer</string>
+    <string name="firstname_text">Vorname</string>
+    <string name="lastname_text">Nachname</string>
+    <string name="phone_text">Telefonnummer</string>
     <string name="email_text">E-Mail</string>
-    <string name="passwort_text">Passwort</string>
-    <string name="passwort_bestaetigen_text">Passwort bestätigen</string>
-    <string name="regButtonTitel">Registrieren</string>
-    <string name="hinweis_text_sign_up">Notieren Sie sich die Organisation-ID. Diese wird für die Registrierung der Mitarbeiter benötigt.</string>
+    <string name="password_text">Passwort</string>
+    <string name="confirm_password_text">Passwort bestätigen</string>
+    <string name="organisation_button_title">Registrieren</string>
+    <string name="warning_text_sign_up">Notieren Sie sich die Organisation-ID. Diese wird für die Registrierung der Mitarbeiter benötigt.</string>
 </resources>

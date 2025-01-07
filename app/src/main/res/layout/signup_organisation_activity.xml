@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OrganisationRegActivity">
+    tools:context=".SignUpOrganisationActivity">
 
     <ImageView
         android:id="@+id/logoImageView"
@@ -21,14 +21,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/hinweisTextView"
+        android:id="@+id/hintTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
         android:gravity="center"
-        android:text="@string/hinweis_text_sign_up"
+        android:text="@string/warning_text_sign_up"
         android:textColor="#CA1212"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,11 +45,11 @@
         android:ems="16"
         android:textSize="16sp"
         android:inputType="text"
-        android:hint="@string/org_id_hint_text"
+        android:hint="@string/organisation_id_hint_text"
         android:autofillHints="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hinweisTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/hintTextView" />
 
     <EditText
         android:id="@+id/organisationNameEditText"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/organisationIDEditText" />
 
     <EditText
-        android:id="@+id/strasseEditText"
+        android:id="@+id/streetEditText"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
@@ -78,7 +78,7 @@
         android:ems="16"
         android:textSize="16sp"
         android:inputType="text"
-        android:hint="@string/strasse_text"
+        android:hint="@string/street_text"
         android:autofillHints="postalAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/organisationNameEditText" />
 
     <EditText
-        android:id="@+id/hausnummerEditText"
+        android:id="@+id/housenumberEditText"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
@@ -95,12 +95,12 @@
         android:ems="16"
         android:textSize="16sp"
         android:inputType="text"
-        android:hint="@string/hausnummer_text"
+        android:hint="@string/housenumber_text"
         android:autofillHints="postalAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/strasseEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/streetEditText" />
 
     <EditText
         android:id="@+id/plzEditText"
@@ -117,10 +117,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hausnummerEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/housenumberEditText" />
 
     <EditText
-        android:id="@+id/ortEditText"
+        android:id="@+id/cityEditText"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
@@ -129,7 +129,7 @@
         android:ems="16"
         android:textSize="16sp"
         android:inputType="text"
-        android:hint="@string/ort_text"
+        android:hint="@string/city_text"
         android:autofillHints="postalAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
@@ -137,20 +137,20 @@
         app:layout_constraintTop_toBottomOf="@+id/plzEditText" />
 
     <Button
-        android:id="@+id/orgRegButton"
+        android:id="@+id/organisationSignUpButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
-        android:text="@string/org_reg_button_titel"
+        android:text="@string/organisation_signup_button_title"
         android:background="@color/orbitBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ortEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/cityEditText" />
 
     <Button
-        android:id="@+id/mitarbeiterRegButton"
+        android:id="@+id/employeeSignUpButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="70dp"
@@ -159,16 +159,16 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="mitarbeiterRegButton"
-        android:text="@string/mitarbeiter_reg_button_titel"
+        android:onClick="employeeSignUpButton"
+        android:text="@string/employee_signup_button_title"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orgRegButton" />
+        app:layout_constraintTop_toBottomOf="@+id/organisationSignUpButton" />
 
     <Button
-        android:id="@+id/anmeldenButton"
+        android:id="@+id/signInButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="70dp"
@@ -177,13 +177,13 @@
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:text="@string/anmelden_button_titel"
-        android:onClick="anmeldenButton"
+        android:text="@string/signin_button_title"
+        android:onClick="signInButton"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mitarbeiterRegButton" />
+        app:layout_constraintTop_toBottomOf="@+id/employeeSignUpButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

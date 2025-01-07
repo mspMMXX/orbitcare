@@ -13,13 +13,13 @@
         android:theme="@style/Theme.Orbitcare"
         tools:targetApi="31">
         <activity
-            android:name=".AnmeldenActivity"
+            android:name=".SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".MitarbeiterRegActivity"
+            android:name=".SignUpEmployeeActivity"
             android:exported="false" />
         <activity
-            android:name=".OrganisationRegActivity"
+            android:name=".SignUpOrganisationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
