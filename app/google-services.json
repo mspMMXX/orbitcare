@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "386208068316",
+    "project_id": "orbitcare-63220",
+    "storage_bucket": "orbitcare-63220.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386208068316:android:ab2ce2b7ea2e0b3c95fa19",
+        "android_client_info": {
+          "package_name": "com.yama.orbitcare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJhc-HECN8GTAbQQovG08uRH1HRi4KvCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

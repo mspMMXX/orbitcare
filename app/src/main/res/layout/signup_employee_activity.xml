@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
 
     <EditText
-        android:id="@+id/firstnameEditText"
+        android:id="@+id/firstNameEditText"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/organisationIDEditText" />
 
     <EditText
-        android:id="@+id/lastnameEditText"
+        android:id="@+id/lastNameEditText"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="70dp"
@@ -68,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstnameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/firstNameEditText" />
 
     <EditText
         android:id="@+id/phoneEditText"
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastnameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/lastNameEditText" />
 
     <EditText
         android:id="@+id/mailEditText"
