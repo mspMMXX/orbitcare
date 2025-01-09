@@ -1,5 +1,6 @@
 package com.yama.orbitcare.features.calendar
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.GridLayout
@@ -77,6 +78,33 @@ class CalendarActivity : AppCompatActivity() {
         for (dayOfMonth in 1..maxDaysInMonth) {
             // addDay
         }
+    }
+
+    private fun addDay(dayOfMonth: Int) {
+        val dayView = TextView(this).apply {
+            text = dayOfMonth.toString()
+            gravity = Gravity.CENTER
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = 0
+                height = GridLayout.LayoutParams.WRAP_CONTENT
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                setMargins(8, 8, 8, 8)
+            }
+            setPadding(8, 16, 8, 16)
+
+            // Check if day is today
+            if (isCurrentDay(dayOfMonth)) {
+                setBackgroundResource(R.drawable.current_day_background)
+                setTextColor(Color.WHITE)
+            }
+        }
+        calendarGrid.addView(dayView)
+    }
+
+    private fun isCurrentDay(dayOfMonth: Int): Boolean {
+        return calendar.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                calendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+                dayOfMonth == currentDate.get(Calendar.DAY_OF_MONTH)
     }
 
     private fun setupCalendar() {
