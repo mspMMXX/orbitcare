@@ -36,6 +36,17 @@ class CalendarActivity : AppCompatActivity() {
         monthYearText = findViewById(R.id.monthYearText)
         prevMonth = findViewById(R.id.prevMonth)
         nextMonth = findViewById(R.id.nextMonth)
+
+        // Navigation
+        prevMonth.setOnClickListener{
+            calendar.add(Calendar.MONTH, -1)
+            // updateCalendar()
+        }
+
+        nextMonth.setOnClickListener {
+            calendar.add(Calendar.MONTH, +1)
+            // updateCalender()
+        }
     }
 
     private fun setupCalendar() {
