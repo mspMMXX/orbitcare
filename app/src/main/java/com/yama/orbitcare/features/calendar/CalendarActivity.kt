@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.yama.orbitcare.R
 import java.text.SimpleDateFormat
@@ -85,6 +86,17 @@ class CalendarActivity : AppCompatActivity() {
             if (isCurrentDay(dayOfMonth)) {
                 setBackgroundResource(R.drawable.current_day_background)
                 setTextColor(Color.WHITE)
+            }
+
+            setOnClickListener {
+                val date = Calendar.getInstance().apply {
+                    set(calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        dayOfMonth)
+                }
+                Toast.makeText(context,
+                    SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(date.time),
+                    Toast.LENGTH_SHORT).show()
             }
         }
         calendarGrid.addView(dayView)
