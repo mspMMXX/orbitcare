@@ -25,7 +25,7 @@ class CalendarActivity : AppCompatActivity() {
 
         // Set date
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
-        selectedDateText.text = "Ausgewähltes Datum: ${dateFormat.format(Date())}" // TODO: Set String
+        selectedDateText.text = getString(R.string.selected_date, dateFormat.format(Date()))  // TODO: Set String
     }
 
     private fun setupCalendar() {
