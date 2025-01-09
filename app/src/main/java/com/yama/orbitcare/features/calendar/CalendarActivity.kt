@@ -11,27 +11,30 @@ import java.util.Locale
 
 class CalendarActivity : AppCompatActivity() {
 
-    private lateinit var calenderView: CalendarView
+    private lateinit var calendarView: CalendarView
     private lateinit var selectedDateText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
+
+        initializeViews()
+        setupCalendar()
     }
 
     private fun initializeViews() {
-        calenderView = findViewById(R.id.calendarView)
+        calendarView = findViewById(R.id.calendarView)
         selectedDateText = findViewById(R.id.selectedDateText)
 
         // Set date
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
-        selectedDateText.text = getString(R.string.selected_date, dateFormat.format(Date()))  // TODO: Set String
+        selectedDateText.text = getString(R.string.selected_date, dateFormat.format(Date()))
     }
 
     private fun setupCalendar() {
-        calenderView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val date = String.format(Locale.GERMAN, "%02d.%02d.%d", dayOfMonth, (month + 1), year)
-            selectedDateText.text = "Ausgewähltes Datum: $date" // TODO: Set String
+            selectedDateText.text = getString(R.string.selected_date, date.format(Date()))
         }
     }
 }
