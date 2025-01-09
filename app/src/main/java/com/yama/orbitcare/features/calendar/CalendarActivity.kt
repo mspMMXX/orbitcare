@@ -2,14 +2,13 @@ package com.yama.orbitcare.features.calendar
 
 import android.os.Bundle
 import android.view.Gravity
-import android.widget.CalendarView
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.yama.orbitcare.R
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.Calendar
 import java.util.Locale
 
 class CalendarActivity : AppCompatActivity() {
@@ -18,6 +17,11 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var monthYearText: TextView
     private lateinit var prevMonth: ImageButton
     private lateinit var nextMonth: ImageButton
+
+    // Calendar variables
+    private val calendar = Calendar.getInstance()
+    private val currentDate = Calendar.getInstance()
+    private val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +39,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun setupCalendar() {
-        // Beispiel für das Hinzufügen eines Tages
+        // Add Day
         for (i in 1..31) {
             val dayView = TextView(this).apply {
                 text = "$i"
@@ -51,13 +55,13 @@ class CalendarActivity : AppCompatActivity() {
             calendarGrid.addView(dayView)
         }
 
-        // Click Listener für Navigation
+        // Click Listener for Navigation
         prevMonth.setOnClickListener {
-            // Vorheriger Monat
+            // Prev Month
         }
 
         nextMonth.setOnClickListener {
-            // Nächster Monat
+            // Next Month
         }
     }
 }
