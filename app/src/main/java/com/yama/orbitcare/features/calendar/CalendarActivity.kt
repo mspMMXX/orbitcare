@@ -58,8 +58,25 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.removeAllViews()
 
         // First day of month
-        val firstDateOfMonth = calendar.clone() as Calendar
-        firstDateOfMonth.set(Calendar.DAY_OF_MONTH, 1)
+        val firstDayOfMonth = calendar.clone() as Calendar
+        firstDayOfMonth.set(Calendar.DAY_OF_MONTH, 1)
+
+        // Days of Month
+        val maxDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        // Monday as starting day
+        var startDayOfWeek = firstDayOfMonth.get(Calendar.DAY_OF_WEEK) - 2
+        if (startDayOfWeek < 0) startDayOfWeek = 6
+
+        // Empty spaces for days before Month begins
+        for (i in 0 until startDayOfWeek) {
+            // addEmptyDay
+        }
+
+        // Add days of Month
+        for (dayOfMonth in 1..maxDaysInMonth) {
+            // addDay
+        }
     }
 
     private fun setupCalendar() {
