@@ -139,11 +139,13 @@ class CalendarActivity : AppCompatActivity() {
 
         // Click Listener for Navigation
         prevMonth.setOnClickListener {
-            // Prev Month
+            calendar.add(Calendar.MONTH, -1)
+            updateCalendarView()
         }
 
         nextMonth.setOnClickListener {
-            // Next Month
+            calendar.add(Calendar.MONTH, 1)
+            updateCalendarView()
         }
     }
 }
