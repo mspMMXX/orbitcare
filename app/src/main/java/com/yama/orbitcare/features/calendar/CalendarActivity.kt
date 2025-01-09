@@ -71,12 +71,12 @@ class CalendarActivity : AppCompatActivity() {
 
         // Empty spaces for days before Month begins
         for (i in 0 until startDayOfWeek) {
-            // addEmptyDay
+            addEmptyDay()
         }
 
         // Add days of Month
         for (dayOfMonth in 1..maxDaysInMonth) {
-            // addDay
+            addDay(dayOfMonth)
         }
     }
 
@@ -99,6 +99,19 @@ class CalendarActivity : AppCompatActivity() {
             }
         }
         calendarGrid.addView(dayView)
+    }
+
+    private fun addEmptyDay() {
+        val emptyView = TextView(this).apply {
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = 0
+                height = GridLayout.LayoutParams.WRAP_CONTENT
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                setMargins(8, 8, 8, 8)
+            }
+            setPadding(8, 16, 8, 16)
+        }
+        calendarGrid.addView(emptyView)
     }
 
     private fun isCurrentDay(dayOfMonth: Int): Boolean {
