@@ -24,7 +24,7 @@ class CalendarActivity : AppCompatActivity() {
     private val calendar = Calendar.getInstance()
     private val currentDate = Calendar.getInstance()
     private val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
-    private val selectedDay: Int? = null
+    private var selectedDay: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +100,10 @@ class CalendarActivity : AppCompatActivity() {
             }
 
             setOnClickListener {
+                selectedDay = if (selectedDay == dayOfMonth) null else dayOfMonth
+
+                updateCalendarView()
+
                 val date = Calendar.getInstance().apply {
                     set(calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
