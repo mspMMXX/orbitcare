@@ -1,7 +1,10 @@
 package com.yama.orbitcare.features.calendar
 
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.CalendarView
+import android.widget.GridLayout
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.yama.orbitcare.R
@@ -11,8 +14,10 @@ import java.util.Locale
 
 class CalendarActivity : AppCompatActivity() {
 
-    private lateinit var calendarView: CalendarView
-    private lateinit var selectedDateText: TextView
+    private lateinit var calendarGrid: GridLayout
+    private lateinit var monthYearText: TextView
+    private lateinit var prevMonth: ImageButton
+    private lateinit var nextMonth: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,18 +28,36 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun initializeViews() {
-        calendarView = findViewById(R.id.calendarView)
-        selectedDateText = findViewById(R.id.selectedDateText)
-
-        // Set date
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
-        selectedDateText.text = getString(R.string.selected_date, dateFormat.format(Date()))
+        calendarGrid = findViewById(R.id.calendarGrid)
+        monthYearText = findViewById(R.id.monthYearText)
+        prevMonth = findViewById(R.id.prevMonth)
+        nextMonth = findViewById(R.id.nextMonth)
     }
 
     private fun setupCalendar() {
-        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val date = String.format(Locale.GERMAN, "%02d.%02d.%d", dayOfMonth, (month + 1), year)
-            selectedDateText.text = getString(R.string.selected_date, date.format(Date()))
+        // Beispiel für das Hinzufügen eines Tages
+        for (i in 1..31) {
+            val dayView = TextView(this).apply {
+                text = "$i"
+                gravity = Gravity.CENTER
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(8, 8, 8, 8)
+                }
+                setPadding(8, 16, 8, 16)
+            }
+            calendarGrid.addView(dayView)
+        }
+
+        // Click Listener für Navigation
+        prevMonth.setOnClickListener {
+            // Vorheriger Monat
+        }
+
+        nextMonth.setOnClickListener {
+            // Nächster Monat
         }
     }
 }
