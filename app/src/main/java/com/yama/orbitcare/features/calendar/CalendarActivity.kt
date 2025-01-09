@@ -1,21 +1,37 @@
 package com.yama.orbitcare.features.calendar
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.CalendarView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.yama.orbitcare.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CalendarActivity : AppCompatActivity() {
+
+    private lateinit var calenderView: CalendarView
+    private lateinit var selectedDateText: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_calendar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+    }
+
+    private fun initializeViews() {
+        calenderView = findViewById(R.id.calendarView)
+        selectedDateText = findViewById(R.id.selectedDateText)
+
+        // Set date
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN)
+        selectedDateText.text = "Ausgewähltes Datum: ${dateFormat.format(Date())}" // TODO: Set String
+    }
+
+    private fun setupCalendar() {
+        calenderView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val date = String.format(Locale.GERMAN, "%02d.%02d.%d", dayOfMonth, (month + 1), year)
+            selectedDateText.text = "Ausgewähltes Datum: $date" // TODO: Set String
         }
     }
 }
