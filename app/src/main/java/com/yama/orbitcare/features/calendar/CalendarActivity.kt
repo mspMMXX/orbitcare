@@ -24,6 +24,7 @@ class CalendarActivity : AppCompatActivity() {
     private val calendar = Calendar.getInstance()
     private val currentDate = Calendar.getInstance()
     private val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
+    private val selectedDay: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +82,16 @@ class CalendarActivity : AppCompatActivity() {
                 setMargins(8, 8, 8, 8)
             }
             setPadding(8, 16, 8, 16)
+
+            when {
+                isCurrentDay(dayOfMonth) -> {
+                    setBackgroundResource(R.drawable.current_day_background)
+                    setTextColor(Color.WHITE)
+                }
+                dayOfMonth == selectedDay -> {
+                    setBackgroundResource(R.drawable.selected_day_background)
+                }
+            }
 
             // Check if day is today
             if (isCurrentDay(dayOfMonth)) {
