@@ -29,6 +29,7 @@ class CalendarActivity : AppCompatActivity() {
 
         initializeViews()
         setupCalendar()
+        updateCalendarView()
     }
 
     private fun initializeViews() {
@@ -40,13 +41,25 @@ class CalendarActivity : AppCompatActivity() {
         // Navigation
         prevMonth.setOnClickListener{
             calendar.add(Calendar.MONTH, -1)
-            // updateCalendar()
+            updateCalendarView()
         }
 
         nextMonth.setOnClickListener {
             calendar.add(Calendar.MONTH, +1)
-            // updateCalender()
+            updateCalendarView()
         }
+    }
+
+    private fun updateCalendarView() {
+        // Update Month and Year in Header
+        monthYearText.text = dateFormat.format(calendar.time)
+
+        // Empty Grid
+        calendarGrid.removeAllViews()
+
+        // First day of month
+        val firstDateOfMonth = calendar.clone() as Calendar
+        firstDateOfMonth.set(Calendar.DAY_OF_MONTH, 1)
     }
 
     private fun setupCalendar() {
