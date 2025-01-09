@@ -144,6 +144,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
         android:text="@string/organisation_signup_button_title"
+        android:onClick="organisationSignUpButton"
         android:background="@color/orbitBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
