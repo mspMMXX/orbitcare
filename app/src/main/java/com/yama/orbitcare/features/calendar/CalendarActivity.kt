@@ -49,6 +49,9 @@ class CalendarActivity : AppCompatActivity() {
         // Empty Grid
         calendarGrid.removeAllViews()
 
+        // Add Weekdays Headers
+        addWeekDayHeaders()
+
         // First day of month
         val firstDayOfMonth = calendar.clone() as Calendar
         firstDayOfMonth.set(Calendar.DAY_OF_MONTH, 1)
@@ -68,6 +71,25 @@ class CalendarActivity : AppCompatActivity() {
         // Add days of Month
         for (dayOfMonth in 1..maxDaysInMonth) {
             addDay(dayOfMonth)
+        }
+    }
+
+    private fun addWeekDayHeaders() {
+        val weekDays = arrayOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
+        for (day in weekDays) {
+            val dayView = TextView(this).apply {
+                text = day
+                gravity = Gravity.CENTER
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(8, 8, 8, 8)
+                }
+                setPadding(8, 16, 8, 16)
+                setTextColor(Color.GRAY) // Wochentage in Grau
+            }
+            calendarGrid.addView(dayView)
         }
     }
 
