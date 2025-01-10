@@ -159,22 +159,6 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun setupCalendar() {
-        // Add Day
-        for (i in 1..31) {
-            val dayView = TextView(this).apply {
-                text = "$i"
-                gravity = Gravity.CENTER
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = GridLayout.LayoutParams.WRAP_CONTENT
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    setMargins(8, 8, 8, 8)
-                }
-                setPadding(8, 16, 8, 16)
-            }
-            calendarGrid.addView(dayView)
-        }
-
         // Click Listener for Navigation
         prevMonth.setOnClickListener {
             calendar.add(Calendar.MONTH, -1)
