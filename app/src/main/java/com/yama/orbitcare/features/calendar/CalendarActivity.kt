@@ -97,13 +97,20 @@ class CalendarActivity : AppCompatActivity() {
         val dayView = TextView(this).apply {
             text = dayOfMonth.toString()
             gravity = Gravity.CENTER
+
+            // Variables for max height per day
+            val displayMetrics = resources.displayMetrics
+            val screenHeight = displayMetrics.heightPixels
+            val dayHeight = screenHeight / 8 // 6 Rows + Header + Week days
+
             layoutParams = GridLayout.LayoutParams().apply {
                 width = 0
-                height = GridLayout.LayoutParams.WRAP_CONTENT
+                height = dayHeight
                 columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 setMargins(8, 8, 8, 8)
             }
             setPadding(8, 16, 8, 16)
+            textSize = 16f
 
             when {
                 isCurrentDay(dayOfMonth) -> {
