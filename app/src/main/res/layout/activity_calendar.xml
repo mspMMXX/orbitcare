@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Header mit Monatsnavigation -->
+    <!-- Headers with Month navigation -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,24 +35,23 @@
             android:src="@drawable/ic_chevron_right" />
     </LinearLayout>
 
-    <!-- Wochentage -->
+    <!-- Weekdays -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="7"
         android:paddingHorizontal="16dp">
 
-        <!-- Hier fügen wir die Wochentage als TextViews hinzu -->
+        <!-- Add Weekdays as TextViews -->
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:gravity="center"
-            android:text="Mo" />
-        <!-- Weitere Wochentage analog -->
+            android:gravity="center"/>
+
     </GridLayout>
 
-    <!-- Kalendertage -->
+    <!-- Calendar days -->
     <GridLayout
         android:id="@+id/calendarGrid"
         android:layout_width="match_parent"
@@ -60,8 +59,6 @@
         android:layout_weight="1"
         android:columnCount="7"
         android:paddingHorizontal="16dp">
-
-        <!-- Die Kalendertage werden dynamisch in Kotlin hinzugefügt -->
     </GridLayout>
 
 </LinearLayout>
