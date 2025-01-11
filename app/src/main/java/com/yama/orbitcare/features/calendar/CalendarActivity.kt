@@ -62,7 +62,42 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun showViewSelectionDialog() {
+        // Create dialog for view selection
+        val items = arrayOf("Monatsansicht", "Wochenansicht", "Tagesansicht")
+        var selectedView = 0 // Default = Monatsansicht
 
+        AlertDialog.Builder(this)
+            .setTitle("Select Calendar View")
+            .setSingleChoiceItems(items, selectedView) { dialog, which ->
+                selectedView = which
+            }
+            .setPositiveButton("Confirm") { dialog, _ ->
+                when (selectedView) {
+                    0 -> switchToMonthView()
+                    1 -> switchToWeekView()
+                    2 -> switchToDayView()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
+    }
+
+    private fun switchToMonthView() {
+        // Placeholder for month view
+        Toast.makeText(this, "zu Monatsansicht wechseln", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun switchToWeekView() {
+        // Placeholder for month view
+        Toast.makeText(this, "zu Wochenansicht wechseln", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun switchToDayView() {
+        // Placeholder for month view
+        Toast.makeText(this, "zu Tagesansicht wechseln", Toast.LENGTH_SHORT).show()
     }
 
     private fun showAddEventDialog() {
