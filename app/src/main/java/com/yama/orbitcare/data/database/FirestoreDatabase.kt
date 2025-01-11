@@ -2,17 +2,15 @@ package com.yama.orbitcare.data.database
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
 import com.yama.orbitcare.data.models.*
-import kotlin.math.exp
 
 class FirestoreDatabase {
 
     private val db = FirebaseFirestore.getInstance()
 
     //Hinzufügen eines Dokuments in eine Sammlung
+
     fun addOrganisation(organisation: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
             .add(organisation)
@@ -42,6 +40,7 @@ class FirestoreDatabase {
     }
 
     //Laden aller Dokumente einer Sammlung -> mit Callback
+
     fun getAllOrganisations(onComplete: (MutableList<Organisation>?) -> Unit) {
         db.collection("Organisation")
             .get()
@@ -132,6 +131,7 @@ class FirestoreDatabase {
     }
 
     //Laden von Dokumente einer Sammlung mittels ID und Callback
+
     fun getOrganisation(documentId: String, onComplete: (Organisation?) -> Unit) {
         val doc = db.collection("Organisation").document(documentId)
             doc.get()
@@ -207,5 +207,39 @@ class FirestoreDatabase {
                 Log.d(TAG, "Fehler beim Laden des Event-Dokuments.", e)
                 onComplete(null)
             }
+    }
+
+    //Ändern eines Dokuments mit der ID
+
+    fun updateOrganisation(organisationID: String, updateOrganisation: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("Organisation")
+            .document(organisationID)
+            .set(updateOrganisation)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+
+    fun updateEmployee(employeeID: String, updateEmployee: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("Organisation")
+            .document(employeeID)
+            .set(updateEmployee)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+
+    fun updateClient(clientID: String, updateClient: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("Organisation")
+            .document(clientID)
+            .set(updateClient)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+
+    fun updateEvent(eventID: String, updateEvent: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("Organisation")
+            .document(eventID)
+            .set(updateEvent)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e) }
     }
 }
