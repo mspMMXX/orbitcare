@@ -23,6 +23,7 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var prevMonth: ImageButton
     private lateinit var nextMonth: ImageButton
     private lateinit var addEventButton: FloatingActionButton
+    private lateinit var settingsButton: FloatingActionButton
 
     // Calendar variables
     private val calendar = Calendar.getInstance()
@@ -38,6 +39,7 @@ class CalendarActivity : AppCompatActivity() {
         setupCalendar()
         updateCalendarView()
         setupEventButton()
+        // setupSettingsButton()
     }
 
     private fun initializeViews() {
@@ -46,12 +48,21 @@ class CalendarActivity : AppCompatActivity() {
         prevMonth = findViewById(R.id.prevMonth)
         nextMonth = findViewById(R.id.nextMonth)
         addEventButton = findViewById(R.id.addEventButton)
+        settingsButton = findViewById(R.id.settingsButton)
     }
 
     private fun setupEventButton() {
         addEventButton.setOnClickListener{
             showAddEventDialog()
         }
+
+        settingsButton.setOnClickListener{
+            // showViewSelectionDialog()
+        }
+    }
+
+    private fun showViewSelectionDialog() {
+
     }
 
     private fun showAddEventDialog() {
