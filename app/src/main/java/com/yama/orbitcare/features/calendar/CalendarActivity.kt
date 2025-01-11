@@ -74,6 +74,24 @@ class CalendarActivity : AppCompatActivity() {
         } else {
             Calendar.getInstance().time
         }
+
+        dateEdit.setText(SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(currentDate))
+        timeEdit.setText(SimpleDateFormat("HH:mm", Locale.GERMAN).format(currentDate))
+
+        builder.setView(dialogView)
+            .setTitle("Neues Event")
+            .setPositiveButton("Hinzufügen") { _, _ ->
+                val eventTitle = titleEdit.text.toString()
+                val eventDate = dateEdit.text.toString()
+                val eventTime = timeEdit.text.toString()
+
+                // Hier können Sie die Event-Daten speichern
+                saveEvent(eventTitle, eventDate, eventTime)
+            }
+            .setNegativeButton("Abbrechen") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 
     private fun updateCalendarView() {
