@@ -122,12 +122,6 @@ class CalendarActivity : AppCompatActivity() {
                 }
             }
 
-            // Check if day is today
-            if (isCurrentDay(dayOfMonth)) {
-                setBackgroundResource(R.drawable.current_day_background)
-                setTextColor(Color.WHITE)
-            }
-
             setOnClickListener {
                 selectedDay = if (selectedDay == dayOfMonth) null else dayOfMonth
 
