@@ -63,7 +63,7 @@
             android:layout_weight="1"
             android:columnCount="7"
             android:paddingHorizontal="16dp"
-            android:rowCount="6">
+            android:rowCount="1">
             
         </GridLayout>
 
