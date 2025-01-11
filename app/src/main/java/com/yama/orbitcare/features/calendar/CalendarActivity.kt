@@ -3,6 +3,7 @@ package com.yama.orbitcare.features.calendar
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
+import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.TextView
@@ -58,6 +59,21 @@ class CalendarActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         val inflater = layoutInflater
         val dialogView = inflater.inflate(R.layout.dialog_add_event, null)
+
+        val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
+        val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
+        val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
+
+        // Add current date as default
+        val currentDate = if (selectedDay != null) {
+            Calendar.getInstance().apply {
+                set(calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    selectedDay!!)
+            }.time
+        } else {
+            Calendar.getInstance().time
+        }
     }
 
     private fun updateCalendarView() {
