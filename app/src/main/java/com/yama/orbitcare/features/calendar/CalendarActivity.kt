@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageButton
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -296,17 +297,23 @@ class CalendarActivity : AppCompatActivity() {
             layoutParams = GridLayout.LayoutParams().apply {
                 width = 0
                 height = GridLayout.LayoutParams.WRAP_CONTENT
-                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 6f) // Breiter für den Tagesname
-                setMargins(8, 8, 8, 8)
+                columnSpec = GridLayout.spec(0, 2)
+                setMargins(8, 8, 8, 24)
             }
             setPadding(8, 16, 8, 16)
             textSize = 18f
-            setTextColor(if (isCurrentDay(calendar)) Color.WHITE else Color.BLACK)
-            if (isCurrentDay(calendar)) {
-                setBackgroundResource(R.drawable.current_day_background)
-            }
+            setTextColor(Color.BLACK)
         }
         calendarGrid.addView(dateHeader)
+
+        // ScrollView for hours
+        val scrollView = ScrollView(this).apply {
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = GridLayout.LayoutParams.MATCH_PARENT
+                height = GridLayout.LayoutParams.MATCH_PARENT
+                columnSpec = GridLayout.spec(0, 2) // Über beide Spalten
+            }
+        }
 
         // Hour View from 6 to 22
         for (hour in 6..22) {
