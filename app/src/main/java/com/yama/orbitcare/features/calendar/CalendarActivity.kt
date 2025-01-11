@@ -66,11 +66,11 @@ class CalendarActivity : AppCompatActivity() {
         var selectedView = 0 // Default = Monatsansicht
 
         AlertDialog.Builder(this)
-            .setTitle("Select Calendar View")
+            .setTitle("Wähle Kalenderansicht")
             .setSingleChoiceItems(items, selectedView) { dialog, which ->
                 selectedView = which
             }
-            .setPositiveButton("Confirm") { dialog, _ ->
+            .setPositiveButton("Bestätigen") { dialog, _ ->
                 when (selectedView) {
                     0 -> switchToMonthView()
                     1 -> switchToWeekView()
@@ -78,7 +78,7 @@ class CalendarActivity : AppCompatActivity() {
                 }
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
             }
             .show()
