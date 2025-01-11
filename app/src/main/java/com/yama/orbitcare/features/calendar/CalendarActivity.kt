@@ -327,31 +327,38 @@ class CalendarActivity : AppCompatActivity() {
 
         // Hour View from 6 to 22
         for (hour in 6..22) {
-            // Stunde anzeigen
+            // Hours
+            val hourRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            // Hourview
             val hourView = TextView(this).apply {
                 text = String.format("%02d:00", hour)
                 gravity = Gravity.CENTER_VERTICAL or Gravity.END
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = 120 // Feste Höhe für jede Stunde
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    setMargins(8, 0, 8, 0)
+                layoutParams = LinearLayout.LayoutParams(
+                    120,
+                    120
+                ).apply {
+                    marginEnd = 16
                 }
-                setPadding(8, 16, 8, 16)
                 setTextColor(Color.GRAY)
             }
-            calendarGrid.addView(hourView)
+            hourRow.addView(hourView)
 
             // Slots for Events
             val timeSlot = TextView(this).apply {
                 gravity = Gravity.TOP or Gravity.START
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = 120 // Gleiche Höhe wie Stunden
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 6f)
-                    setMargins(8, 0, 8, 0)
-                }
-                setPadding(8, 4, 8, 4)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    120
+                )
+
+                setPadding(8, 16, 8, 16)
                 background =
                     ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
 
@@ -361,8 +368,12 @@ class CalendarActivity : AppCompatActivity() {
                     showAddEventDialog() // opens dialog for new events
                 }
             }
-            calendarGrid.addView(timeSlot)
+            hourRow.addView(timeSlot)
+
+            timeContainer.addView(hourRow)
         }
+        scrollView.addView(timeContainer)
+        calendarGrid.addView(scrollView)
     }
 
     private fun addWeekDayHeaders() {
