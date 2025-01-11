@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -19,6 +20,7 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var monthYearText: TextView
     private lateinit var prevMonth: ImageButton
     private lateinit var nextMonth: ImageButton
+    private lateinit var addEventButton: FloatingActionButton
 
     // Calendar variables
     private val calendar = Calendar.getInstance()
@@ -33,6 +35,7 @@ class CalendarActivity : AppCompatActivity() {
         initializeViews()
         setupCalendar()
         updateCalendarView()
+        // addEventButton
     }
 
     private fun initializeViews() {
@@ -40,6 +43,7 @@ class CalendarActivity : AppCompatActivity() {
         monthYearText = findViewById(R.id.monthYearText)
         prevMonth = findViewById(R.id.prevMonth)
         nextMonth = findViewById(R.id.nextMonth)
+        addEventButton = findViewById(R.id.addEventButton)
     }
 
     private fun updateCalendarView() {
