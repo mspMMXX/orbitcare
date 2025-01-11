@@ -7,6 +7,7 @@ import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
@@ -44,6 +45,19 @@ class CalendarActivity : AppCompatActivity() {
         prevMonth = findViewById(R.id.prevMonth)
         nextMonth = findViewById(R.id.nextMonth)
         addEventButton = findViewById(R.id.addEventButton)
+    }
+
+    private fun setupEventButton() {
+        addEventButton.setOnClickListener{
+            // addEventDialog
+        }
+    }
+
+    private fun showAddEventDialog() {
+        // Alert Dialog to add event
+        val builder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_add_event, null)
     }
 
     private fun updateCalendarView() {
