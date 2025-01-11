@@ -28,8 +28,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="20sp"
-                android:text="Januar 1970" />
+                android:text="Januar 1970"
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/nextMonth"
@@ -51,7 +51,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:gravity="center"/>
+                android:gravity="center" />
 
         </GridLayout>
 
@@ -62,28 +62,34 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:columnCount="7"
-            android:rowCount="6"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="16dp"
+            android:rowCount="6">
+            
         </GridLayout>
 
-        <!-- Floating Action Button - Settings -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/settingsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_menu"
-            android:contentDescription="Settings Menu"/>
-
-        <!-- Floating Action Button - Add-->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addEventButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            android:contentDescription="Add Event"/>
     </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+            <!-- Floating Action Button - Settings -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="16dp"
+                android:contentDescription="Settings Menu"
+                android:src="@drawable/ic_menu" />
+            <!-- Floating Action Button - Add-->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addEventButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:contentDescription="Add Event"
+                android:src="@drawable/ic_add" />
+        </FrameLayout>
 </FrameLayout>
