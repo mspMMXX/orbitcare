@@ -162,6 +162,15 @@ class CalendarActivity : AppCompatActivity() {
         // Empty Grid
         calendarGrid.removeAllViews()
 
+        when (currentView) {
+            CalendarView.MONTH -> // updateMonthView()
+            CalendarView.WEEK -> // updateWeekView()
+            CalendarView.DAY -> // updateDayView()
+        }
+
+    }
+
+    private fun updateMonthView() {
         // Add Weekdays Headers
         addWeekDayHeaders()
 
