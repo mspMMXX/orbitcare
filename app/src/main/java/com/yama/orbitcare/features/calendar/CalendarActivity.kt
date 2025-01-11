@@ -35,7 +35,7 @@ class CalendarActivity : AppCompatActivity() {
     private var currentView = CalendarView.MONTH
 
     enum class CalendarView {
-        MONTH, WEEK, DAY
+        MONTH, WEEK, // DAY
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,7 +165,7 @@ class CalendarActivity : AppCompatActivity() {
         when (currentView) {
             CalendarView.MONTH -> updateMonthView()
             CalendarView.WEEK -> updateWeekView()
-            CalendarView.DAY -> // updateDayView()
+            // CalendarView.DAY -> // updateDayView()
         }
 
     }
@@ -253,6 +253,7 @@ class CalendarActivity : AppCompatActivity() {
                 }
             }
             calendarGrid.addView(dayView)
+        }
     }
 
     private fun addWeekDayHeaders() {
@@ -334,6 +335,12 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.addView(emptyView)
     }
 
+    private fun isCurrentDay(dayOfMonth: Int): Boolean {
+        return calendar.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                calendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+                dayOfMonth == currentDate.get(Calendar.DAY_OF_MONTH)
+    }
+
     private fun isCurrentDay(checkCalendar: Calendar): Boolean {
         return checkCalendar.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
                 checkCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
@@ -346,7 +353,7 @@ class CalendarActivity : AppCompatActivity() {
             when (currentView) {
                 CalendarView.MONTH -> calendar.add(Calendar.MONTH, -1)
                 CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, -1)
-                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, -1)
+                //CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, -1)
             }
             updateCalendarView()
         }
@@ -355,7 +362,7 @@ class CalendarActivity : AppCompatActivity() {
             when (currentView) {
                 CalendarView.MONTH -> calendar.add(Calendar.MONTH, 1)
                 CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, 1)
-                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
+                //CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
             updateCalendarView()
         }
