@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
@@ -313,6 +314,15 @@ class CalendarActivity : AppCompatActivity() {
                 height = GridLayout.LayoutParams.MATCH_PARENT
                 columnSpec = GridLayout.spec(0, 2) // Über beide Spalten
             }
+        }
+
+        // Container for Time and Events
+        val timeContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
 
         // Hour View from 6 to 22
