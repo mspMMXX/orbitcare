@@ -31,6 +31,13 @@ class CalendarActivity : AppCompatActivity() {
     private val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
     private var selectedDay: Int? = null
 
+    // Calendar View enum
+    private var currentView = CalendarView.MONTH
+
+    enum class CalendarView {
+        MONTH, WEEK, DAY
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
@@ -90,8 +97,8 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun switchToWeekView() {
-        // Placeholder for month view
-        Toast.makeText(this, "zu Wochenansicht wechseln", Toast.LENGTH_SHORT).show()
+        currentView = CalendarView.WEEK
+        updateCalendarView()
     }
 
     private fun switchToDayView() {
