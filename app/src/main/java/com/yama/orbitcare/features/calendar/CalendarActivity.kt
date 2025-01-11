@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
 import java.text.SimpleDateFormat
@@ -35,7 +36,7 @@ class CalendarActivity : AppCompatActivity() {
     private var currentView = CalendarView.MONTH
 
     enum class CalendarView {
-        MONTH, WEEK, // DAY
+        MONTH, WEEK, DAY
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,8 +103,8 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun switchToDayView() {
-        // Placeholder for month view
-        Toast.makeText(this, "zu Tagesansicht wechseln", Toast.LENGTH_SHORT).show()
+        currentView = CalendarView.DAY
+        updateCalendarView()
     }
 
     private fun showAddEventDialog() {
@@ -165,7 +166,7 @@ class CalendarActivity : AppCompatActivity() {
         when (currentView) {
             CalendarView.MONTH -> updateMonthView()
             CalendarView.WEEK -> updateWeekView()
-            // CalendarView.DAY -> // updateDayView()
+            CalendarView.DAY -> updateDayView()
         }
     }
 
@@ -257,7 +258,78 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun updateDayView() {
         // Header for hours
+        val hourHeader = TextView(this).apply {
+            text = "Zeit"
+            gravity = Gravity.CENTER
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = 0
+                height = GridLayout.LayoutParams.WRAP_CONTENT
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                setMargins(8, 8, 8, 8)
+            }
+            setPadding(8, 16, 8, 16)
+            setTextColor(Color.GRAY)
+        }
+        calendarGrid.addView(hourHeader)
 
+        // Date of current day
+        val dateHeader = TextView(this).apply {
+            val dateFormat = SimpleDateFormat("EEEE, dd. MMMM", Locale.GERMAN)
+            text = dateFormat.format(calendar.time)
+            gravity = Gravity.CENTER
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = 0
+                height = GridLayout.LayoutParams.WRAP_CONTENT
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 6f) // Breiter für den Tagesname
+                setMargins(8, 8, 8, 8)
+            }
+            setPadding(8, 16, 8, 16)
+            textSize = 18f
+            setTextColor(if (isCurrentDay(calendar)) Color.WHITE else Color.BLACK)
+            if (isCurrentDay(calendar)) {
+                setBackgroundResource(R.drawable.current_day_background)
+            }
+        }
+        calendarGrid.addView(dateHeader)
+
+        // Hour View from 6 to 22
+        for (hour in 6..22) {
+            // Stunde anzeigen
+            val hourView = TextView(this).apply {
+                text = String.format("%02d:00", hour)
+                gravity = Gravity.CENTER_VERTICAL or Gravity.END
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = 120 // Feste Höhe für jede Stunde
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(8, 0, 8, 0)
+                }
+                setPadding(8, 16, 8, 16)
+                setTextColor(Color.GRAY)
+            }
+            calendarGrid.addView(hourView)
+
+            // Slots for Events
+            val timeSlot = TextView(this).apply {
+                gravity = Gravity.TOP or Gravity.START
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = 120 // Gleiche Höhe wie Stunden
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 6f)
+                    setMargins(8, 0, 8, 0)
+                }
+                setPadding(8, 4, 8, 4)
+                background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
+
+                // Check if there are already Events
+                setOnClickListener {
+                    val timeString = String.format("%02d:00", hour)
+                    showAddEventDialog() // opens dialog for new events
+                }
+            }
+            calendarGrid.addView(timeSlot)
+        }
     }
 
     private fun addWeekDayHeaders() {
@@ -357,7 +429,7 @@ class CalendarActivity : AppCompatActivity() {
             when (currentView) {
                 CalendarView.MONTH -> calendar.add(Calendar.MONTH, -1)
                 CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, -1)
-                //CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, -1)
+                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, -1)
             }
             updateCalendarView()
         }
@@ -366,7 +438,7 @@ class CalendarActivity : AppCompatActivity() {
             when (currentView) {
                 CalendarView.MONTH -> calendar.add(Calendar.MONTH, 1)
                 CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, 1)
-                //CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
+                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
             updateCalendarView()
         }
