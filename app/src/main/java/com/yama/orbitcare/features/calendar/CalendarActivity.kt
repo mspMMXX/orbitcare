@@ -93,8 +93,8 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun switchToMonthView() {
-        // Placeholder for month view
-        Toast.makeText(this, "zu Monatsansicht wechseln", Toast.LENGTH_SHORT).show()
+        currentView = CalendarView.MONTH
+        updateCalendarView()
     }
 
     private fun switchToWeekView() {
@@ -257,6 +257,10 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun updateDayView() {
+        // Change GridLayout to vertical
+        calendarGrid.orientation = GridLayout.VERTICAL
+        calendarGrid.columnCount = 2 // one column for time, one for events
+
         // Header for hours
         val hourHeader = TextView(this).apply {
             text = "Zeit"
