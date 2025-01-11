@@ -163,6 +163,18 @@ class CalendarActivity : AppCompatActivity() {
         // Empty Grid
         calendarGrid.removeAllViews()
 
+        // Change layout in dependency of View
+        when (currentView) {
+            CalendarView.MONTH, CalendarView.WEEK -> {
+                calendarGrid.orientation = GridLayout.HORIZONTAL
+                calendarGrid.columnCount = 7  // 7 days per week
+            }
+            CalendarView.DAY -> {
+                calendarGrid.orientation = GridLayout.VERTICAL
+                calendarGrid.columnCount = 2  // Time and Events
+            }
+        }
+
         when (currentView) {
             CalendarView.MONTH -> updateMonthView()
             CalendarView.WEEK -> updateWeekView()
