@@ -164,7 +164,7 @@ class CalendarActivity : AppCompatActivity() {
 
         when (currentView) {
             CalendarView.MONTH -> updateMonthView()
-            CalendarView.WEEK -> // updateWeekView()
+            CalendarView.WEEK -> updateWeekView()
             CalendarView.DAY -> // updateDayView()
         }
 
@@ -334,21 +334,29 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.addView(emptyView)
     }
 
-    private fun isCurrentDay(dayOfMonth: Int): Boolean {
-        return calendar.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                calendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
-                dayOfMonth == currentDate.get(Calendar.DAY_OF_MONTH)
+    private fun isCurrentDay(checkCalendar: Calendar): Boolean {
+        return checkCalendar.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                checkCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+                checkCalendar.get(Calendar.DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)
     }
 
     private fun setupCalendar() {
         // Click Listener for Navigation
         prevMonth.setOnClickListener {
-            calendar.add(Calendar.MONTH, -1)
+            when (currentView) {
+                CalendarView.MONTH -> calendar.add(Calendar.MONTH, -1)
+                CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, -1)
+                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, -1)
+            }
             updateCalendarView()
         }
 
         nextMonth.setOnClickListener {
-            calendar.add(Calendar.MONTH, 1)
+            when (currentView) {
+                CalendarView.MONTH -> calendar.add(Calendar.MONTH, 1)
+                CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, 1)
+                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
+            }
             updateCalendarView()
         }
     }
