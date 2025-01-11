@@ -167,7 +167,6 @@ class CalendarActivity : AppCompatActivity() {
             CalendarView.WEEK -> updateWeekView()
             // CalendarView.DAY -> // updateDayView()
         }
-
     }
 
     private fun updateMonthView() {
@@ -254,6 +253,11 @@ class CalendarActivity : AppCompatActivity() {
             }
             calendarGrid.addView(dayView)
         }
+    }
+
+    private fun updateDayView() {
+        // Header for hours
+
     }
 
     private fun addWeekDayHeaders() {
