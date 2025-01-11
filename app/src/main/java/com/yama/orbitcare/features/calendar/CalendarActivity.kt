@@ -163,7 +163,7 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.removeAllViews()
 
         when (currentView) {
-            CalendarView.MONTH -> // updateMonthView()
+            CalendarView.MONTH -> updateMonthView()
             CalendarView.WEEK -> // updateWeekView()
             CalendarView.DAY -> // updateDayView()
         }
@@ -171,7 +171,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun updateMonthView() {
-        // Add Weekdays Headers
+        // Add Weekday Headers
         addWeekDayHeaders()
 
         // First day of month
@@ -194,6 +194,65 @@ class CalendarActivity : AppCompatActivity() {
         for (dayOfMonth in 1..maxDaysInMonth) {
             addDay(dayOfMonth)
         }
+    }
+
+    private fun updateWeekView() {
+        // Add Weekday Headers
+        addWeekDayHeaders()
+
+        // Set day to monday
+        val weekStart = calendar.clone() as Calendar
+        weekStart.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+
+        // Add days of week
+        for (i in 0..6) {
+            val currentCal = weekStart.clone() as Calendar
+            currentCal.add(Calendar.DAY_OF_WEEK, i)
+
+            val dayView = TextView(this).apply {
+                text = currentCal.get(Calendar.DAY_OF_MONTH).toString()
+                gravity = Gravity.CENTER
+
+                // Add space for week view
+                val displayMetrics = resources.displayMetrics
+                val screenHeight = displayMetrics.heightPixels
+                val dayHeight = screenHeight / 2
+
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = dayHeight
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(8, 8, 8, 8)
+                }
+
+                setPadding(8, 16, 8, 16)
+                textSize = 16f
+
+                // Highlight current day
+                when {
+                    isCurrentDay(currentCal) -> {
+                        setBackgroundResource(R.drawable.current_day_background)
+                        setTextColor(Color.WHITE)
+                    }
+
+                    currentCal.get(Calendar.DAY_OF_MONTH) == selectedDay -> {
+                        setBackgroundResource(R.drawable.selected_day_background)
+                    }
+                }
+
+                // Click Listener for days
+                setOnClickListener {
+                    selectedDay = currentCal.get(Calendar.DAY_OF_MONTH)
+                    updateCalendarView()
+
+                    Toast.makeText(
+                        context,
+                        SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(currentCal.time),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            calendarGrid.addView(dayView)
     }
 
     private fun addWeekDayHeaders() {
