@@ -37,7 +37,7 @@ class CalendarActivity : AppCompatActivity() {
         initializeViews()
         setupCalendar()
         updateCalendarView()
-        // addEventButton
+        setupEventButton()
     }
 
     private fun initializeViews() {
@@ -50,7 +50,7 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun setupEventButton() {
         addEventButton.setOnClickListener{
-            // addEventDialog
+            showAddEventDialog()
         }
     }
 
