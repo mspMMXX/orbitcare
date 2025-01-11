@@ -85,13 +85,22 @@ class CalendarActivity : AppCompatActivity() {
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
 
-                // Hier können Sie die Event-Daten speichern
-                saveEvent(eventTitle, eventDate, eventTime)
+                // Save event entries
+                saveEvent(eventTitle, eventDate, eventTime) // Dummy Values
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
             }
             .show()
+    }
+
+    private fun saveEvent(title: String, date: String, time: String) {
+        // Add the logic - replace with firestore values
+        Toast.makeText(this,
+            "Event erstellt: $title am $date um $time",
+            Toast.LENGTH_SHORT).show()
+
+        updateCalendarView()
     }
 
     private fun updateCalendarView() {
