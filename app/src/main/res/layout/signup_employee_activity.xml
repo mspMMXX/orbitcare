@@ -140,6 +140,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
+    <TextView
+        android:id="@+id/idError"
+        android:layout_width="match_parent"
+        android:layout_height="15sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/errorRed"
+        android:text="OrganisationID nicht bekannt."
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmationEditText"/>
+
+    <TextView
+        android:id="@+id/pwdError"
+        android:layout_width="match_parent"
+        android:layout_height="15sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/errorRed"
+        android:text="Passwörter stimmen nicht überein."
+        app:layout_constraintTop_toBottomOf="@+id/idError"/>
+
+    <TextView
+        android:id="@+id/editTextFilledError"
+        android:layout_width="match_parent"
+        android:layout_height="15sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/errorRed"
+        android:text="Bitte alle Felder ausfüllen!"
+        app:layout_constraintTop_toBottomOf="@+id/pwdError"/>
+
     <Button
         android:id="@+id/signUpButton"
         android:layout_width="0dp"
@@ -149,9 +179,10 @@
         android:layout_marginEnd="70dp"
         android:text="@string/organisation_button_title"
         android:background="@color/orbitBlue"
+        android:onClick="signUpButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmationEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextFilledError" />
 
     <Button
         android:id="@+id/organisationSignUpButton"
@@ -172,7 +203,7 @@
         app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
 
     <Button
-        android:id="@+id/anmeldenButton"
+        android:id="@+id/signInButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="70dp"

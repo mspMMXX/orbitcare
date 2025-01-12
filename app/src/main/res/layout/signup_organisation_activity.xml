@@ -136,6 +136,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plzEditText" />
 
+    <TextView
+        android:id="@+id/errorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="15sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/errorRed"
+        android:text="Bitte alle Felder ausfüllen!"
+        app:layout_constraintTop_toBottomOf="@+id/cityEditText"/>
+
+    <TextView
+        android:id="@+id/idError"
+        android:layout_width="match_parent"
+        android:layout_height="15sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/errorRed"
+        android:text="OrganisationID bereits vergeben."
+        app:layout_constraintTop_toBottomOf="@+id/errorContainer"/>
+
     <Button
         android:id="@+id/organisationSignUpButton"
         android:layout_width="0dp"
@@ -148,7 +168,7 @@
         android:background="@color/orbitBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cityEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/idError" />
 
     <Button
         android:id="@+id/employeeSignUpButton"
