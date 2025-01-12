@@ -18,4 +18,5 @@
     <string name="confirm_password_text">Passwort bestätigen</string>
     <string name="organisation_button_title">Registrieren</string>
     <string name="warning_text_sign_up">Notieren Sie sich die Organisation-ID. Diese wird für die Registrierung der Mitarbeiter benötigt.</string>
+    <string name="selected_date">Ausgewähltes Datum: %1$s</string>
 </resources>

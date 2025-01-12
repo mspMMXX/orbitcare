@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/eventTitleEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Titel"
+        android:inputType="text"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/eventDateEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Datum (TT.MM.JJJJ)"
+        android:inputType="date"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/eventTimeEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Zeit (HH:mm)"
+        android:inputType="time"/>
+
+</LinearLayout>
