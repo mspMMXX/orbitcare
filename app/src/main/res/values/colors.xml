@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="orbitBlue">#2A6BB7</color>
+    <color name="errorRed">#FF0000</color>
 </resources>

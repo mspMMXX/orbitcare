@@ -55,18 +55,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
 
+    <TextView
+        android:id="@+id/signInError"
+        android:layout_width="match_parent"
+        android:layout_height="15sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/errorRed"
+        android:text="Anmeldedaten nicht korrekt!"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditText"/>
+
     <Button
-        android:id="@+id/signUpButton"
+        android:id="@+id/signInButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
         android:text="@string/signin_button_title"
+        android:onClick="signInButton"
         android:background="@color/orbitBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/signInError" />
 
     <Button
         android:id="@+id/orgSignUpButton"
@@ -84,7 +95,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUpButton" />
+        app:layout_constraintTop_toBottomOf="@+id/signInButton" />
 
     <Button
         android:id="@+id/employeeSignUpButton"

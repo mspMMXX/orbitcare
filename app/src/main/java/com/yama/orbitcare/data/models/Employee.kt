@@ -1,7 +1,7 @@
 package com.yama.orbitcare.data.models
 
 data class Employee (
-    val organisationID: Int = 0,
+    val organisationID: String = "",
     val firstName: String = "",
     val lastName: String = "",
     val phone: String = "",

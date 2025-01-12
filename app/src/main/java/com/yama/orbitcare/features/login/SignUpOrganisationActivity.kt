@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,10 @@ class SignUpOrganisationActivity : AppCompatActivity() {
     private lateinit var housenumberEditText: EditText
     private lateinit var plzEditText: EditText
     private lateinit var cityEditText: EditText
+    private lateinit var errorContainer: TextView
+    private lateinit var idError: TextView
+    private var textEditsFilled: Boolean = true
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +49,8 @@ class SignUpOrganisationActivity : AppCompatActivity() {
         housenumberEditText = findViewById(R.id.housenumberEditText)
         plzEditText = findViewById(R.id.plzEditText)
         cityEditText = findViewById(R.id.cityEditText)
+        errorContainer = findViewById(R.id.errorContainer)
+        idError = findViewById(R.id.idError)
     }
 
     // Button - öffnet die MitarbeiterRegActivity
@@ -60,22 +67,43 @@ class SignUpOrganisationActivity : AppCompatActivity() {
 
     fun organisationSignUpButton(view:View) {
         println("OrganisationSignUpButton-clicked")
-        val organisation = Organisation(
-            organisationID = organisationIDEditText.text.toString().toIntOrNull() ?: 0,
-            name = organisationNameEditText.text.toString(),
-            street = streetEditText.text.toString(),
-            housenumber = housenumberEditText.text.toString(),
-            plz = plzEditText.text.toString(),
-            city = cityEditText.text.toString()
-        )
         val db = FirestoreDatabase()
-        db.addOrganisation(
-            organisation,
-            onSuccess = {
-                Toast.makeText(this, "Organisation erfolgreich hinzugefügt", Toast.LENGTH_SHORT).show()
-            },
-            onFailure = { e ->
-                Toast.makeText(this, "Fehler: ${e.message}", Toast.LENGTH_SHORT).show()
-            })
+        db.getOrganisationWithFieldValue("organisationID", organisationIDEditText.text.toString()) { org ->
+            if(org != null){
+                idError.visibility = View.VISIBLE
+                println("ID bereits vorhanden.")
+            } else {
+                if (!organisationIDEditText.text.toString().isEmpty() &&
+                    !organisationNameEditText.text.toString().isEmpty() &&
+                    !streetEditText.text.toString().isEmpty() &&
+                    !housenumberEditText.text.toString().isEmpty() &&
+                    !plzEditText.text.toString().isEmpty() &&
+                    !cityEditText.text.toString().isEmpty()) {
+                    textEditsFilled = true
+                } else {
+                    textEditsFilled = false
+                    errorContainer.visibility = View.VISIBLE
+                }
+                if (textEditsFilled) {
+                    val organisation = Organisation(
+                        organisationID = organisationIDEditText.text.toString(),
+                        name = organisationNameEditText.text.toString(),
+                        street = streetEditText.text.toString(),
+                        housenumber = housenumberEditText.text.toString(),
+                        plz = plzEditText.text.toString(),
+                        city = cityEditText.text.toString())
+
+                    db.addOrganisation(organisation, onSuccess = {
+                        println("Organisation wurde erfolgreich hinzugefügt.")
+                        val signInActivityIntent = Intent(this, SignInActivity::class.java)
+                        startActivity(signInActivityIntent)
+                    }, onFailure = {
+                        println("Organisation konnte nicht hinzugefügt werden.")
+                    })
+                } else {
+                    println("Bitte alle Felder ausfüllen.")
+                }
+            }
+        }
     }
 }
