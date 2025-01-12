@@ -271,24 +271,11 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun updateDayView() {
+        calendarGrid.removeAllViews()
+
         // Change GridLayout to vertical
         calendarGrid.orientation = GridLayout.VERTICAL
         calendarGrid.columnCount = 2 // one column for time, one for events
-
-        // Header for hours
-        val hourHeader = TextView(this).apply {
-            text = "Zeit"
-            gravity = Gravity.CENTER
-            layoutParams = GridLayout.LayoutParams().apply {
-                width = 0
-                height = GridLayout.LayoutParams.WRAP_CONTENT
-                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                setMargins(8, 8, 8, 8)
-            }
-            setPadding(8, 16, 8, 16)
-            setTextColor(Color.GRAY)
-        }
-        calendarGrid.addView(hourHeader)
 
         // Date of current day
         val dateHeader = TextView(this).apply {
@@ -296,10 +283,11 @@ class CalendarActivity : AppCompatActivity() {
             text = dateFormat.format(calendar.time)
             gravity = Gravity.CENTER
             layoutParams = GridLayout.LayoutParams().apply {
-                width = 0
+                width = GridLayout.LayoutParams.MATCH_PARENT
                 height = GridLayout.LayoutParams.WRAP_CONTENT
-                columnSpec = GridLayout.spec(0, 2)
-                setMargins(8, 8, 8, 24)
+                rowSpec = GridLayout.spec(0)
+                columnSpec = GridLayout.spec(0, 2, GridLayout.FILL, 1f)
+                setMargins(8, 8, 8, 16)
             }
             setPadding(8, 16, 8, 16)
             textSize = 18f
@@ -311,10 +299,10 @@ class CalendarActivity : AppCompatActivity() {
         val scrollView = ScrollView(this).apply {
             layoutParams = GridLayout.LayoutParams().apply {
                 width = GridLayout.LayoutParams.MATCH_PARENT
-                height = 0
+                height = GridLayout.LayoutParams.MATCH_PARENT
                 this.setGravity(Gravity.FILL_VERTICAL)
-                rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                columnSpec = GridLayout.spec(0, 2) // Über beide Spalten
+                rowSpec = GridLayout.spec(1, 1f)
+                columnSpec = GridLayout.spec(0, 2)
             }
         }
 
@@ -323,7 +311,7 @@ class CalendarActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
 
