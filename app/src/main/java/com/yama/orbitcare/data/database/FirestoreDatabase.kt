@@ -7,10 +7,12 @@ import com.yama.orbitcare.data.models.*
 
 class FirestoreDatabase {
 
+    // Firebase Firestore instance for database operations
     private val db = FirebaseFirestore.getInstance()
 
-    //Hinzufügen eines Dokuments in eine Sammlung
+    // ---------- Add Documents to Firestore ----------
 
+    // Adds an Organisation object to the Organisation Collection
     fun addOrganisation(organisation: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
             .add(organisation)
@@ -18,6 +20,7 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
+    // Adds an Employee object to the Employee Collection
     fun addEmployee(employee: Employee, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Employee")
             .add(employee)
@@ -25,6 +28,7 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
+    // Adds an Client object to the Client Collection
     fun addClient(client: Client, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Client")
             .add(client)
@@ -32,6 +36,7 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
+    // Adds an Event object to the Event Collection
     fun addEvent(event: Event, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Event")
             .add(event)
@@ -39,8 +44,12 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
-    //Laden aller Dokumente einer Sammlung -> mit Callback
+    // ---------- Get All Documents from Firestore ----------
 
+    /**
+     * Retrieves all Organisation documents from the Organisation collection.
+     * Calls the onComplete callback with the list of Organisations or null failure.
+     */
     fun getAllOrganisations(onComplete: (MutableList<Organisation>?) -> Unit) {
         db.collection("Organisation")
             .get()
@@ -64,6 +73,10 @@ class FirestoreDatabase {
     }
 
 
+    /**
+     * Retrieves all Client documents from the Client collection.
+     * Calls the onComplete callback with the list of Clients or null failure.
+     */
     fun getAllClients(onComplete: (MutableList<Client>?) -> Unit) {
         db.collection("Client")
             .get()
@@ -86,6 +99,10 @@ class FirestoreDatabase {
             }
     }
 
+    /**
+     * Retrieves all Employee documents from the Employee collection.
+     * Calls the onComplete callback with the list of Employees or null failure.
+     */
     fun getAllEmployees(onComplete: (MutableList<Employee>?) -> Unit) {
         db.collection("Employee")
             .get()
@@ -108,6 +125,10 @@ class FirestoreDatabase {
             }
     }
 
+    /**
+     * Retrieves all Event documents from the Event collection.
+     * Calls the onComplete callback with the list of Events or null failure.
+     */
     fun getAllEvents(onComplete: (MutableList<Event>?) -> Unit) {
         db.collection("Event")
             .get()
@@ -130,8 +151,12 @@ class FirestoreDatabase {
             }
     }
 
-    //Laden von Dokumente einer Sammlung mittels ID und Callback
+    // ---------- Get Document by ID from Firestore ----------
 
+    /**
+     * Retrieves a specific Organisation document by its ID.
+     * Calls the onComplete callback with the Organisation object or null if not found.
+     */
     fun getOrganisation(documentId: String, onComplete: (Organisation?) -> Unit) {
         db.collection("Organisation").document(documentId)
             .get()
@@ -152,6 +177,10 @@ class FirestoreDatabase {
 
     }
 
+    /**
+     * Retrieves a specific Employee document by its ID.
+     * Calls the onComplete callback with the Employee object or null if not found.
+     */
     fun getEmployee(documentId: String, onComplete: (Employee?) -> Unit) {
         db.collection("Employee").document(documentId)
             .get()
@@ -171,6 +200,10 @@ class FirestoreDatabase {
             }
     }
 
+    /**
+     * Retrieves a specific Vlient document by its ID.
+     * Calls the onComplete callback with the Client object or null if not found.
+     */
     fun getClient(documentId: String, onComplete: (Client?) -> Unit) {
         db.collection("Client").document(documentId)
             .get()
@@ -190,6 +223,10 @@ class FirestoreDatabase {
             }
     }
 
+    /**
+     * Retrieves a specific Event document by its ID.
+     * Calls the onComplete callback with the Event object or null if not found.
+     */
     fun getEvent(documentId: String, onComplete: (Event?) -> Unit) {
         db.collection("Event").document(documentId)
             .get()
@@ -209,8 +246,12 @@ class FirestoreDatabase {
             }
     }
 
-    //Lädt ein Dokument mit Feldwert
+    // ---------- Get Document by Field Value from Firestore ----------
 
+    /**
+     * Retrieves the first Organisation document that matches a specific field and value.
+     * Calls the onComplete callback with the Organisation object or null if not found.
+     */
     fun getOrganisationWithFieldValue(fieldName: String, fieldValue: String, onComplete: (Organisation?) -> Unit) {
         db.collection("Organisation")
             .whereEqualTo(fieldName, fieldValue)
@@ -239,6 +280,10 @@ class FirestoreDatabase {
             }
     }
 
+    /**
+     * Retrieves the first Employee document that matches a specific field and value.
+     * Calls the onComplete callback with the Employee object or null if not found.
+     */
     fun getEmployeeWithFieldValue(fieldName: String, fieldValue: String, onComplete: (Employee?) -> Unit) {
         db.collection("Employee")
             .whereEqualTo(fieldName, fieldValue)
@@ -267,6 +312,10 @@ class FirestoreDatabase {
             }
     }
 
+    /**
+     * Retrieves the first Client document that matches a specific field and value.
+     * Calls the onComplete callback with the Client object or null if not found.
+     */
     fun getClientWithFieldValue(fieldName: String, fieldValue: String, onComplete: (Client?) -> Unit) {
         db.collection("Client")
             .whereEqualTo(fieldName, fieldValue)
@@ -295,6 +344,10 @@ class FirestoreDatabase {
             }
     }
 
+    /**
+     * Retrieves the first Event document that matches a specific field and value.
+     * Calls the onComplete callback with the Event object or null if not found.
+     */
     fun getEventWithFieldValue(fieldName: String, fieldValue: String, onComplete: (Event?) -> Unit) {
         db.collection("Event")
             .whereEqualTo(fieldName, fieldValue)
@@ -323,8 +376,11 @@ class FirestoreDatabase {
             }
     }
 
-    //Ändern eines Dokuments mit der ID
+    // ---------- Update Documents in Firestore ----------
 
+    /**
+     * Updates an Organisation document by its ID with the new Organisation data.
+     */
     fun updateOrganisation(organisationID: String, updateOrganisation: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
             .document(organisationID)
@@ -333,6 +389,9 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
+    /**
+     * Updates an Employee document by its ID with the new Employee data.
+     */
     fun updateEmployee(employeeID: String, updateEmployee: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
             .document(employeeID)
@@ -341,6 +400,9 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
+    /**
+     * Updates an Client document by its ID with the new Client data.
+     */
     fun updateClient(clientID: String, updateClient: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
             .document(clientID)
@@ -349,6 +411,9 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
+    /**
+     * Updates an Event document by its ID with the new Event data.
+     */
     fun updateEvent(eventID: String, updateEvent: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
             .document(eventID)
