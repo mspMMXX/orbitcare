@@ -122,18 +122,17 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun switchToMonthView() {
-        currentView = CalendarView.MONTH
-        updateCalendarView()
+        viewModel.switchView(CalendarView.MONTH)
     }
 
     private fun switchToWeekView() {
-        currentView = CalendarView.WEEK
-        updateCalendarView()
+        viewModel.switchView(CalendarView.WEEK)
     }
 
     private fun switchToDayView() {
-        currentView = CalendarView.DAY
-        updateCalendarView()
+        /*currentView = CalendarView.DAY
+        updateCalendarView()*/
+        viewModel.switchView(CalendarView.DAY)
     }
 
     private fun showAddEventDialog() {
@@ -509,7 +508,7 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun setupCalendar() {
         // Click Listener for Navigation
-        prevMonth.setOnClickListener {
+        /*prevMonth.setOnClickListener {
             when (currentView) {
                 CalendarView.MONTH -> calendar.add(Calendar.MONTH, -1)
                 CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, -1)
@@ -525,6 +524,13 @@ class CalendarActivity : AppCompatActivity() {
                 CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
             updateCalendarView()
+        }*/
+        prevMonth.setOnClickListener {
+            viewModel.navigatePrevious()
+        }
+
+        nextMonth.setOnClickListener {
+            viewModel.navigateNext()
         }
     }
 }
