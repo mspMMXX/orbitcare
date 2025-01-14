@@ -70,4 +70,23 @@ class CalendarViewModel {
             event.dateTime.year == year && event.dateTime.monthValue == month
         }
     }
+
+    // Navigate through views
+    fun navigateNext() {
+        when (_currentView.value) {
+            CalendarActivity.CalendarView.MONTH -> _currentDate.value = _currentDate.value?.plusMonths(1)
+            CalendarActivity.CalendarView.WEEK -> _currentDate.value = _currentDate.value?.plusWeeks(1)
+            CalendarActivity.CalendarView.DAY -> _currentDate.value = _currentDate.value?.plusDays(1)
+            else -> {}
+        }
+    }
+
+    fun navigatePrevious() {
+        when (_currentView.value) {
+            CalendarActivity.CalendarView.MONTH -> _currentDate.value = _currentDate.value?.minusMonths(1)
+            CalendarActivity.CalendarView.WEEK -> _currentDate.value = _currentDate.value?.minusWeeks(1)
+            CalendarActivity.CalendarView.DAY -> _currentDate.value = _currentDate.value?.minusDays(1)
+            else -> {}
+        }
+    }
 }
