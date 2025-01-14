@@ -46,6 +46,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.gridlayout)
     implementation(libs.firebase.firestore.ktx)
+    implementation (libs.threetenabp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
