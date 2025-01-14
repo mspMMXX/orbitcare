@@ -63,4 +63,11 @@ class CalendarViewModel {
             !eventDate.isBefore(weekStart) && !eventDate.isAfter(weekEnd)
         }
     }
+
+    // Get specific Events for specific months
+    fun getEventsForMonth(year: Int, month: Int): List<Event> {
+        return _events.value.orEmpty().filter { event ->
+            event.dateTime.year == year && event.dateTime.monthValue == month
+        }
+    }
 }
