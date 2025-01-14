@@ -23,4 +23,11 @@ class CalendarViewModel {
     // Live data for selected day
     private val _selectedDay = MutableLiveData<LocalDate>()
     val selectedDay: LiveData<LocalDate> = _selectedDay
+
+    init {
+        _currentDate.value = LocalDateTime.now()
+        _currentView.value = CalendarActivity.CalendarView.MONTH
+        _events.value = emptyList()
+        _selectedDay.value = LocalDate.now()
+    }
 }
