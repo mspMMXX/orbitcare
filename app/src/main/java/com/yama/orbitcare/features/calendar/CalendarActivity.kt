@@ -50,9 +50,28 @@ class CalendarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_calendar)
 
         initializeViews()
-        setupCalendar()
-        updateCalendarView()
+        //setupCalendar()
+        //updateCalendarView()
         setupEventButtons()
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.currentDate.observe(this) {
+            updateCalendarView()
+        }
+
+        viewModel.events.observe(this) {
+            updateCalendarView()
+        }
+
+        viewModel.currentView.observe(this) {
+            updateCalendarView()
+        }
+
+        viewModel.selectedDay.observe(this) {
+            updateCalendarView()
+        }
     }
 
     private fun initializeViews() {
