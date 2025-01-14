@@ -47,4 +47,11 @@ class CalendarViewModel {
         currentEvents.add(newEvent)
         _events.value = currentEvents
     }
+
+    // Get specific Events for specific dates
+    fun getEventsForDate(date: LocalDate): List<Event> {
+        return _events.value.orEmpty().filter {
+            it.dateTime.toLocalDate() == date
+        }
+    }
 }
