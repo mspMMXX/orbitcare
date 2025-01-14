@@ -1,5 +1,6 @@
 package com.yama.orbitcare.features.calendar
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
@@ -175,6 +176,7 @@ class CalendarActivity : AppCompatActivity() {
             .show()
     }
 
+    @SuppressLint("NewApi")
     private fun saveEvent(title: String, date: String, time: String) {
         // Add the logic - replace with firestore values
         /*Toast.makeText(this,

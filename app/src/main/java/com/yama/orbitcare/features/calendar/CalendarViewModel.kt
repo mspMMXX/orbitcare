@@ -1,5 +1,6 @@
 package com.yama.orbitcare.features.calendar
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +9,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-class CalendarViewModel {
+@SuppressLint("NewApi")
+class CalendarViewModel : ViewModel() {
     // Live data for events
     private val _events = MutableLiveData<List<Event>>()
     val events: LiveData<List<Event>> = _events
@@ -56,6 +58,7 @@ class CalendarViewModel {
     }
 
     // Get specific Events for specific weeks
+    @SuppressLint("NewApi")
     fun getEventsForWeek(weekStart: LocalDate): List<Event> {
         val weekEnd = weekStart.plusDays(6)
         return _events.value.orEmpty().filter { event ->
@@ -65,6 +68,7 @@ class CalendarViewModel {
     }
 
     // Get specific Events for specific months
+    @SuppressLint("NewApi")
     fun getEventsForMonth(year: Int, month: Int): List<Event> {
         return _events.value.orEmpty().filter { event ->
             event.dateTime.year == year && event.dateTime.monthValue == month
@@ -72,6 +76,7 @@ class CalendarViewModel {
     }
 
     // Navigate through views
+    @SuppressLint("NewApi")
     fun navigateNext() {
         when (_currentView.value) {
             CalendarActivity.CalendarView.MONTH -> _currentDate.value = _currentDate.value?.plusMonths(1)
@@ -81,6 +86,7 @@ class CalendarViewModel {
         }
     }
 
+    @SuppressLint("NewApi")
     fun navigatePrevious() {
         when (_currentView.value) {
             CalendarActivity.CalendarView.MONTH -> _currentDate.value = _currentDate.value?.minusMonths(1)
