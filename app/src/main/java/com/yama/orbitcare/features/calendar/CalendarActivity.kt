@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -36,6 +37,9 @@ class CalendarActivity : AppCompatActivity() {
 
     // Calendar View enum
     private var currentView = CalendarView.MONTH
+
+    // CalendarViewModel
+    private val viewModel: CalendarViewModel by viewModels()
 
     enum class CalendarView {
         MONTH, WEEK, DAY
