@@ -17,6 +17,9 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -56,6 +59,7 @@ class CalendarActivity : AppCompatActivity() {
         setupObservers()
     }
 
+    // Observe Data
     private fun setupObservers() {
         viewModel.currentDate.observe(this) {
             updateCalendarView()
@@ -174,11 +178,24 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun saveEvent(title: String, date: String, time: String) {
         // Add the logic - replace with firestore values
-        Toast.makeText(this,
+        /*Toast.makeText(this,
             "Event erstellt: $title am $date um $time",
             Toast.LENGTH_SHORT).show()
 
-        updateCalendarView()
+        updateCalendarView()*/
+        // Parse date and time strings to LocalDate and LocalTime
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+        val localDate = LocalDate.parse(date, dateFormatter)
+        val localTime = LocalTime.parse(time, timeFormatter)
+
+        viewModel.addEvent(
+            title = title,
+            date = localDate,
+            time = localTime,
+            eventType = "Default"
+        )
     }
 
     private fun updateCalendarView() {
