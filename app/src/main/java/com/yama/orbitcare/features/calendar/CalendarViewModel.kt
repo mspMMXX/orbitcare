@@ -54,4 +54,13 @@ class CalendarViewModel {
             it.dateTime.toLocalDate() == date
         }
     }
+
+    // Get specific Events for specific weeks
+    fun getEventsForWeek(weekStart: LocalDate): List<Event> {
+        val weekEnd = weekStart.plusDays(6)
+        return _events.value.orEmpty().filter { event ->
+            val eventDate = event.dateTime.toLocalDate()
+            !eventDate.isBefore(weekStart) && !eventDate.isAfter(weekEnd)
+        }
+    }
 }
