@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.yama.orbitcare.data.models.Event
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 class CalendarViewModel {
     // Live data for events
@@ -29,5 +30,21 @@ class CalendarViewModel {
         _currentView.value = CalendarActivity.CalendarView.MONTH
         _events.value = emptyList()
         _selectedDay.value = LocalDate.now()
+    }
+
+    // Add Event
+    fun addEvent(title: String, date: LocalDate, time: LocalTime, eventType: String, notes: String = "", color: String = "", view: String = "") {
+        val newEvent = Event(
+            title = title,
+            dateTime = LocalDateTime.of(date, time),
+            eventType = eventType,
+            notes = notes,
+            color = color,
+
+        )
+
+        val currentEvents = _events.value.orEmpty().toMutableList()
+        currentEvents.add(newEvent)
+        _events.value = currentEvents
     }
 }
