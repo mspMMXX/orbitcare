@@ -89,4 +89,13 @@ class CalendarViewModel {
             else -> {}
         }
     }
+
+    // View management
+    fun switchView(view: CalendarActivity.CalendarView) {
+        _currentView.value = view
+    }
+
+    fun selectDay(date: LocalDate) {
+        _selectedDay.value = date
+    }
 }
