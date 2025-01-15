@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
+import com.yama.orbitcare.data.models.Event
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -197,6 +198,17 @@ class CalendarActivity : AppCompatActivity() {
             time = localTime,
             eventType = "Default"
         )
+    }
+
+    @SuppressLint("NewApi")
+    private fun showUpdateEventDialog(event: Event) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_add_event, null)
+
+        val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
+        val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
+        val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
     }
 
     private fun updateCalendarView() {
