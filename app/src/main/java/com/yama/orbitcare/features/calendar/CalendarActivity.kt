@@ -359,6 +359,21 @@ class CalendarActivity : AppCompatActivity() {
         for (dayOfMonth in 1..maxDaysInMonth) {
             addDay(dayOfMonth)
         }
+
+        // Days with events
+        for (dayOfMonth in 1..maxDaysInMonth) {
+            val dayContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(4, 4, 4, 4)
+                }
+                setPadding(4, 8, 4, 8)
+            }
+
+        }
     }
 
     private fun updateWeekView() {
