@@ -64,6 +64,14 @@ class CalendarActivity : AppCompatActivity() {
         //updateCalendarView()
         setupEventButtons()
         setupObservers()
+
+        // Test event
+        viewModel.addEvent(
+            title = "Test Event",
+            date = LocalDate.now(),
+            time = LocalTime.of(14, 0),
+            eventType = "Default"
+        )
     }
 
     // Observe Data
