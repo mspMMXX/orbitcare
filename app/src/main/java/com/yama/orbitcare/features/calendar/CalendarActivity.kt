@@ -456,7 +456,43 @@ class CalendarActivity : AppCompatActivity() {
                 }
             }
 
-            calendarGrid.addView(dayView)
+            // Add date
+            val dateView = TextView(this).apply {
+                text = currentCal.get(Calendar.DAY_OF_MONTH).toString()
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                setPadding(4, 8, 4, 8)
+                textSize = 16f
+
+                when {
+                    isCurrentDay(currentCal) -> {
+                        setBackgroundResource(R.drawable.current_day_background)
+                        setTextColor(Color.WHITE)
+                    }
+                    currentCal.get(Calendar.DAY_OF_MONTH) == selectedDay -> {
+                        setBackgroundResource(R.drawable.selected_day_background)
+                    }
+                }
+            }
+
+            dayContainer.addView(dateView)
+
+            // Events for this day
+            val eventsForDay = viewModel.events.value?.filter { event ->
+                val eventDate = event.dateTime.toLocalDate()
+                eventDate.year == currentCal.get(Calendar.YEAR) &&
+                        eventDate.monthValue == currentCal.get(Calendar.MONTH) + 1 &&
+                        eventDate.dayOfMonth == currentCal.get(Calendar.DAY_OF_MONTH)
+            }?.sortedBy { it.dateTime }
+
+            eventsForDay?.forEach { event ->
+                dayContainer.addView(createEventView(event))
+            }
+
+            calendarGrid.addView(dayContainer)
         }
     }
 
