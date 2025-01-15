@@ -282,7 +282,7 @@ class CalendarActivity : AppCompatActivity() {
         val eventView = TextView(this).apply {
             text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
             setPadding(8, 4, 8, 4)
-            //setBackgroundResource(R.drawable.event_background)
+            setBackgroundResource(R.drawable.event_background)
             setTextColor(Color.WHITE)
 
             setOnClickListener {
@@ -327,7 +327,7 @@ class CalendarActivity : AppCompatActivity() {
         return TextView(this).apply {
             text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
             setTextColor(Color.WHITE)
-            //setBackgroundResource(R.drawable.event_background)
+            setBackgroundResource(R.drawable.event_background)
             setPadding(4, 2, 4, 2)
             textSize = 12f
             maxLines = 1
