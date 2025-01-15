@@ -54,6 +54,7 @@ class CalendarActivity : AppCompatActivity() {
         MONTH, WEEK, DAY
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
@@ -66,6 +67,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     // Observe Data
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
         viewModel.currentDate.observe(this) {
             updateCalendarView()
@@ -290,6 +292,7 @@ class CalendarActivity : AppCompatActivity() {
         container.addView(eventView)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateCalendarView() {
         // Update Month and Year in Header
         monthYearText.text = dateFormat.format(calendar.time)
@@ -319,6 +322,7 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createEventView(event: Event): TextView {
         return TextView(this).apply {
             text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
@@ -335,6 +339,7 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateMonthView() {
         // Add Weekday Headers
         addWeekDayHeaders()
@@ -373,9 +378,61 @@ class CalendarActivity : AppCompatActivity() {
                 setPadding(4, 8, 4, 8)
             }
 
+            // Add date
+            val dateView = TextView(this).apply {
+                text = dayOfMonth.toString()
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                textSize = 16f
+
+                when {
+                    isCurrentDay(dayOfMonth) -> {
+                        setBackgroundResource(R.drawable.current_day_background)
+                        setTextColor(Color.WHITE)
+                    }
+
+                    dayOfMonth == selectedDay -> {
+                        setBackgroundResource(R.drawable.selected_day_background)
+                    }
+                }
+                setOnClickListener {
+                    selectedDay = if (selectedDay == dayOfMonth) null else dayOfMonth
+                    updateCalendarView()
+                }
+            }
+            dayContainer.addView(dateView)
+
+            // Add events for this day
+            val eventsForDay = viewModel.events.value?.filter { event ->
+                val eventDate = event.dateTime.toLocalDate()
+                eventDate.year == calendar.get(Calendar.YEAR) &&
+                        eventDate.monthValue == calendar.get(Calendar.MONTH) + 1 &&
+                        eventDate.dayOfMonth == dayOfMonth
+            }
+
+            eventsForDay?.take(2)?.forEach { event ->
+                dayContainer.addView(createEventView(event))
+            }
+
+            // Show if there are more events
+            if ((eventsForDay?.size ?: 0) > 2) {
+                val moreEventsView = TextView(this).apply {
+                    text = "+${eventsForDay!!.size - 2} mehr"
+                    setTextColor(Color.GRAY)
+                    textSize = 10f
+                    gravity = Gravity.CENTER
+                }
+                dayContainer.addView(moreEventsView)
+            }
+
+            calendarGrid.addView(dayContainer)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateWeekView() {
         // Add Weekday Headers
         addWeekDayHeaders()
@@ -561,6 +618,7 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addDay(dayOfMonth: Int) {
         val dayView = TextView(this).apply {
             text = dayOfMonth.toString()
