@@ -247,7 +247,20 @@ class CalendarActivity : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     private fun updateEvent(eventId: String, title: String, date: String, time: String) {
+        // Parse date and time strings to LocalDate and LocalTime
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
+        val localDate = LocalDate.parse(date, dateFormatter)
+        val localTime = LocalTime.parse(time, timeFormatter)
+
+        viewModel.updateEvent(
+            id = eventId,
+            title = title,
+            date = localDate,
+            time = localTime,
+            eventType = "Default" // oder beibehalten des ursprünglichen Event-Typs
+        )
     }
 
     private fun updateCalendarView() {
