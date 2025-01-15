@@ -446,49 +446,16 @@ class CalendarActivity : AppCompatActivity() {
             val currentCal = weekStart.clone() as Calendar
             currentCal.add(Calendar.DAY_OF_WEEK, i)
 
-            val dayView = TextView(this).apply {
-                text = currentCal.get(Calendar.DAY_OF_MONTH).toString()
-                gravity = Gravity.CENTER
-
-                // Add space for week view
-                val displayMetrics = resources.displayMetrics
-                val screenHeight = displayMetrics.heightPixels
-                val dayHeight = screenHeight / 2
-
+            val dayContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
-                    height = dayHeight
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    setMargins(8, 8, 8, 8)
-                }
-
-                setPadding(8, 16, 8, 16)
-                textSize = 16f
-
-                // Highlight current day
-                when {
-                    isCurrentDay(currentCal) -> {
-                        setBackgroundResource(R.drawable.current_day_background)
-                        setTextColor(Color.WHITE)
-                    }
-
-                    currentCal.get(Calendar.DAY_OF_MONTH) == selectedDay -> {
-                        setBackgroundResource(R.drawable.selected_day_background)
-                    }
-                }
-
-                // Click Listener for days
-                setOnClickListener {
-                    selectedDay = currentCal.get(Calendar.DAY_OF_MONTH)
-                    updateCalendarView()
-
-                    Toast.makeText(
-                        context,
-                        SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(currentCal.time),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    setMargins(4, 4, 4, 4)
                 }
             }
+
             calendarGrid.addView(dayView)
         }
     }
