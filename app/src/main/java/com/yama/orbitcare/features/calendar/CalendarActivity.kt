@@ -209,6 +209,28 @@ class CalendarActivity : AppCompatActivity() {
         val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
         val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
         val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
+
+        // Insert Event data
+        titleEdit.setText(event.title)
+        dateEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+
+        builder.setView(dialogView)
+            .setTitle("Event bearbeiten")
+            .setPositiveButton("Aktualisieren") { _, _ ->
+                val eventTitle = titleEdit.text.toString()
+                val eventDate = dateEdit.text.toString()
+                val eventTime = timeEdit.text.toString()
+
+                //updateEvent(event.id, eventTitle, eventDate, eventTime)
+            }
+            .setNegativeButton("Abbrechen") { dialog, _ ->
+                dialog.cancel()
+            }
+            .setNeutralButton("Löschen") { _, _ ->
+                //showDeleteEventDialog(event)
+            }
+            .show()
+
     }
 
     private fun updateCalendarView() {
