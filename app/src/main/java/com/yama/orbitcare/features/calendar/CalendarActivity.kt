@@ -216,6 +216,7 @@ class CalendarActivity : AppCompatActivity() {
         // Insert Event data
         titleEdit.setText(event.title)
         dateEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+        timeEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")))
 
         builder.setView(dialogView)
             .setTitle("Event bearbeiten")
@@ -224,13 +225,13 @@ class CalendarActivity : AppCompatActivity() {
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
 
-                //updateEvent(event.id, eventTitle, eventDate, eventTime)
+                updateEvent(event, eventTitle, eventDate, eventTime)
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
             }
             .setNeutralButton("Löschen") { _, _ ->
-                //showDeleteEventDialog(event)
+                showDeleteEventDialog(event)
             }
             .show()
     }
@@ -240,7 +241,7 @@ class CalendarActivity : AppCompatActivity() {
             .setTitle("Event löschen")
             .setMessage("Möchten Sie das Event '${event.title}' wirklich löschen?")
             .setPositiveButton("Löschen") { _, _ ->
-                //removeEvent(event.id)
+                removeEvent(event)
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
@@ -249,7 +250,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NewApi")
-    private fun updateEvent(eventId: String, title: String, date: String, time: String) {
+    private fun updateEvent(oldEvent: Event, title: String, date: String, time: String) {
         // Parse date and time strings to LocalDate and LocalTime
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -257,17 +258,19 @@ class CalendarActivity : AppCompatActivity() {
         val localDate = LocalDate.parse(date, dateFormatter)
         val localTime = LocalTime.parse(time, timeFormatter)
 
-        viewModel.updateEvent( // TODO: Add to Viewmodel
-            id = eventId,
+        viewModel.updateEvent(
+            oldEvent = oldEvent,
             title = title,
             date = localDate,
             time = localTime,
-            eventType = "Default" // oder beibehalten des ursprünglichen Event-Typs
+            eventType = "Default",
+            notes = oldEvent.notes,
+            color = oldEvent.color,
         )
     }
 
-    private fun removeEvent(eventId: String) {
-        viewModel.removeEvent(eventId) // TODO: Add to ViewModel
+    private fun removeEvent(event: Event) {
+        viewModel.removeEvent(event)
     }
 
     // Present Event in view
