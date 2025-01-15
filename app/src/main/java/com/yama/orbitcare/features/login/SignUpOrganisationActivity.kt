@@ -112,7 +112,10 @@ class SignUpOrganisationActivity : AppCompatActivity() {
                     // Add the organisation to Firestore
                     db.addOrganisation(organisation, onSuccess = {
                         val signInActivityIntent = Intent(this, SignInActivity::class.java)
-                        startActivity(signInActivityIntent)
+                        val confirmDialog = ConfirmationDialog()
+                        confirmDialog.showConfirmation(this, "Erfolgreich!", "Ihre Organisation wurde registriert.", onComplete = {
+                            startActivity(signInActivityIntent)
+                        })
                     }, onFailure = {
                         Log.d("Debugg", "Organisation not saved in Firestore")
                     })

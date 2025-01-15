@@ -65,7 +65,10 @@ class SignInActivity : AppCompatActivity() {
 
                 // Navigate to the CalendarActivity
                 val calendarActivity = Intent(this, CalendarActivity::class.java)
-                startActivity(calendarActivity)
+                val confirmDialog = ConfirmationDialog()
+                confirmDialog.showConfirmation(this, "Hallo ${employee.firstName}.", "Willkommen bei ORBITCARE!", onComplete = {
+                    startActivity(calendarActivity)
+                })
             } else {
                 // Display error message if authentication fails
                 signInError.visibility = View.VISIBLE

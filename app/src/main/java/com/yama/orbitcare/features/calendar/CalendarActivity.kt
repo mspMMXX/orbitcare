@@ -2,6 +2,7 @@ package com.yama.orbitcare.features.calendar
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.EditText
 import android.widget.GridLayout
@@ -154,15 +155,15 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun saveEvent(title: String, date: String, time: String) {
-        // Add the logic - replace with firestore values
+        // ATTENTION: Later -> Implementation of all Attributes!!!
         val dformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
         val dateTime = LocalDateTime.parse("${date} ${time}", dformatter)
         val event = Event(title, dateTime)
         val db = FirestoreDatabase()
         db.addEvent(event, onSuccess = {
-            println("Event successfull saved.")
+            Log.d("Debugg", "Event saved to Firestore.")
         }, onFailure = {
-            println("Event not saved.")
+            Log.d("Debugg", "Event not saved to Firestore.")
         })
         Toast.makeText(this,
             "Event erstellt: $title am $date um $time",

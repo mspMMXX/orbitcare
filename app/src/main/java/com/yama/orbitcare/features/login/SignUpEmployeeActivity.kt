@@ -101,7 +101,10 @@ class SignUpEmployeeActivity : AppCompatActivity() {
                         db.addEmployee(employee, onSuccess = {
                             Log.d(":Debugg", "Employee wurde erfolgreich gespeichert")
                             val signInActivityIntent = Intent(this, SignInActivity::class.java)
-                            startActivity(signInActivityIntent)
+                            val confirmDialog = ConfirmationDialog()
+                            confirmDialog.showConfirmation(this, "Erfolgreich!", "Sie wurden registriert.", onComplete = {
+                                startActivity(signInActivityIntent)
+                            })
                         }, onFailure = {
                             Log.d(":Debugg", "Employee konnte nicht gespeichert werden.")
                         })
