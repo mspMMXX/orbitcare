@@ -496,6 +496,7 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateDayView() {
         calendarGrid.removeAllViews()
 
@@ -549,6 +550,14 @@ class CalendarActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
+
+        // Events for current day
+        val eventsForDay = viewModel.events.value?.filter { event ->
+            val eventDate = event.dateTime.toLocalDate()
+            eventDate.year == calendar.get(Calendar.YEAR) &&
+                    eventDate.monthValue == calendar.get(Calendar.MONTH) + 1 &&
+                    eventDate.dayOfMonth == calendar.get(Calendar.DAY_OF_MONTH)
+        }?.sortedBy { it.dateTime }
 
         // Hour View from 6 to 22
         for (hour in 6..22) {
