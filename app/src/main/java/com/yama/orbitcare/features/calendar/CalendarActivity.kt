@@ -369,9 +369,9 @@ class CalendarActivity : AppCompatActivity() {
         }
 
         // Add days of Month
-        for (dayOfMonth in 1..maxDaysInMonth) {
+        /*for (dayOfMonth in 1..maxDaysInMonth) {
             addDay(dayOfMonth)
-        }
+        }*/
 
         // Days with events
         for (dayOfMonth in 1..maxDaysInMonth) {
