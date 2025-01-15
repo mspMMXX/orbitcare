@@ -40,7 +40,7 @@ class CalendarActivity : AppCompatActivity() {
     private var selectedDay: Int? = null
 
     // Calendar View enum
-    private var currentView = CalendarView.MONTH
+    //private var currentView = CalendarView.MONTH
 
     // CalendarViewModel
     private val viewModel: CalendarViewModel by viewModels()
@@ -54,7 +54,7 @@ class CalendarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_calendar)
 
         initializeViews()
-        //setupCalendar()
+        setupCalendar()
         //updateCalendarView()
         setupEventButtons()
         setupObservers()
@@ -205,6 +205,9 @@ class CalendarActivity : AppCompatActivity() {
 
         // Empty Grid
         calendarGrid.removeAllViews()
+
+        // Add currentView from ViewModel
+        val currentView = viewModel.currentView.value ?: CalendarView.MONTH
 
         // Change layout in dependency of View
         when (currentView) {
