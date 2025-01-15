@@ -584,25 +584,25 @@ class CalendarActivity : AppCompatActivity() {
             }
             hourRow.addView(hourView)
 
-            // Slots for Events
-            val timeSlot = TextView(this).apply {
-                gravity = Gravity.TOP or Gravity.START
+            // Container for Events
+            val eventsContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    120
+                    LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-
-                setPadding(8, 16, 8, 16)
-                background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
-
-                // Check if there are already Events
-                setOnClickListener {
-                    val timeString = String.format("%02d:00", hour)
-                    showAddEventDialog() // opens dialog for new events
-                }
+                setPadding(8, 4, 8, 4)
+                background = ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
             }
-            hourRow.addView(timeSlot)
+
+            // Show Events for current hour
+            eventsForDay?.filter { event ->
+                event.dateTime.hour == hour
+            }?.forEach { event ->
+                eventsContainer.addView(createEventView(event))
+            }
+
+            hourRow.addView(eventsContainer)
 
             timeContainer.addView(hourRow)
         }
