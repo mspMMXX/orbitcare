@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.EditText
@@ -315,6 +316,22 @@ class CalendarActivity : AppCompatActivity() {
             CalendarView.MONTH -> updateMonthView()
             CalendarView.WEEK -> updateWeekView()
             CalendarView.DAY -> updateDayView()
+        }
+    }
+
+    private fun createEventView(event: Event): TextView {
+        return TextView(this).apply {
+            text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
+            setTextColor(Color.WHITE)
+            //setBackgroundResource(R.drawable.event_background)
+            setPadding(4, 2, 4, 2)
+            textSize = 12f
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.END
+
+            setOnClickListener {
+                showUpdateEventDialog(event)
+            }
         }
     }
 
