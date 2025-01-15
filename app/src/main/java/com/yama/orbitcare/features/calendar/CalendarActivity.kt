@@ -245,6 +245,11 @@ class CalendarActivity : AppCompatActivity() {
             .show()
     }
 
+    @SuppressLint("NewApi")
+    private fun updateEvent(eventId: String, title: String, date: String, time: String) {
+
+    }
+
     private fun updateCalendarView() {
         // Update Month and Year in Header
         monthYearText.text = dateFormat.format(calendar.time)

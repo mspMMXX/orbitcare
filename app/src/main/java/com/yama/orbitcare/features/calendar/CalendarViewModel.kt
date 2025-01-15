@@ -35,7 +35,7 @@ class CalendarViewModel : ViewModel() {
     }
 
     // Add Event
-    fun addEvent(title: String, date: LocalDate, time: LocalTime, eventType: String, notes: String = "", color: String = "", view: String = "") {
+    fun addEvent(title: String, date: LocalDate, time: LocalTime, eventType: String, notes: String = "", color: String = "") {
         val newEvent = Event(
             title = title,
             dateTime = LocalDateTime.of(date, time),
