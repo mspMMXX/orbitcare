@@ -2,8 +2,10 @@ package com.yama.orbitcare.features.calendar
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageButton
@@ -12,6 +14,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -267,7 +270,21 @@ class CalendarActivity : AppCompatActivity() {
         viewModel.removeEvent(eventId) // TODO: Add to ViewModel
     }
 
+    // Present Event in view
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun addEventToView(event: Event, container: ViewGroup) {
+        val eventView = TextView(this).apply {
+            text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
+            setPadding(8, 4, 8, 4)
+            //setBackgroundResource(R.drawable.event_background)
+            setTextColor(Color.WHITE)
 
+            setOnClickListener {
+                showUpdateEventDialog(event)
+            }
+        }
+        container.addView(eventView)
+    }
 
     private fun updateCalendarView() {
         // Update Month and Year in Header
