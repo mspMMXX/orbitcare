@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.gridlayout)
     implementation(libs.firebase.firestore.ktx)
     implementation (libs.threetenabp)
+    implementation(libs.androidx.core.i18n)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

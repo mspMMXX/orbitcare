@@ -183,35 +183,12 @@ class CalendarActivity : AppCompatActivity() {
                 val eventTime = timeEdit.text.toString()
 
                 // Save event entries
-                saveEvent(eventTitle, eventDate, eventTime) // Dummy Values
+                viewModel.saveEvent(eventTitle, eventDate, eventTime) // Dummy Values
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
             }
             .show()
-    }
-
-    @SuppressLint("NewApi")
-    private fun saveEvent(title: String, date: String, time: String) {
-        // Add the logic - replace with firestore values
-        /*Toast.makeText(this,
-            "Event erstellt: $title am $date um $time",
-            Toast.LENGTH_SHORT).show()
-
-        updateCalendarView()*/
-        // Parse date and time strings to LocalDate and LocalTime
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-
-        val localDate = LocalDate.parse(date, dateFormatter)
-        val localTime = LocalTime.parse(time, timeFormatter)
-
-        viewModel.addEvent(
-            title = title,
-            date = localDate,
-            time = localTime,
-            eventType = "Default"
-        )
     }
 
     @SuppressLint("NewApi")

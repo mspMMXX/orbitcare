@@ -9,6 +9,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
+
 @SuppressLint("NewApi")
 class CalendarViewModel : ViewModel() {
     // Live data for events
@@ -48,6 +49,28 @@ class CalendarViewModel : ViewModel() {
         val currentEvents = _events.value.orEmpty().toMutableList()
         currentEvents.add(newEvent)
         _events.value = currentEvents
+    }
+
+    @SuppressLint("NewApi")
+    fun saveEvent(title: String, dateStr: String, timeStr: String) {
+        try {
+            // Parse date and time strings to LocalDate and LocalTime
+            val dateFormatter = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            val timeFormatter = java.time.format.DateTimeFormatter.ofPattern("HH:mm")
+
+            val localDate = LocalDate.parse(dateStr, dateFormatter)
+            val localTime = LocalTime.parse(timeStr, timeFormatter)
+
+            addEvent(
+                title = title,
+                date = localDate,
+                time = localTime,
+                eventType = "Default"
+            )
+        } catch (e: Exception) {
+            // Handle parsing errors if needed
+            e.printStackTrace()
+        }
     }
 
     fun updateEvent(oldEvent: Event, title: String, date: LocalDate, time: LocalTime, eventType: String = "", notes: String = "", color: String = "", view: String = "") {
