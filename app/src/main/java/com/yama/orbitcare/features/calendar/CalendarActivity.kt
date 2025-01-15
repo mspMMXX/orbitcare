@@ -230,7 +230,19 @@ class CalendarActivity : AppCompatActivity() {
                 //showDeleteEventDialog(event)
             }
             .show()
+    }
 
+    private fun showDeleteEventDialog(event: Event) {
+        AlertDialog.Builder(this)
+            .setTitle("Event löschen")
+            .setMessage("Möchten Sie das Event '${event.title}' wirklich löschen?")
+            .setPositiveButton("Löschen") { _, _ ->
+                //removeEvent(event.id)
+            }
+            .setNegativeButton("Abbrechen") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 
     private fun updateCalendarView() {
