@@ -254,7 +254,7 @@ class CalendarActivity : AppCompatActivity() {
         val localDate = LocalDate.parse(date, dateFormatter)
         val localTime = LocalTime.parse(time, timeFormatter)
 
-        viewModel.updateEvent(
+        viewModel.updateEvent( // TODO: Add to Viewmodel
             id = eventId,
             title = title,
             date = localDate,
@@ -262,6 +262,12 @@ class CalendarActivity : AppCompatActivity() {
             eventType = "Default" // oder beibehalten des ursprünglichen Event-Typs
         )
     }
+
+    private fun removeEvent(eventId: String) {
+        viewModel.removeEvent(eventId) // TODO: Add to ViewModel
+    }
+
+
 
     private fun updateCalendarView() {
         // Update Month and Year in Header
