@@ -69,6 +69,12 @@ class CalendarViewModel : ViewModel() {
         }
     }
 
+    fun removeEvent(event: Event) {
+        val currentEvents = _events.value.orEmpty().toMutableList()
+        currentEvents.remove(event)
+        _events.value = currentEvents
+    }
+
     // Get specific Events for specific dates
     fun getEventsForDate(date: LocalDate): List<Event> {
         return _events.value.orEmpty().filter {
