@@ -50,6 +50,25 @@ class CalendarViewModel : ViewModel() {
         _events.value = currentEvents
     }
 
+    fun updateEvent(oldEvent: Event, title: String, date: LocalDate, time: LocalTime, eventType: String = "", notes: String = "", color: String = "", view: String = "") {
+        val currentEvents = _events.value.orEmpty().toMutableList()
+        val eventIndex = currentEvents.indexOf(oldEvent)
+
+        if (eventIndex != -1) {
+            val updatedEvent = Event(
+                title = title,
+                dateTime = LocalDateTime.of(date, time),
+                eventType = eventType,
+                notes = notes,
+                color = color,
+                view = view
+            )
+
+            currentEvents[eventIndex] = updatedEvent
+            _events.value = currentEvents
+        }
+    }
+
     // Get specific Events for specific dates
     fun getEventsForDate(date: LocalDate): List<Event> {
         return _events.value.orEmpty().filter {
