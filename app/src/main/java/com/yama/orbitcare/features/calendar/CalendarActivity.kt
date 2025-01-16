@@ -1,9 +1,13 @@
 package com.yama.orbitcare.features.calendar
 
+import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.text.TextUtils
 import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageButton
@@ -11,6 +15,8 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -18,8 +24,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Event
+import com.yama.orbitcare.data.models.Event
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
@@ -40,20 +50,53 @@ class CalendarActivity : AppCompatActivity() {
     private var selectedDay: Int? = null
 
     // Calendar View enum
-    private var currentView = CalendarView.MONTH
+    //private var currentView = CalendarView.MONTH
+
+    // CalendarViewModel
+    private val viewModel: CalendarViewModel by viewModels()
 
     enum class CalendarView {
         MONTH, WEEK, DAY
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
         initializeViews()
         setupCalendar()
-        updateCalendarView()
+        //updateCalendarView()
         setupEventButtons()
+        setupObservers()
+
+        // Test event
+        viewModel.addEvent(
+            title = "Test Event",
+            date = LocalDate.now(),
+            time = LocalTime.of(14, 0),
+            eventType = "Default"
+        )
+    }
+
+    // Observe Data
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setupObservers() {
+        viewModel.currentDate.observe(this) {
+            updateCalendarView()
+        }
+
+        viewModel.events.observe(this) {
+            updateCalendarView()
+        }
+
+        viewModel.currentView.observe(this) {
+            updateCalendarView()
+        }
+
+        viewModel.selectedDay.observe(this) {
+            updateCalendarView()
+        }
     }
 
     private fun initializeViews() {
@@ -100,18 +143,17 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun switchToMonthView() {
-        currentView = CalendarView.MONTH
-        updateCalendarView()
+        viewModel.switchView(CalendarView.MONTH)
     }
 
     private fun switchToWeekView() {
-        currentView = CalendarView.WEEK
-        updateCalendarView()
+        viewModel.switchView(CalendarView.WEEK)
     }
 
     private fun switchToDayView() {
-        currentView = CalendarView.DAY
-        updateCalendarView()
+        /*currentView = CalendarView.DAY
+        updateCalendarView()*/
+        viewModel.switchView(CalendarView.DAY)
     }
 
     private fun showAddEventDialog() {
@@ -146,7 +188,7 @@ class CalendarActivity : AppCompatActivity() {
                 val eventTime = timeEdit.text.toString()
 
                 // Save event entries
-                saveEvent(eventTitle, eventDate, eventTime) // Dummy Values
+                viewModel.saveEvent(eventTitle, eventDate, eventTime) // Dummy Values
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
@@ -154,30 +196,102 @@ class CalendarActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun saveEvent(title: String, date: String, time: String) {
-        // ATTENTION: Later -> Implementation of all Attributes!!!
-        val dformatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
-        val dateTime = LocalDateTime.parse("${date} ${time}", dformatter)
-        val event = Event(title, dateTime)
-        val db = FirestoreDatabase()
-        db.addEvent(event, onSuccess = {
-            Log.d("Debugg", "Event saved to Firestore.")
-        }, onFailure = {
-            Log.d("Debugg", "Event not saved to Firestore.")
-        })
-        Toast.makeText(this,
-            "Event erstellt: $title am $date um $time",
-            Toast.LENGTH_SHORT).show()
+    @SuppressLint("NewApi")
+    private fun showUpdateEventDialog(event: Event) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_add_event, null)
 
-        updateCalendarView()
+        val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
+        val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
+        val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
+
+        // Insert Event data
+        titleEdit.setText(event.title)
+        dateEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+        timeEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+
+        builder.setView(dialogView)
+            .setTitle("Event bearbeiten")
+            .setPositiveButton("Aktualisieren") { _, _ ->
+                val eventTitle = titleEdit.text.toString()
+                val eventDate = dateEdit.text.toString()
+                val eventTime = timeEdit.text.toString()
+
+                updateEvent(event, eventTitle, eventDate, eventTime)
+            }
+            .setNegativeButton("Abbrechen") { dialog, _ ->
+                dialog.cancel()
+            }
+            .setNeutralButton("Löschen") { _, _ ->
+                showDeleteEventDialog(event)
+            }
+            .show()
     }
 
+    private fun showDeleteEventDialog(event: Event) {
+        AlertDialog.Builder(this)
+            .setTitle("Event löschen")
+            .setMessage("Möchten Sie das Event '${event.title}' wirklich löschen?")
+            .setPositiveButton("Löschen") { _, _ ->
+                removeEvent(event)
+            }
+            .setNegativeButton("Abbrechen") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
+    }
+
+    @SuppressLint("NewApi")
+    private fun updateEvent(oldEvent: Event, title: String, date: String, time: String) {
+        // Parse date and time strings to LocalDate and LocalTime
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+        val localDate = LocalDate.parse(date, dateFormatter)
+        val localTime = LocalTime.parse(time, timeFormatter)
+
+        viewModel.updateEvent(
+            oldEvent = oldEvent,
+            title = title,
+            date = localDate,
+            time = localTime,
+            eventType = "Default",
+            notes = oldEvent.notes,
+            color = oldEvent.color,
+        )
+    }
+
+    private fun removeEvent(event: Event) {
+        viewModel.removeEvent(event)
+    }
+
+    // Present Event in view
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun addEventToView(event: Event, container: ViewGroup) {
+        val eventView = TextView(this).apply {
+            text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
+            setPadding(8, 4, 8, 4)
+            setBackgroundResource(R.drawable.event_background)
+            setTextColor(Color.WHITE)
+
+            setOnClickListener {
+                showUpdateEventDialog(event)
+            }
+        }
+        container.addView(eventView)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateCalendarView() {
         // Update Month and Year in Header
         monthYearText.text = dateFormat.format(calendar.time)
 
         // Empty Grid
         calendarGrid.removeAllViews()
+
+        // Add currentView from ViewModel
+        val currentView = viewModel.currentView.value ?: CalendarView.MONTH
 
         // Change layout in dependency of View
         when (currentView) {
@@ -198,6 +312,24 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createEventView(event: Event): TextView {
+        return TextView(this).apply {
+            text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
+            setTextColor(Color.WHITE)
+            setBackgroundResource(R.drawable.event_background)
+            setPadding(4, 2, 4, 2)
+            textSize = 12f
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.END
+
+            setOnClickListener {
+                showUpdateEventDialog(event)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateMonthView() {
         // Add Weekday Headers
         addWeekDayHeaders()
@@ -219,11 +351,78 @@ class CalendarActivity : AppCompatActivity() {
         }
 
         // Add days of Month
-        for (dayOfMonth in 1..maxDaysInMonth) {
+        /*for (dayOfMonth in 1..maxDaysInMonth) {
             addDay(dayOfMonth)
+        }*/
+
+        // Days with events
+        for (dayOfMonth in 1..maxDaysInMonth) {
+            val dayContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(4, 4, 4, 4)
+                }
+                setPadding(4, 8, 4, 8)
+            }
+
+            // Add date
+            val dateView = TextView(this).apply {
+                text = dayOfMonth.toString()
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                textSize = 16f
+
+                when {
+                    isCurrentDay(dayOfMonth) -> {
+                        setBackgroundResource(R.drawable.current_day_background)
+                        setTextColor(Color.WHITE)
+                    }
+
+                    dayOfMonth == selectedDay -> {
+                        setBackgroundResource(R.drawable.selected_day_background)
+                    }
+                }
+                setOnClickListener {
+                    selectedDay = if (selectedDay == dayOfMonth) null else dayOfMonth
+                    updateCalendarView()
+                }
+            }
+            dayContainer.addView(dateView)
+
+            // Add events for this day
+            val eventsForDay = viewModel.events.value?.filter { event ->
+                val eventDate = event.dateTime.toLocalDate()
+                eventDate.year == calendar.get(Calendar.YEAR) &&
+                        eventDate.monthValue == calendar.get(Calendar.MONTH) + 1 &&
+                        eventDate.dayOfMonth == dayOfMonth
+            }
+
+            eventsForDay?.take(2)?.forEach { event ->
+                dayContainer.addView(createEventView(event))
+            }
+
+            // Show if there are more events
+            if ((eventsForDay?.size ?: 0) > 2) {
+                val moreEventsView = TextView(this).apply {
+                    text = "+${eventsForDay!!.size - 2} mehr"
+                    setTextColor(Color.GRAY)
+                    textSize = 10f
+                    gravity = Gravity.CENTER
+                }
+                dayContainer.addView(moreEventsView)
+            }
+
+            calendarGrid.addView(dayContainer)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateWeekView() {
         // Add Weekday Headers
         addWeekDayHeaders()
@@ -237,53 +436,57 @@ class CalendarActivity : AppCompatActivity() {
             val currentCal = weekStart.clone() as Calendar
             currentCal.add(Calendar.DAY_OF_WEEK, i)
 
-            val dayView = TextView(this).apply {
-                text = currentCal.get(Calendar.DAY_OF_MONTH).toString()
-                gravity = Gravity.CENTER
-
-                // Add space for week view
-                val displayMetrics = resources.displayMetrics
-                val screenHeight = displayMetrics.heightPixels
-                val dayHeight = screenHeight / 2
-
+            val dayContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
-                    height = dayHeight
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    setMargins(8, 8, 8, 8)
+                    setMargins(4, 4, 4, 4)
                 }
+            }
 
-                setPadding(8, 16, 8, 16)
+            // Add date
+            val dateView = TextView(this).apply {
+                text = currentCal.get(Calendar.DAY_OF_MONTH).toString()
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                setPadding(4, 8, 4, 8)
                 textSize = 16f
 
-                // Highlight current day
                 when {
                     isCurrentDay(currentCal) -> {
                         setBackgroundResource(R.drawable.current_day_background)
                         setTextColor(Color.WHITE)
                     }
-
                     currentCal.get(Calendar.DAY_OF_MONTH) == selectedDay -> {
                         setBackgroundResource(R.drawable.selected_day_background)
                     }
                 }
-
-                // Click Listener for days
-                setOnClickListener {
-                    selectedDay = currentCal.get(Calendar.DAY_OF_MONTH)
-                    updateCalendarView()
-
-                    Toast.makeText(
-                        context,
-                        SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(currentCal.time),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
-            calendarGrid.addView(dayView)
+
+            dayContainer.addView(dateView)
+
+            // Events for this day
+            val eventsForDay = viewModel.events.value?.filter { event ->
+                val eventDate = event.dateTime.toLocalDate()
+                eventDate.year == currentCal.get(Calendar.YEAR) &&
+                        eventDate.monthValue == currentCal.get(Calendar.MONTH) + 1 &&
+                        eventDate.dayOfMonth == currentCal.get(Calendar.DAY_OF_MONTH)
+            }?.sortedBy { it.dateTime }
+
+            eventsForDay?.forEach { event ->
+                dayContainer.addView(createEventView(event))
+            }
+
+            calendarGrid.addView(dayContainer)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateDayView() {
         calendarGrid.removeAllViews()
 
@@ -310,7 +513,7 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.addView(dateHeader)
 
         // ScrollView for hours
-        val scrollView = ScrollView(this).apply {
+        /*val scrollView = ScrollView(this).apply {
             layoutParams = GridLayout.LayoutParams().apply {
                 width = GridLayout.LayoutParams.MATCH_PARENT
                 height = GridLayout.LayoutParams.MATCH_PARENT
@@ -318,7 +521,7 @@ class CalendarActivity : AppCompatActivity() {
                 rowSpec = GridLayout.spec(1, 1f)
                 columnSpec = GridLayout.spec(0, 2)
             }
-        }
+        }*/
 
         // Maincontainer
         val mainContainer = LinearLayout(this).apply {
@@ -337,6 +540,14 @@ class CalendarActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
+
+        // Events for current day
+        val eventsForDay = viewModel.events.value?.filter { event ->
+            val eventDate = event.dateTime.toLocalDate()
+            eventDate.year == calendar.get(Calendar.YEAR) &&
+                    eventDate.monthValue == calendar.get(Calendar.MONTH) + 1 &&
+                    eventDate.dayOfMonth == calendar.get(Calendar.DAY_OF_MONTH)
+        }?.sortedBy { it.dateTime }
 
         // Hour View from 6 to 22
         for (hour in 6..22) {
@@ -363,30 +574,40 @@ class CalendarActivity : AppCompatActivity() {
             }
             hourRow.addView(hourView)
 
-            // Slots for Events
-            val timeSlot = TextView(this).apply {
-                gravity = Gravity.TOP or Gravity.START
+            // Container for Events
+            val eventsContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    120
+                    LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-
-                setPadding(8, 16, 8, 16)
-                background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
-
-                // Check if there are already Events
-                setOnClickListener {
-                    val timeString = String.format("%02d:00", hour)
-                    showAddEventDialog() // opens dialog for new events
-                }
+                setPadding(8, 4, 8, 4)
+                background = ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
             }
-            hourRow.addView(timeSlot)
+
+            // Show Events for current hour
+            eventsForDay?.filter { event ->
+                event.dateTime.hour == hour
+            }?.forEach { event ->
+                eventsContainer.addView(createEventView(event))
+            }
+
+            hourRow.addView(eventsContainer)
 
             timeContainer.addView(hourRow)
         }
-        mainContainer.addView(timeContainer)
-        scrollView.addView(mainContainer)
+
+        // Scrollview for event layout
+        val scrollView = ScrollView(this).apply {
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = GridLayout.LayoutParams.MATCH_PARENT
+                height = GridLayout.LayoutParams.MATCH_PARENT
+                rowSpec = GridLayout.spec(1, 1f)
+                columnSpec = GridLayout.spec(0, 2)
+            }
+        }
+
+        scrollView.addView(timeContainer)
         calendarGrid.addView(scrollView)
     }
 
@@ -409,6 +630,7 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addDay(dayOfMonth: Int) {
         val dayView = TextView(this).apply {
             text = dayOfMonth.toString()
@@ -483,7 +705,7 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun setupCalendar() {
         // Click Listener for Navigation
-        prevMonth.setOnClickListener {
+        /*prevMonth.setOnClickListener {
             when (currentView) {
                 CalendarView.MONTH -> calendar.add(Calendar.MONTH, -1)
                 CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, -1)
@@ -499,6 +721,13 @@ class CalendarActivity : AppCompatActivity() {
                 CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
             updateCalendarView()
+        }*/
+        prevMonth.setOnClickListener {
+            viewModel.navigatePrevious()
+        }
+
+        nextMonth.setOnClickListener {
+            viewModel.navigateNext()
         }
     }
 }

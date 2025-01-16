@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.yama.orbitcare"
-        minSdk = 26
+        minSdk = 24
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -46,7 +46,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.gridlayout)
     implementation(libs.firebase.firestore.ktx)
-    implementation("de.mkammerer:argon2-jvm:2.11")
+    implementation (libs.threetenabp)
+    implementation(libs.androidx.core.i18n)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
