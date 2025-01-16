@@ -69,12 +69,12 @@ class CalendarActivity : AppCompatActivity() {
         setupObservers()
 
         // Test event
-        viewModel.addEvent(
+        /*viewModel.addEvent(
             title = "Test Event",
             date = LocalDate.now(),
             time = LocalTime.of(14, 0),
             eventType = "Default"
-        )
+        )*/
     }
 
     // Observe Data

@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.toObject
 import com.yama.orbitcare.data.models.*
 
 class FirestoreDatabase {
@@ -135,20 +136,20 @@ class FirestoreDatabase {
         db.collection("Event")
             .get()
             .addOnSuccessListener { result ->
-                if(result != null) {
-                    val list = mutableListOf<Event>()
-                    for (document in result) {
-                        Log.d(TAG, "${document.id} => ${document.data}")
+                val list = mutableListOf<Event>()
+                for (document in result) {
+                    try {
                         val event = document.toObject(Event::class.java)
+                        Log.d("Debugg", "Event: ${event.title} wurde geladen")
                         list.add(event)
+                    } catch (e: Exception) {
+                        Log.d("Debugg", "Convert Failure Doc")
                     }
-                    onComplete(list)
-                } else {
-                    onComplete(null)
                 }
+                onComplete(list)
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Fehler beim laden der Event-Sammlung.", e)
+                Log.d("Debugg", "Load Events failure")
                 onComplete(null)
             }
     }
@@ -165,15 +166,13 @@ class FirestoreDatabase {
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val organisation = document.toObject(Organisation::class.java)
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                     onComplete(organisation)
                 } else {
-                    Log.d(TAG, "Kein Dokument mit dieser ID gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Organisation-Dokuments.", e)
+                Log.d("Organisation", "Loading organisation-doc failed", e)
                 onComplete(null)
             }
 
@@ -189,15 +188,13 @@ class FirestoreDatabase {
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val employee = document.toObject(Employee::class.java)
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                     onComplete(employee)
                 } else {
-                    Log.d(TAG, "Kein Dokument mit dieser ID gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Employee-Dokuments.", e)
+                Log.d("Employee", "Loading employee-doc failed.", e)
                 onComplete(null)
             }
     }
@@ -212,15 +209,13 @@ class FirestoreDatabase {
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val client = document.toObject(Client::class.java)
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                     onComplete(client)
                 } else {
-                    Log.d(TAG, "Kein Dokument mit dieser ID gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Client-Dokuments.", e)
+                Log.d("Client", "Loading client-doc failed.", e)
                 onComplete(null)
             }
     }
@@ -235,15 +230,13 @@ class FirestoreDatabase {
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val event = document.toObject(Event::class.java)
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                     onComplete(event)
                 } else {
-                    Log.d(TAG, "Kein Dokument mit dieser ID gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Event-Dokuments.", e)
+                Log.d("Event", "Loading event-doc failed.", e)
                 onComplete(null)
             }
     }
@@ -268,16 +261,14 @@ class FirestoreDatabase {
                         Log.d(TAG, "DocumentSnapshot data: ${document.documents.first().data}")
                         onComplete(organisation)
                     } else {
-                        Log.d(TAG, "Kein Dokument mit dem Wert gefunden.")
                         onComplete(null)
                     }
                 } else {
-                    Log.d(TAG, "Kein Dokument mit diesem Feld gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Employee-Dokuments.", e)
+                Log.d("Organisation", "Loading organisation failed", e)
                 onComplete(null)
             }
     }
@@ -300,16 +291,14 @@ class FirestoreDatabase {
                         Log.d(TAG, "DocumentSnapshot data: ${document.documents.first().data}")
                         onComplete(employee)
                     } else {
-                        Log.d(TAG, "Kein Dokument mit dem Wert gefunden.")
                         onComplete(null)
                     }
                 } else {
-                    Log.d(TAG, "Kein Dokument mit diesem Feld gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Employee-Dokuments.", e)
+                Log.d("Employee", "Loading Employee failed.", e)
                 onComplete(null)
             }
     }
@@ -332,16 +321,14 @@ class FirestoreDatabase {
                         Log.d(TAG, "DocumentSnapshot data: ${document.documents.first().data}")
                         onComplete(client)
                     } else {
-                        Log.d(TAG, "Kein Dokument mit dem Wert gefunden.")
                         onComplete(null)
                     }
                 } else {
-                    Log.d(TAG, "Kein Dokument mit diesem Feld gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Employee-Dokuments.", e)
+                Log.d("Client", "Loading client failed.", e)
                 onComplete(null)
             }
     }
@@ -364,16 +351,14 @@ class FirestoreDatabase {
                         Log.d(TAG, "DocumentSnapshot data: ${document.documents.first().data}")
                         onComplete(event)
                     } else {
-                        Log.d(TAG, "Kein Dokument mit dem Wert gefunden.")
                         onComplete(null)
                     }
                 } else {
-                    Log.d(TAG, "Kein Dokument mit diesem Feld gefunden.")
                     onComplete(null)
                 }
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "Fehler beim Laden des Employee-Dokuments.", e)
+                Log.d("Event", "Loading event failed.", e)
                 onComplete(null)
             }
     }
@@ -394,8 +379,8 @@ class FirestoreDatabase {
     /**
      * Updates an Employee document by its ID with the new Employee data.
      */
-    fun updateEmployee(employeeID: String, updateEmployee: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        db.collection("Organisation")
+    fun updateEmployee(employeeID: String, updateEmployee: Employee, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("Employee")
             .document(employeeID)
             .set(updateEmployee)
             .addOnSuccessListener { onSuccess() }
@@ -405,8 +390,8 @@ class FirestoreDatabase {
     /**
      * Updates an Client document by its ID with the new Client data.
      */
-    fun updateClient(clientID: String, updateClient: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        db.collection("Organisation")
+    fun updateClient(clientID: String, updateClient: Client, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("Client")
             .document(clientID)
             .set(updateClient)
             .addOnSuccessListener { onSuccess() }
@@ -417,7 +402,7 @@ class FirestoreDatabase {
      * Updates an Event document by its ID with the new Event data.
      */
     fun updateEvent(id: String, updateEvent: Event, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        db.collection("Organisation")
+        db.collection("Event")
             .document(id)
             .set(updateEvent, SetOptions.merge())
             .addOnSuccessListener { onSuccess() }
@@ -425,6 +410,10 @@ class FirestoreDatabase {
     }
 
     // ---------- Delete Documents from Firestore ----------
+
+    /**
+     * Deletes an Event document by its ID.
+     */
     fun deleteEvent(id: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Event")
             .document(id)
