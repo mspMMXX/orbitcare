@@ -1,13 +1,16 @@
 package com.yama.orbitcare.features.calendar
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Event
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.UUID
 
 
 @SuppressLint("NewApi")
@@ -32,12 +35,14 @@ class CalendarViewModel : ViewModel() {
         _currentDate.value = LocalDateTime.now()
         _currentView.value = CalendarActivity.CalendarView.MONTH
         _events.value = emptyList()
+        //loadAllEvents()
         _selectedDay.value = LocalDate.now()
     }
 
     // Add Event
     fun addEvent(title: String, date: LocalDate, time: LocalTime, eventType: String, notes: String = "", color: String = "") {
         val newEvent = Event(
+            id = UUID.randomUUID().toString(),
             title = title,
             dateTime = LocalDateTime.of(date, time),
             eventType = eventType,
@@ -45,6 +50,14 @@ class CalendarViewModel : ViewModel() {
             color = color,
 
         )
+
+        // Save Event to Firestore DB
+        val db = FirestoreDatabase()
+        db.addEvent(newEvent, onSuccess = {
+            Log.d("Debugg", "Save Event success.")
+        }, onFailure = {
+            Log.d("Debugg", "Save Event failure.")
+        })
 
         val currentEvents = _events.value.orEmpty().toMutableList()
         currentEvents.add(newEvent)
@@ -78,7 +91,9 @@ class CalendarViewModel : ViewModel() {
         val eventIndex = currentEvents.indexOf(oldEvent)
 
         if (eventIndex != -1) {
+            Log.d("Debugg", "EventID: ${oldEvent.id}")
             val updatedEvent = Event(
+                id = oldEvent.id,
                 title = title,
                 dateTime = LocalDateTime.of(date, time),
                 eventType = eventType,
@@ -87,6 +102,13 @@ class CalendarViewModel : ViewModel() {
                 view = view
             )
 
+            // Update - Firestore should but doesn't work?!
+            val db = FirestoreDatabase()
+            db.updateEvent(oldEvent.id, updatedEvent, onSuccess = {
+                Log.d("Debugg", "Eventupdate success")
+            }, onFailure = {
+                Log.d("Debugg", "Eventupdate failure.")
+            })
             currentEvents[eventIndex] = updatedEvent
             _events.value = currentEvents
         }
@@ -96,6 +118,12 @@ class CalendarViewModel : ViewModel() {
         val currentEvents = _events.value.orEmpty().toMutableList()
         currentEvents.remove(event)
         _events.value = currentEvents
+        val db = FirestoreDatabase()
+        db.deleteEvent(event.id, onSuccess = {
+            Log.d("Debugg", "Event deleted.")
+        }, onFailure = {
+            Log.d("Debugg", "Event not deleted.")
+        })
     }
 
     // Get specific Events for specific dates
@@ -151,5 +179,16 @@ class CalendarViewModel : ViewModel() {
 
     fun selectDay(date: LocalDate) {
         _selectedDay.value = date
+    }
+
+    private fun loadAllEvents() {
+        val db = FirestoreDatabase()
+        db.getAllEvents { events ->
+            if (events != null) {
+                _events.value = events
+            } else {
+                Log.d("Debugg", "No Events found.")
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.yama.orbitcare.data.database
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.yama.orbitcare.data.models.*
 
 class FirestoreDatabase {
@@ -39,7 +40,8 @@ class FirestoreDatabase {
     // Adds an Event object to the Event Collection
     fun addEvent(event: Event, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Event")
-            .add(event)
+            .document(event.id)
+            .set(event)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e) }
     }
@@ -414,11 +416,24 @@ class FirestoreDatabase {
     /**
      * Updates an Event document by its ID with the new Event data.
      */
-    fun updateEvent(eventID: String, updateEvent: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun updateEvent(id: String, updateEvent: Event, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
-            .document(eventID)
-            .set(updateEvent)
+            .document(id)
+            .set(updateEvent, SetOptions.merge())
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e) }
+    }
+
+    // ---------- Delete Documents from Firestore ----------
+    fun deleteEvent(id: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("Event")
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
     }
 }

@@ -3,6 +3,7 @@ package com.yama.orbitcare.data.models
 import java.time.LocalDateTime
 
 data class Event (
+    val id: String = "",
     val title: String = "",
     val dateTime: LocalDateTime,
     val eventType: String = "",
