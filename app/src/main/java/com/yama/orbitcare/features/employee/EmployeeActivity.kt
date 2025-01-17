@@ -57,6 +57,6 @@ class EmployeeActivity : AppCompatActivity() {
         }
 
         // Set active menu button
-        bottomNavigation.selectedItemId = R.id.navigation_calendar
+        bottomNavigation.selectedItemId = R.id.navigation_group
     }
 }
