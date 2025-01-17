@@ -1,6 +1,7 @@
 package com.yama.orbitcare.features.calendar
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -20,10 +21,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
 import com.yama.orbitcare.data.models.Event
 import com.yama.orbitcare.data.database.FirestoreDatabase
+import com.yama.orbitcare.features.client.ClientActivity
+import com.yama.orbitcare.features.employee.EmployeeActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -40,6 +44,8 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var nextMonth: ImageButton
     private lateinit var addEventButton: FloatingActionButton
     private lateinit var settingsButton: FloatingActionButton
+    // Bottom Navigation
+    private lateinit var bottomNavigation: BottomNavigationView
 
     // Calendar variables
     private val calendar = Calendar.getInstance()
@@ -67,6 +73,7 @@ class CalendarActivity : AppCompatActivity() {
         //updateCalendarView()
         setupEventButtons()
         setupObservers()
+        setupBottomNavigation()
 
         // Test event
         viewModel.addEvent(
@@ -75,6 +82,7 @@ class CalendarActivity : AppCompatActivity() {
             time = LocalTime.of(14, 0),
             eventType = "Default"
         )
+
     }
 
     // Observe Data
@@ -104,6 +112,34 @@ class CalendarActivity : AppCompatActivity() {
         nextMonth = findViewById(R.id.nextMonth)
         addEventButton = findViewById(R.id.addEventButton)
         settingsButton = findViewById(R.id.settingsButton)
+        bottomNavigation = findViewById(R.id.bottomNavigation)
+    }
+
+    private fun setupBottomNavigation() {
+        bottomNavigation.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.navigation_person -> {
+                    // Start ClientActivity
+                    startActivity(Intent(this, ClientActivity::class.java))
+                    finish() // Close current Activity
+                    true
+                }
+                R.id.navigation_group -> {
+                    // Start EmployeeActivity
+                    startActivity(Intent(this, EmployeeActivity::class.java))
+                    finish() // Close current Activity
+                    true
+                }
+                R.id.navigation_calendar -> {
+                    // Already in CalendarView
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // Set active menu button
+        bottomNavigation.selectedItemId = R.id.navigation_calendar
     }
 
     private fun setupEventButtons() {
