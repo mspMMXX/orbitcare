@@ -3,13 +3,13 @@
     <item
         android:id="@+id/navigation_calendar"
         android:icon="@drawable/ic_calendar"
-        android:title="Kalender"/>
+        android:title="Calendar"/>
     <item
         android:id="@+id/navigation_person"
         android:icon="@drawable/ic_person"
-        android:title="Profil"/>
+        android:title="Profile"/>
     <item
         android:id="@+id/navigation_group"
         android:icon="@drawable/ic_group"
-        android:title="Gruppe"/>
+        android:title="Group"/>
 </menu>
