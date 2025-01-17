@@ -90,7 +90,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="100dp"
                 android:contentDescription="Settings Menu"
                 android:src="@drawable/ic_menu" />
             <!-- Floating Action Button - Add-->
@@ -99,7 +101,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="100dp"
                 android:contentDescription="Add Event"
                 android:src="@drawable/ic_add" />
         </FrameLayout>
