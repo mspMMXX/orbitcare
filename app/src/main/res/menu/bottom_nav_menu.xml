@@ -7,9 +7,9 @@
     <item
         android:id="@+id/navigation_person"
         android:icon="@drawable/ic_person"
-        android:title="Profile"/>
+        android:title="Client"/>
     <item
         android:id="@+id/navigation_group"
         android:icon="@drawable/ic_group"
-        android:title="Group"/>
+        android:title="Employee"/>
 </menu>
