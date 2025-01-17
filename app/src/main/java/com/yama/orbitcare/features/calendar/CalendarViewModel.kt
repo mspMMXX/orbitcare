@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Event
+import com.yama.orbitcare.features.login.SignInActivity
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -14,7 +15,7 @@ import java.util.UUID
 
 
 @SuppressLint("NewApi")
-class CalendarViewModel : ViewModel() {
+class CalendarViewModel(private val employeeId: String) : ViewModel() {
 
     private val db = FirestoreDatabase()
 
@@ -37,14 +38,17 @@ class CalendarViewModel : ViewModel() {
     init {
         _currentDate.value = LocalDateTime.now()
         _currentView.value = CalendarActivity.CalendarView.MONTH
-        loadAllEvents()
+        if (!employeeId.isEmpty()) {
+            loadAllEvents()
+        }
+        Log.d("Debugg", "Init CalendarViewModel nach loadAllEvents")
         _selectedDay.value = LocalDate.now()
     }
 
     // Add Event
     fun addEvent(title: String, date: LocalDate, time: LocalTime, eventType: String, notes: String = "", color: String = "") {
         val newEvent = Event(
-            id = UUID.randomUUID().toString(),
+            employeeId = employeeId,
             title = title,
             dateTimeString = LocalDateTime.of(date, time).toString(),
             eventType = eventType,
@@ -181,10 +185,14 @@ class CalendarViewModel : ViewModel() {
     }
 
     private fun loadAllEvents() {
-        db.getAllEvents { eventList ->
+        Log.d("Debugg", "LoadAllEvents - start")
+        db.getAllEvents(employeeId) { eventList ->
+            Log.d("Debugg", "getAllEvents in LoadAllEvents - start")
             if (eventList != null) {
+                Log.d("Debugg", "eventList != null")
                 _events.postValue(eventList)
             } else {
+                Log.d("Debugg", "eventList == null")
                 _events.postValue(emptyList())
             }
         }

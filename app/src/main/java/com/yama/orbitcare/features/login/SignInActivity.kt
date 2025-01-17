@@ -2,6 +2,7 @@ package com.yama.orbitcare.features.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.yama.orbitcare.R
 import com.yama.orbitcare.data.database.FirestoreDatabase
+import com.yama.orbitcare.data.models.Employee
 import com.yama.orbitcare.features.calendar.CalendarActivity
 import java.security.MessageDigest
 
@@ -59,18 +61,20 @@ class SignInActivity : AppCompatActivity() {
         val db = FirestoreDatabase()
 
         // Retrieve employee data based on the provided email
-        db.getEmployeeWithFieldValue("email", emailEditText.text.toString()) { employee ->
+        db.getEmployeeWithFieldValue("email", emailEditText.text.toString()) { empl ->
             // Check if email matches and the provided password (after hashing) matches the stored hash
-            if(employee?.email.toString() == emailEditText.text.toString() && employee?.passwordHash == pwdHash(passwordEditText.text.toString())) {
+            if(empl?.email.toString() == emailEditText.text.toString() && empl?.passwordHash == pwdHash(passwordEditText.text.toString())) {
 
                 // Navigate to the CalendarActivity
                 val calendarActivity = Intent(this, CalendarActivity::class.java)
+                calendarActivity.putExtra("employeeId", empl.id)
                 val confirmDialog = ConfirmationDialog()
-                confirmDialog.showConfirmation(this, "Hallo ${employee.firstName}.", "Willkommen bei ORBITCARE!", onComplete = {
+                confirmDialog.showConfirmation(this, "Hallo ${empl.firstName}.", "Willkommen bei ORBITCARE!", onComplete = {
                     startActivity(calendarActivity)
                 })
             } else {
                 // Display error message if authentication fails
+                Log.d("Debugg", "SignINButton failed")
                 signInError.visibility = View.VISIBLE
             }
         }

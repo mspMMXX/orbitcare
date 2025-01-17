@@ -20,6 +20,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
 import com.yama.orbitcare.data.models.Event
@@ -62,11 +64,27 @@ class CalendarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
+        val employeeId = intent.getStringExtra("employeeId") ?: ""
+        if (employeeId.isEmpty()) {
+            Log.e("Debugg", "Keine Employee-ID übergeben!")
+            finish()
+            return
+        }
+
+        val viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(CalendarViewModel::class.java)) {
+                    return CalendarViewModel(employeeId) as T
+                }
+                throw IllegalArgumentException("Unknown ViewModel class")
+            }
+        }).get(CalendarViewModel::class.java)
+
         initializeViews()
         setupCalendar()
         //updateCalendarView()
         setupEventButtons()
-        setupObservers()
+        setupObservers(viewModel)
 
         // Test event
         /*viewModel.addEvent(
@@ -79,7 +97,7 @@ class CalendarActivity : AppCompatActivity() {
 
     // Observe Data
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun setupObservers() {
+    private fun setupObservers(viewModel: CalendarViewModel) {
         viewModel.currentDate.observe(this) {
             updateCalendarView()
         }

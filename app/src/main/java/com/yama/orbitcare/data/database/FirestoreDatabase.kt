@@ -25,7 +25,8 @@ class FirestoreDatabase {
     // Adds an Employee object to the Employee Collection
     fun addEmployee(employee: Employee, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Employee")
-            .add(employee)
+            .document(employee.id)
+            .set(employee)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e) }
     }
@@ -123,33 +124,34 @@ class FirestoreDatabase {
                 }
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Fehler beim laden der Employee-Sammlung.", e)
+                Log.w(TAG, "getAllEmployees failure", e)
                 onComplete(null)
             }
     }
 
     /**
-     * Retrieves all Event documents from the Event collection.
+     * Retrieves all Event documents with the employee-ID from the Event collection.
      * Calls the onComplete callback with the list of Events or null failure.
      */
-    fun getAllEvents(onComplete: (MutableList<Event>?) -> Unit) {
+    fun getAllEvents(employeeId: String, onComplete: (MutableList<Event>?) -> Unit) {
         db.collection("Event")
+            .whereEqualTo("employeeId", employeeId)
             .get()
             .addOnSuccessListener { result ->
                 val list = mutableListOf<Event>()
                 for (document in result) {
                     try {
                         val event = document.toObject(Event::class.java)
-                        Log.d("Debugg", "Event: ${event.title} wurde geladen")
+                        Log.d("Debugg", "Event geladen: ${event.title}")
                         list.add(event)
                     } catch (e: Exception) {
-                        Log.d("Debugg", "Convert Failure Doc")
+                        Log.e("Debugg", "Fehler beim Konvertieren eines Events", e)
                     }
                 }
                 onComplete(list)
             }
             .addOnFailureListener { e ->
-                Log.d("Debugg", "Load Events failure")
+                Log.e("Debugg", "Fehler beim Abrufen der Events", e)
                 onComplete(null)
             }
     }
