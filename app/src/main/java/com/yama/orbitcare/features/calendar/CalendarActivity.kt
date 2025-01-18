@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.ViewGroup
