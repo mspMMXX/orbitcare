@@ -10,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yama.orbitcare.R
 import com.yama.orbitcare.features.calendar.CalendarActivity
 import com.yama.orbitcare.features.employee.EmployeeActivity
+import com.yama.orbitcare.features.login.SignInActivity
 
 class ClientActivity : AppCompatActivity() {
 
@@ -37,6 +38,17 @@ class ClientActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_calendar -> {
+
+                    val sharedRef = getSharedPreferences("orbitcarePref", MODE_PRIVATE)
+                    val employeeId = sharedRef.getString("employeeId", "") ?: ""
+                    if (employeeId.isNotEmpty()) {
+                        startActivity(Intent(this, CalendarActivity::class.java).apply {
+                            putExtra("employeeId", employeeId)
+                        })
+                    } else {
+                        startActivity(Intent(this, SignInActivity::class.java))
+                        finish()
+                    }
                     // Start ClientActivity
                     startActivity(Intent(this, CalendarActivity::class.java))
                     finish() // Close current Activity
