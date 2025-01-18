@@ -29,6 +29,7 @@ import com.yama.orbitcare.data.models.Event
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.features.client.ClientActivity
 import com.yama.orbitcare.features.employee.EmployeeActivity
+import com.yama.orbitcare.features.login.SignInActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -69,11 +70,22 @@ class CalendarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
-        val employeeId = intent.getStringExtra("employeeId") ?: ""
-        if (employeeId.isEmpty()) {
+        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        val employeeId = sharedPreferences.getString("employeeId", null)
+
+        if (employeeId.isNullOrEmpty()) {
+            // Falls keine employeeId verfügbar ist, zur SignInActivity navigieren
+            val signInIntent = Intent(this, SignInActivity::class.java)
+            startActivity(signInIntent)
             finish()
             return
         }
+
+        /*val employeeId = intent.getStringExtra("employeeId") ?: ""
+        if (employeeId.isEmpty()) {
+            finish()
+            return
+        }*/
         viewModel.initialize(employeeId)
         initializeViews()
         setupCalendar()

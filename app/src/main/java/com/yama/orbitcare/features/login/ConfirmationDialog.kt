@@ -22,7 +22,7 @@ class ConfirmationDialog {
                     dialog.dismiss()
                     onComplete()
                 }
-            }, 4000)
+            }, 2000)
         }
 
     }
