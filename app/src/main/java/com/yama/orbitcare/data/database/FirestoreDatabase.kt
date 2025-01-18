@@ -6,6 +6,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 import com.yama.orbitcare.data.models.*
+import java.net.HttpURLConnection
+import java.net.URL
 
 class FirestoreDatabase {
 
@@ -134,6 +136,11 @@ class FirestoreDatabase {
      * Calls the onComplete callback with the list of Events or null failure.
      */
     fun getAllEvents(employeeId: String, onComplete: (MutableList<Event>?) -> Unit) {
+        if (employeeId.isBlank()) {
+            onComplete(null)
+            return
+        }
+
         db.collection("Event")
             .whereEqualTo("employeeId", employeeId)
             .get()
@@ -142,16 +149,16 @@ class FirestoreDatabase {
                 for (document in result) {
                     try {
                         val event = document.toObject(Event::class.java)
-                        Log.d("Debugg", "Event geladen: ${event.title}")
+                        Log.d("Debugg", "Loaded Event: ${event.title}")
                         list.add(event)
                     } catch (e: Exception) {
-                        Log.e("Debugg", "Fehler beim Konvertieren eines Events", e)
+                        Log.e("Debugg", "Event-Convert failure", e)
                     }
                 }
                 onComplete(list)
             }
             .addOnFailureListener { e ->
-                Log.e("Debugg", "Fehler beim Abrufen der Events", e)
+                Log.e("Debugg", "Failure on event-loading", e)
                 onComplete(null)
             }
     }

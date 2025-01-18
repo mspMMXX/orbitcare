@@ -15,8 +15,9 @@ import java.util.UUID
 
 
 @SuppressLint("NewApi")
-class CalendarViewModel(private val employeeId: String) : ViewModel() {
+class CalendarViewModel() : ViewModel() {
 
+    private lateinit var employeeId: String
     private val db = FirestoreDatabase()
 
     // Live data for events
@@ -38,11 +39,12 @@ class CalendarViewModel(private val employeeId: String) : ViewModel() {
     init {
         _currentDate.value = LocalDateTime.now()
         _currentView.value = CalendarActivity.CalendarView.MONTH
-        if (!employeeId.isEmpty()) {
-            loadAllEvents()
-        }
-        Log.d("Debugg", "Init CalendarViewModel nach loadAllEvents")
         _selectedDay.value = LocalDate.now()
+    }
+
+    fun initialize(employeeId: String) {
+        this.employeeId = employeeId
+        loadAllEvents()
     }
 
     // Add Event
@@ -185,14 +187,12 @@ class CalendarViewModel(private val employeeId: String) : ViewModel() {
     }
 
     private fun loadAllEvents() {
-        Log.d("Debugg", "LoadAllEvents - start")
         db.getAllEvents(employeeId) { eventList ->
-            Log.d("Debugg", "getAllEvents in LoadAllEvents - start")
             if (eventList != null) {
-                Log.d("Debugg", "eventList != null")
+                Log.d("Debugg", "Events are loaded: ${eventList.size}")
                 _events.postValue(eventList)
             } else {
-                Log.d("Debugg", "eventList == null")
+                Log.d("Debugg", "No events are found.")
                 _events.postValue(emptyList())
             }
         }

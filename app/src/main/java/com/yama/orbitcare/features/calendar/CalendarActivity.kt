@@ -66,25 +66,15 @@ class CalendarActivity : AppCompatActivity() {
 
         val employeeId = intent.getStringExtra("employeeId") ?: ""
         if (employeeId.isEmpty()) {
-            Log.e("Debugg", "Keine Employee-ID übergeben!")
             finish()
             return
         }
-
-        val viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(CalendarViewModel::class.java)) {
-                    return CalendarViewModel(employeeId) as T
-                }
-                throw IllegalArgumentException("Unknown ViewModel class")
-            }
-        }).get(CalendarViewModel::class.java)
-
+        viewModel.initialize(employeeId)
         initializeViews()
         setupCalendar()
         //updateCalendarView()
         setupEventButtons()
-        setupObservers(viewModel)
+        setupObservers()
 
         // Test event
         /*viewModel.addEvent(
@@ -97,12 +87,12 @@ class CalendarActivity : AppCompatActivity() {
 
     // Observe Data
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun setupObservers(viewModel: CalendarViewModel) {
+    private fun setupObservers() {
         viewModel.currentDate.observe(this) {
             updateCalendarView()
         }
 
-        viewModel.events.observe(this) {
+        viewModel.events.observe(this) { events ->
             updateCalendarView()
         }
 
