@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.ViewGroup
@@ -21,6 +20,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
@@ -68,6 +69,12 @@ class CalendarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
+        val employeeId = intent.getStringExtra("employeeId") ?: ""
+        if (employeeId.isEmpty()) {
+            finish()
+            return
+        }
+        viewModel.initialize(employeeId)
         initializeViews()
         setupCalendar()
         //updateCalendarView()
@@ -76,13 +83,14 @@ class CalendarActivity : AppCompatActivity() {
         setupBottomNavigation()
 
         // Test event
-        viewModel.addEvent(
+        /*viewModel.addEvent(
             title = "Test Event",
             date = LocalDate.now(),
             time = LocalTime.of(14, 0),
             eventType = "Default"
         )
 
+        )*/
     }
 
     // Observe Data
@@ -92,7 +100,7 @@ class CalendarActivity : AppCompatActivity() {
             updateCalendarView()
         }
 
-        viewModel.events.observe(this) {
+        viewModel.events.observe(this) { events ->
             updateCalendarView()
         }
 
