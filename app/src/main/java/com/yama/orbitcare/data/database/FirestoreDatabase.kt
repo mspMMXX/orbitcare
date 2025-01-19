@@ -36,7 +36,8 @@ class FirestoreDatabase {
     // Adds an Client object to the Client Collection
     fun addClient(client: Client, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Client")
-            .add(client)
+            .document(client.id)
+            .set(client)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e) }
     }

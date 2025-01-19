@@ -76,24 +76,33 @@ class ClientActivity : AppCompatActivity() {
             if (clientList != null) {
                 clients = clientList
                 Log.d("Debugg", "Clients found and added to local list")
-            } else {
-                Log.d("Debugg", "No Clients found in DB")
-            }
-        }
-        if (clients.isNotEmpty()) {
-            for (client in clients) {
-                val clientButton = Button(this).apply {
-                    text = client.lastName
-                    setOnClickListener {
-                        println("Klientbutton klick")
+                if (clients.isNotEmpty()) {
+                    for (client in clients) {
+                        Log.d("Debugg", "Klient: ${client.lastName}")
+                        val clientButton = Button(this).apply {
+                            text = client.lastName
+                            tag = client.id
+                            setOnClickListener {
+                                showClient(it.tag as String)
+                            }
+                        }
+                        clientListContainer.addView(clientButton)
                     }
                 }
-                clientListContainer.addView(clientButton)
+            } else {
+                Log.d("Debugg", "No Clients found in DB")
             }
         }
     }
 
     fun addClientButton(view: View) {
-        Log.d("Debugg", "Add client")
+        startActivity(Intent(this, AddClientActivity::class.java))
+    }
+
+    private fun showClient(clientId: String) {
+        val intent = Intent(this, ShowClientActivity::class.java).apply {
+            putExtra("CLIENT_ID", clientId)
+        }
+        startActivity(intent)
     }
 }

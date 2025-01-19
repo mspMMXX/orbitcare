@@ -144,7 +144,7 @@
         android:layout_marginEnd="70dp"
         android:text="Speichern"
         android:background="@color/orbitBlue"
-        android:onClick="signUpButton"
+        android:onClick="saveButtonAction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneText" />
@@ -158,7 +158,7 @@
         android:layout_marginEnd="70dp"
         android:text="Abbruch"
         android:background="@color/orbitBlue"
-        android:onClick="signUpButton"
+        android:onClick="cancelButtonAction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/saveButton" />
