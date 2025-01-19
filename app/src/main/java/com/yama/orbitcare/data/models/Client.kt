@@ -6,5 +6,7 @@ data class Client (
     val street: String = "",
     val housenumber: String = "",
     val plz: String = "",
-    val city: String = ""
+    val city: String = "",
+    val phone: String = "",
+    val email: String = ""
 )
