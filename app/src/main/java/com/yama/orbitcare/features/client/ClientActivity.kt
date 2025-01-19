@@ -2,12 +2,18 @@ package com.yama.orbitcare.features.client
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yama.orbitcare.R
+import com.yama.orbitcare.data.database.FirestoreDatabase
+import com.yama.orbitcare.data.models.Client
 import com.yama.orbitcare.features.calendar.CalendarActivity
 import com.yama.orbitcare.features.employee.EmployeeActivity
 import com.yama.orbitcare.features.login.SignInActivity
@@ -15,6 +21,9 @@ import com.yama.orbitcare.features.login.SignInActivity
 class ClientActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigation: BottomNavigationView
+    private val db = FirestoreDatabase()
+    private lateinit var clientListContainer: LinearLayout
+    private var clients = mutableListOf<Client>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,13 +34,14 @@ class ClientActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         initializeViews()
+        setClientList()
         setupBottomNavigation()
     }
 
     private fun initializeViews() {
         bottomNavigation = findViewById(R.id.bottomNavigation)
+        clientListContainer = findViewById(R.id.clientListContainer)
     }
 
     private fun setupBottomNavigation() {
@@ -59,5 +69,31 @@ class ClientActivity : AppCompatActivity() {
 
         // Set active menu button
         bottomNavigation.selectedItemId = R.id.navigation_person
+    }
+
+    private fun setClientList() {
+        db.getAllClients { clientList ->
+            if (clientList != null) {
+                clients = clientList
+                Log.d("Debugg", "Clients found and added to local list")
+            } else {
+                Log.d("Debugg", "No Clients found in DB")
+            }
+        }
+        if (clients.isNotEmpty()) {
+            for (client in clients) {
+                val clientButton = Button(this).apply {
+                    text = client.lastName
+                    setOnClickListener {
+                        println("Klientbutton klick")
+                    }
+                }
+                clientListContainer.addView(clientButton)
+            }
+        }
+    }
+
+    fun addClientButton(view: View) {
+        Log.d("Debugg", "Add client")
     }
 }
