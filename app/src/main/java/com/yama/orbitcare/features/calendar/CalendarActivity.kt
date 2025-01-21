@@ -74,6 +74,14 @@ class CalendarActivity : AppCompatActivity() {
             finish()
             return
         }
+
+        // Synchronize calendar with ViewModel
+        viewModel.currentDate.value?.let { initialDate ->
+            calendar.set(initialDate.year,
+                initialDate.monthValue -1,
+                initialDate. dayOfMonth)
+        }
+
         viewModel.initialize(employeeId)
         initializeViews()
         setupCalendar()
@@ -96,7 +104,11 @@ class CalendarActivity : AppCompatActivity() {
     // Observe Data
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
-        viewModel.currentDate.observe(this) {
+        viewModel.currentDate.observe(this) { newDateTime ->
+            // Synchronize calendar variable with ViewModel
+            calendar.set(newDateTime.year,
+                newDateTime.monthValue -1,
+                newDateTime.dayOfMonth)
             updateCalendarView()
         }
 
