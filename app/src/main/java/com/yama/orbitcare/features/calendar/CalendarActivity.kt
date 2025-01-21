@@ -220,19 +220,15 @@ class CalendarActivity : AppCompatActivity() {
         val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
         val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
 
-        // Add current date as default
-        val currentDate = if (selectedDay != null) {
-            Calendar.getInstance().apply {
-                set(calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    selectedDay!!)
-            }.time
-        } else {
-            Calendar.getInstance().time
-        }
+        // Use the calendar's current date instead of selectedDay or current date
+        val eventDate = Calendar.getInstance().apply {
+            set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+            set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+            set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH))
+        }.time
 
-        dateEdit.setText(SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(currentDate))
-        timeEdit.setText(SimpleDateFormat("HH:mm", Locale.GERMAN).format(currentDate))
+        dateEdit.setText(SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(eventDate))
+        timeEdit.setText(SimpleDateFormat("HH:mm", Locale.GERMAN).format(eventDate))
 
         builder.setView(dialogView)
             .setTitle("Neues Event")
