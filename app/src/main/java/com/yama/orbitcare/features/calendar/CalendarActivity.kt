@@ -210,7 +210,7 @@ class CalendarActivity : AppCompatActivity() {
         viewModel.switchView(CalendarView.DAY)
     }
 
-    private fun showAddEventDialog() {
+    private fun showAddEventDialog(presetHour: Int? = null, presetMinute: Int? = null) {
         // Alert Dialog to add event
         val builder = AlertDialog.Builder(this)
         val inflater = layoutInflater
@@ -225,6 +225,12 @@ class CalendarActivity : AppCompatActivity() {
             set(Calendar.YEAR, calendar.get(Calendar.YEAR))
             set(Calendar.MONTH, calendar.get(Calendar.MONTH))
             set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH))
+            if (presetHour != null) {
+                set(Calendar.HOUR_OF_DAY, presetHour)
+            }
+            if (presetMinute != null) {
+                set(Calendar.MINUTE, presetMinute)
+            }
         }.time
 
         dateEdit.setText(SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(eventDate))
@@ -623,6 +629,17 @@ class CalendarActivity : AppCompatActivity() {
                 )
                 setPadding(8, 4, 8, 4)
                 background = ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
+
+                // ClickListener for new event in timeslot
+                setOnClickListener {
+                    // Current Date with current Time
+                    val eventDateTime = calendar.clone() as Calendar
+                    eventDateTime.set(Calendar.HOUR_OF_DAY, hour)
+                    eventDateTime.set(Calendar.MINUTE, 0)
+
+                    // Show event dialog
+                    showAddEventDialog(hour, 0)
+                }
             }
 
             // Show Events for current hour
