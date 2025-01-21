@@ -572,26 +572,6 @@ class CalendarActivity : AppCompatActivity() {
         }
         calendarGrid.addView(dateHeader)
 
-        // ScrollView for hours
-        /*val scrollView = ScrollView(this).apply {
-            layoutParams = GridLayout.LayoutParams().apply {
-                width = GridLayout.LayoutParams.MATCH_PARENT
-                height = GridLayout.LayoutParams.MATCH_PARENT
-                this.setGravity(Gravity.FILL_VERTICAL)
-                rowSpec = GridLayout.spec(1, 1f)
-                columnSpec = GridLayout.spec(0, 2)
-            }
-        }*/
-
-        // Maincontainer
-        val mainContainer = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
-
         // Container for Time and Events
         val timeContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -661,7 +641,7 @@ class CalendarActivity : AppCompatActivity() {
         val scrollView = ScrollView(this).apply {
             layoutParams = GridLayout.LayoutParams().apply {
                 width = GridLayout.LayoutParams.MATCH_PARENT
-                height = GridLayout.LayoutParams.MATCH_PARENT
+                height = 0
                 rowSpec = GridLayout.spec(1, 1f)
                 columnSpec = GridLayout.spec(0, 2)
             }
