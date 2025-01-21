@@ -520,6 +520,16 @@ class CalendarActivity : AppCompatActivity() {
                         setBackgroundResource(R.drawable.selected_day_background)
                     }
                 }
+
+                // OnclickListener for day selection
+                setOnClickListener {
+                    selectedDay = if (selectedDay == currentCal.get(Calendar.DAY_OF_MONTH))
+                        null
+                    else
+                        currentCal.get(Calendar.DAY_OF_MONTH)
+                    calendar.set(Calendar.DAY_OF_MONTH, currentCal.get(Calendar.DAY_OF_MONTH))
+                    updateCalendarView()
+                }
             }
 
             dayContainer.addView(dateView)
