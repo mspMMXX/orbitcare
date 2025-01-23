@@ -101,6 +101,7 @@ class CalendarViewModel() : ViewModel() {
         if (eventIndex != -1) {
             val updatedEvent = Event(
                 id = oldEvent.id,
+                employeeId = employeeId,
                 title = title,
                 dateTimeString = LocalDateTime.of(date, time).toString(),
                 eventType = eventType,

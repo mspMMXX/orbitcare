@@ -270,7 +270,7 @@ class CalendarActivity : AppCompatActivity() {
                 val eventTime = timeEdit.text.toString()
                 val eventType = eventTypes[typeSpinner.selectedItemPosition]
                 val notes = notesEdit.text.toString()
-                val color = colors[typeSpinner.selectedItemPosition]
+                val color = colors[colorSpinner.selectedItemPosition]
 
                 // Save event entries
                 viewModel.saveEvent(
@@ -321,6 +321,11 @@ class CalendarActivity : AppCompatActivity() {
         })
         colorSpinner.adapter = colorAdapter
         colorSpinner.setSelection(colors.indexOf(event.color).coerceAtLeast(0))
+        // Get color index for ui
+        val colorIndex = colors.indexOf(event.color)
+        if (colorIndex >= 0) {
+            colorSpinner.setSelection(colorIndex)
+        }
 
         // Insert Event data
         titleEdit.setText(event.title)
@@ -437,7 +442,14 @@ class CalendarActivity : AppCompatActivity() {
         return TextView(this).apply {
             text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
             setTextColor(Color.WHITE)
-            setBackgroundResource(R.drawable.event_background)
+            background = ResourcesCompat.getDrawable(resources, R.drawable.event_background, null)?.also { drawable ->
+                try {
+                    val color = event.color?.let { Color.parseColor(it) } ?: Color.parseColor("#3F51B5")
+                    drawable.setTint(color)
+                } catch (e: Exception) {
+                    drawable.setTint(Color.parseColor("#3F51B5"))
+                }
+            }
             setPadding(4, 2, 4, 2)
             textSize = 12f
             maxLines = 1
