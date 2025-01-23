@@ -308,7 +308,6 @@ class CalendarActivity : AppCompatActivity() {
         typeSpinner.adapter = typeAdapter
 
         // Set up color spinner
-        // Set up color spinner
         val colors = arrayOf("#FF4444", "#33B5E5", "#99CC00", "#FFBB33", "#AA66CC")
         val colorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors.map {
             when(it) {
@@ -327,6 +326,7 @@ class CalendarActivity : AppCompatActivity() {
         titleEdit.setText(event.title)
         dateEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
         timeEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+        notesEdit.setText(event.notes)
 
         builder.setView(dialogView)
             .setTitle("Event bearbeiten")
@@ -334,8 +334,11 @@ class CalendarActivity : AppCompatActivity() {
                 val eventTitle = titleEdit.text.toString()
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
+                val eventType = eventTypes[typeSpinner.selectedItemPosition]
+                val notes = notesEdit.text.toString()
+                val color = colors[colorSpinner.selectedItemPosition]
 
-                updateEvent(event, eventTitle, eventDate, eventTime)
+                updateEvent(event, eventTitle, eventDate, eventTime, eventType, notes, color)
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
@@ -360,7 +363,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NewApi")
-    private fun updateEvent(oldEvent: Event, title: String, date: String, time: String) {
+    private fun updateEvent(oldEvent: Event, title: String, date: String, time: String, eventType: String, notes: String, color: String) {
         // Parse date and time strings to LocalDate and LocalTime
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -373,9 +376,9 @@ class CalendarActivity : AppCompatActivity() {
             title = title,
             date = localDate,
             time = localTime,
-            eventType = "Default",
-            notes = oldEvent.notes,
-            color = oldEvent.color,
+            eventType = eventType,
+            notes = notes,
+            color = color,
         )
     }
 
