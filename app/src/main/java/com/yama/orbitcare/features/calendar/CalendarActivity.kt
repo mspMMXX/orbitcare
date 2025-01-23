@@ -297,6 +297,31 @@ class CalendarActivity : AppCompatActivity() {
         val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
         val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
         val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
+        val typeSpinner = dialogView.findViewById<Spinner>(R.id.eventTypeSpinner)
+        val notesEdit = dialogView.findViewById<EditText>(R.id.eventNotesEdit)
+        val colorSpinner = dialogView.findViewById<Spinner>(R.id.eventColorSpinner)
+
+        // Set up event spinner
+        val eventTypes = arrayOf("Arztbesuch", "Hausbesuch", "Bürozeit", "Wochenplanung", "Feedbackrunde")
+        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, eventTypes)
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        typeSpinner.adapter = typeAdapter
+
+        // Set up color spinner
+        // Set up color spinner
+        val colors = arrayOf("#FF4444", "#33B5E5", "#99CC00", "#FFBB33", "#AA66CC")
+        val colorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors.map {
+            when(it) {
+                "#FF4444" -> "Rot"
+                "#33B5E5" -> "Blau"
+                "#99CC00" -> "Grün"
+                "#FFBB33" -> "Orange"
+                "#AA66CC" -> "Lila"
+                else -> "Default"
+            }
+        })
+        colorSpinner.adapter = colorAdapter
+        colorSpinner.setSelection(colors.indexOf(event.color).coerceAtLeast(0))
 
         // Insert Event data
         titleEdit.setText(event.title)
