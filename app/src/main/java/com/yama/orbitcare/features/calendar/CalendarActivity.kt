@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -219,6 +221,17 @@ class CalendarActivity : AppCompatActivity() {
         val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
         val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
         val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
+        val typeSpinner = dialogView.findViewById<Spinner>(R.id.eventTypeSpinner)
+        val notesEdit = dialogView.findViewById<EditText>(R.id.eventNotesEdit)
+        val colorSpinner = dialogView.findViewById<Spinner>(R.id.eventColorSpinner)
+
+        // Set up event type spinner
+        val eventTypes = arrayOf("Arztbesuch", "Hausbesuch", "Bürozeit", "Wochenplanung", "Feedbackrunde")
+        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, eventTypes)
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        typeSpinner.adapter = typeAdapter
+
+
 
         // Use the calendar's current date instead of selectedDay or current date
         val eventDate = Calendar.getInstance().apply {
