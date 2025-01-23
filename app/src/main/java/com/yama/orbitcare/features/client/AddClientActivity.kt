@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.yama.orbitcare.R
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Client
+import com.yama.orbitcare.features.globalUser.GlobalUser
 
 class AddClientActivity : AppCompatActivity() {
 
@@ -48,21 +49,26 @@ class AddClientActivity : AppCompatActivity() {
     }
 
     fun saveButtonAction(view: View) {
-        val client = Client(
-            firstName = firstNameText.text.toString(),
-            lastName = lastNameText.text.toString(),
-            street = streetText.text.toString(),
-            plz = plzText.text.toString(),
-            city = cityText.text.toString(),
-            email = emailText.text.toString(),
-            phone = phoneText.text.toString()
+        val currentUser = GlobalUser.currentUser
+        if (currentUser != null) {
+            val client = Client(
+                orgId = currentUser.organisationID,
+                firstName = firstNameText.text.toString(),
+                lastName = lastNameText.text.toString(),
+                street = streetText.text.toString(),
+                plz = plzText.text.toString(),
+                city = cityText.text.toString(),
+                email = emailText.text.toString(),
+                phone = phoneText.text.toString()
             )
-        db.addClient(client, onSuccess = {
-            Log.d("Debugg", "Client saved!")
-            startActivity(Intent(this, ClientActivity::class.java))
-        }, onFailure = {
-            Log.d("Debugg", "Client not saved")
-        })
+
+            db.addClient(client, onSuccess = {
+                Log.d("Debugg", "Client saved!")
+                startActivity(Intent(this, ClientActivity::class.java))
+            }, onFailure = {
+                Log.d("Debugg", "Client not saved")
+            })
+        }
     }
 
     fun cancelButtonAction(view: View) {

@@ -20,18 +20,15 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yama.orbitcare.R
 import com.yama.orbitcare.data.models.Event
-import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.features.client.ClientActivity
 import com.yama.orbitcare.features.employee.EmployeeActivity
+import com.yama.orbitcare.features.globalUser.GlobalUser
 import com.yama.orbitcare.features.login.SignInActivity
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.LocalDate
 import java.time.LocalTime
@@ -70,22 +67,15 @@ class CalendarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
-        val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        val employeeId = sharedPreferences.getString("employeeId", null)
+        val employeeId = GlobalUser.currentUser?.id
 
         if (employeeId.isNullOrEmpty()) {
-            // Falls keine employeeId verfügbar ist, zur SignInActivity navigieren
             val signInIntent = Intent(this, SignInActivity::class.java)
             startActivity(signInIntent)
             finish()
             return
         }
 
-        /*val employeeId = intent.getStringExtra("employeeId") ?: ""
-        if (employeeId.isEmpty()) {
-            finish()
-            return
-        }*/
         viewModel.initialize(employeeId)
         initializeViews()
         setupCalendar()
@@ -93,16 +83,6 @@ class CalendarActivity : AppCompatActivity() {
         setupEventButtons()
         setupObservers()
         setupBottomNavigation()
-
-        // Test event
-        /*viewModel.addEvent(
-            title = "Test Event",
-            date = LocalDate.now(),
-            time = LocalTime.of(14, 0),
-            eventType = "Default"
-        )
-
-        )*/
     }
 
     // Observe Data
@@ -141,13 +121,13 @@ class CalendarActivity : AppCompatActivity() {
                 R.id.navigation_person -> {
                     // Start ClientActivity
                     startActivity(Intent(this, ClientActivity::class.java))
-                    finish() // Close current Activity
+                    finish()
                     true
                 }
                 R.id.navigation_group -> {
                     // Start EmployeeActivity
                     startActivity(Intent(this, EmployeeActivity::class.java))
-                    finish() // Close current Activity
+                    finish()
                     true
                 }
                 R.id.navigation_calendar -> {

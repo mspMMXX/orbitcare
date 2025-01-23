@@ -16,6 +16,7 @@ import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Client
 import com.yama.orbitcare.features.calendar.CalendarActivity
 import com.yama.orbitcare.features.employee.EmployeeActivity
+import com.yama.orbitcare.features.globalUser.GlobalUser
 import com.yama.orbitcare.features.login.SignInActivity
 
 class ClientActivity : AppCompatActivity() {
@@ -72,26 +73,31 @@ class ClientActivity : AppCompatActivity() {
     }
 
     private fun setClientList() {
-        db.getAllClients { clientList ->
-            if (clientList != null) {
-                clients = clientList
-                Log.d("Debugg", "Clients found and added to local list")
-                if (clients.isNotEmpty()) {
-                    for (client in clients) {
-                        Log.d("Debugg", "Klient: ${client.lastName}")
-                        val clientButton = Button(this).apply {
-                            text = client.lastName
-                            tag = client.id
-                            setOnClickListener {
-                                showClient(it.tag as String)
+        val currentUser = GlobalUser.currentUser
+        if (currentUser != null) {
+            db.getAllClients { clientList ->
+                if (clientList != null) {
+                    clients = clientList
+                    Log.d("Debugg", "Clients found and added to local list")
+                    if (clients.isNotEmpty()) {
+                        for (client in clients) {
+                            if (client.orgId == currentUser.organisationID) {
+                                Log.d("Debugg", "Klient: ${client.lastName}")
+                                val clientButton = Button(this).apply {
+                                    text = client.lastName
+                                    tag = client.id
+                                    setOnClickListener {
+                                        showClient(it.tag as String)
+                                    }
+                                }
+                                clientListContainer.addView(clientButton)
                             }
                         }
-                        clientListContainer.addView(clientButton)
                     }
+                } else {
+                    Log.d("Debugg", "No Clients found in DB")
                 }
-            } else {
-                Log.d("Debugg", "No Clients found in DB")
-            }
+        }
         }
     }
 

@@ -13,6 +13,7 @@ import com.yama.orbitcare.R
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Employee
 import com.yama.orbitcare.features.calendar.CalendarActivity
+import com.yama.orbitcare.features.globalUser.GlobalUser
 import java.security.MessageDigest
 
 class SignInActivity : AppCompatActivity() {
@@ -64,12 +65,11 @@ class SignInActivity : AppCompatActivity() {
         db.getEmployeeWithFieldValue("email", emailEditText.text.toString()) { empl ->
             // Check if email matches and the provided password (after hashing) matches the stored hash
             if(empl?.email.toString() == emailEditText.text.toString() && empl?.passwordHash == pwdHash(passwordEditText.text.toString())) {
+                //Create the currentUser
+                GlobalUser.currentUser = empl
 
-                val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-                sharedPreferences.edit().putString("employeeId", empl.id).apply()
                 // Navigate to the CalendarActivity
                 val calendarActivity = Intent(this, CalendarActivity::class.java)
-                //calendarActivity.putExtra("employeeId", empl.id)
                 val confirmDialog = ConfirmationDialog()
                 confirmDialog.showConfirmation(this, "Hallo ${empl.firstName}.", "Willkommen bei ORBITCARE!", onComplete = {
                     startActivity(calendarActivity)
