@@ -62,7 +62,7 @@
         android:gravity="center"
         android:visibility="gone"
         android:textColor="@color/errorRed"
-        android:text="Anmeldedaten nicht korrekt!"
+        android:text="@string/incorrectSignInHint"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText"/>
 
     <Button

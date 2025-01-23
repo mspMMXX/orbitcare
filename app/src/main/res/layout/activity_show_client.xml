@@ -5,15 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.login.SignUpEmployeeActivity">
+    tools:context=".features.client.ShowClientActivity">
 
     <TextView
         android:id="@+id/clientLabel"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="50dp"
-        android:text="Klient-Übersicht"
-        android:textSize="25dp"
+        android:text="@string/clientOverview"
+        android:textSize="20sp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -229,7 +229,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="70dp"
-        android:text="Verlassen"
+        android:text="@string/closeButton"
         android:background="@color/orbitBlue"
         android:onClick="exitButtonAction"
         app:layout_constraintEnd_toEndOf="parent"

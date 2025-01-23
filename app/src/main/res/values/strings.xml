@@ -10,6 +10,19 @@
     <string name="plz_text">PLZ</string>
     <string name="city_text">Ort</string>
 
+    <string name="addClient">Neuen Klienten hinzufügen</string>
+    <string name="saveButton">Save</string>
+    <string name="cancelButton">Cancel</string>
+    <string name="clientsLabel">Clients</string>
+    <string name="clientOverview">Client Overview</string>
+    <string name="closeButton">Close</string>
+    <string name="incorrectSignInHint">Incorrect email or password!</string>
+    <string name="unknownOrgId">Unknown Organization ID.</string>
+    <string name="pwdNotMatch">The passwords do not match.</string>
+    <string name="notAllFieldsFilled">All fields must be filled out!</string>
+    <string name="orgIdAlreadyInUse">Organization ID is already in use.</string>
+
+
     <string name="firstname_text">Vorname</string>
     <string name="lastname_text">Nachname</string>
     <string name="phone_text">Telefonnummer</string>
