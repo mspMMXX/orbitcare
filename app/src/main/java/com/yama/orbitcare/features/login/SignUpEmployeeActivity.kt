@@ -18,6 +18,8 @@ import java.security.MessageDigest
 
 class SignUpEmployeeActivity : AppCompatActivity() {
 
+    private  val db = FirestoreDatabase()
+
     // UI components for user input
     private lateinit var organisationIDEditText: EditText
     private lateinit var firstNameEditText: EditText
@@ -73,7 +75,6 @@ class SignUpEmployeeActivity : AppCompatActivity() {
 
     // Handle the SignUpButton click for registering on organisationID
     fun signUpButton(view: View){
-        val db = FirestoreDatabase()
         db.getOrganisationWithFieldValue("organisationID", organisationIDEditText.text.toString()) { org ->
             if(org != null) {
                 // Check if all required fields are filled

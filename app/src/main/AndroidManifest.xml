@@ -13,6 +13,15 @@
         android:theme="@style/Theme.Orbitcare"
         tools:targetApi="31">
         <activity
+            android:name=".features.employee.ShowEmployeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.client.ShowClientActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.client.AddClientActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.client.ClientActivity"
             android:exported="false" />
         <activity
@@ -23,12 +32,6 @@
             android:exported="false" />
         <activity
             android:name=".features.login.SignInActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.login.SignUpEmployeeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.login.SignUpOrganisationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +39,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".features.login.SignUpEmployeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.login.SignUpOrganisationActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

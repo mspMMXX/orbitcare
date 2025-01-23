@@ -13,9 +13,12 @@ import com.yama.orbitcare.R
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Employee
 import com.yama.orbitcare.features.calendar.CalendarActivity
+import com.yama.orbitcare.features.globalUser.GlobalUser
 import java.security.MessageDigest
 
 class SignInActivity : AppCompatActivity() {
+
+    private val db = FirestoreDatabase()
 
     // UI components for user input and error messages
     private lateinit var emailEditText: EditText
@@ -58,16 +61,16 @@ class SignInActivity : AppCompatActivity() {
 
     //Authenticate the user bay verifying email and password against Firestore
     fun signInButton(view: View) {
-        val db = FirestoreDatabase()
 
         // Retrieve employee data based on the provided email
         db.getEmployeeWithFieldValue("email", emailEditText.text.toString()) { empl ->
             // Check if email matches and the provided password (after hashing) matches the stored hash
             if(empl?.email.toString() == emailEditText.text.toString() && empl?.passwordHash == pwdHash(passwordEditText.text.toString())) {
+                //Create the currentUser
+                GlobalUser.currentUser = empl
 
                 // Navigate to the CalendarActivity
                 val calendarActivity = Intent(this, CalendarActivity::class.java)
-                calendarActivity.putExtra("employeeId", empl.id)
                 val confirmDialog = ConfirmationDialog()
                 confirmDialog.showConfirmation(this, "Hallo ${empl.firstName}.", "Willkommen bei ORBITCARE!", onComplete = {
                     startActivity(calendarActivity)

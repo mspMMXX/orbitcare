@@ -147,7 +147,7 @@
         android:gravity="center"
         android:visibility="gone"
         android:textColor="@color/errorRed"
-        android:text="OrganisationID nicht bekannt."
+        android:text="@string/unknownOrgId"
         app:layout_constraintTop_toBottomOf="@+id/passwordConfirmationEditText"/>
 
     <TextView
@@ -157,7 +157,7 @@
         android:gravity="center"
         android:visibility="gone"
         android:textColor="@color/errorRed"
-        android:text="Passwörter stimmen nicht überein."
+        android:text="@string/pwdNotMatch"
         app:layout_constraintTop_toBottomOf="@+id/idError"/>
 
     <TextView
@@ -167,7 +167,7 @@
         android:gravity="center"
         android:visibility="gone"
         android:textColor="@color/errorRed"
-        android:text="Bitte alle Felder ausfüllen!"
+        android:text="@string/notAllFieldsFilled"
         app:layout_constraintTop_toBottomOf="@+id/pwdError"/>
 
     <Button
