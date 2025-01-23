@@ -22,6 +22,7 @@
     <string name="pwdNotMatch">The passwords do not match.</string>
     <string name="notAllFieldsFilled">All fields must be filled out!</string>
     <string name="orgIdAlreadyInUse">Organization ID is already in use.</string>
+    <string name="employeeOverview">Employee Overview</string>
 
     <string name="firstname_text">First Name</string>
     <string name="lastname_text">Last Name</string>

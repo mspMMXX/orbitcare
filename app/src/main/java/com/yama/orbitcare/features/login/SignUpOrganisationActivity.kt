@@ -17,6 +17,8 @@ import com.yama.orbitcare.data.models.Organisation
 
 class SignUpOrganisationActivity : AppCompatActivity() {
 
+    private val db = FirestoreDatabase()
+
     // UI components for organisation registration
     private lateinit var organisationIDEditText: EditText
     private lateinit var organisationNameEditText: EditText
@@ -79,7 +81,6 @@ class SignUpOrganisationActivity : AppCompatActivity() {
     // Handle the organisationSignUpButton click
     fun organisationSignUpButton(view:View) {
         println("OrganisationSignUpButton-clicked")
-        val db = FirestoreDatabase()
 
         // Check if the organisationID already exists in Firestor
         db.getOrganisationWithFieldValue("organisationID", organisationIDEditText.text.toString()) { org ->

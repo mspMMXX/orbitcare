@@ -18,6 +18,8 @@ import java.security.MessageDigest
 
 class SignInActivity : AppCompatActivity() {
 
+    private val db = FirestoreDatabase()
+
     // UI components for user input and error messages
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
@@ -59,7 +61,6 @@ class SignInActivity : AppCompatActivity() {
 
     //Authenticate the user bay verifying email and password against Firestore
     fun signInButton(view: View) {
-        val db = FirestoreDatabase()
 
         // Retrieve employee data based on the provided email
         db.getEmployeeWithFieldValue("email", emailEditText.text.toString()) { empl ->
