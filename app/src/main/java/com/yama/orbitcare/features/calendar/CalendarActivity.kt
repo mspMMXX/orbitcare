@@ -212,7 +212,7 @@ class CalendarActivity : AppCompatActivity() {
         viewModel.switchView(CalendarView.DAY)
     }
 
-    private fun showAddEventDialog(presetHour: Int? = null, presetMinute: Int? = null) {
+    private fun showAddEventDialog(presetHour: Int? = null, presetMinute: Int? = null, presetDate: Calendar? = null) {
         // Alert Dialog to add event
         val builder = AlertDialog.Builder(this)
         val inflater = layoutInflater
@@ -247,7 +247,7 @@ class CalendarActivity : AppCompatActivity() {
         colorSpinner.adapter = colorAdapter
 
         // Use the calendar's current date instead of selectedDay or current date
-        val eventDate = Calendar.getInstance().apply {
+        val eventDate = (presetDate ?: Calendar.getInstance().apply {
             set(Calendar.YEAR, calendar.get(Calendar.YEAR))
             set(Calendar.MONTH, calendar.get(Calendar.MONTH))
             set(Calendar.DAY_OF_MONTH, selectedDay?: calendar.get(Calendar.DAY_OF_MONTH))
@@ -257,7 +257,7 @@ class CalendarActivity : AppCompatActivity() {
             if (presetMinute != null) {
                 set(Calendar.MINUTE, presetMinute)
             }
-        }.time
+        }).time
 
         dateEdit.setText(SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(eventDate))
         timeEdit.setText(SimpleDateFormat("HH:mm", Locale.GERMAN).format(eventDate))
@@ -665,7 +665,10 @@ class CalendarActivity : AppCompatActivity() {
                     background = ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
 
                     setOnClickListener {
-                        showAddEventDialog(hour, 0)
+                        val clickedDate = currentCal.clone() as Calendar
+                        clickedDate.set(Calendar.HOUR_OF_DAY, hour)
+                        clickedDate.set(Calendar.MINUTE, 0)
+                        showAddEventDialog(hour, 0, clickedDate)
                     }
                 }
 
