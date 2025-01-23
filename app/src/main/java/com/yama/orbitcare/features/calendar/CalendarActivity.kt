@@ -250,7 +250,7 @@ class CalendarActivity : AppCompatActivity() {
         val eventDate = Calendar.getInstance().apply {
             set(Calendar.YEAR, calendar.get(Calendar.YEAR))
             set(Calendar.MONTH, calendar.get(Calendar.MONTH))
-            set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH))
+            set(Calendar.DAY_OF_MONTH, selectedDay?: calendar.get(Calendar.DAY_OF_MONTH))
             if (presetHour != null) {
                 set(Calendar.HOUR_OF_DAY, presetHour)
             }
