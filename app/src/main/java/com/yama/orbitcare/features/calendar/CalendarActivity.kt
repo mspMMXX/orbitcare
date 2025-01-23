@@ -480,50 +480,49 @@ class CalendarActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateWeekView() {
-        // Add Weekday Headers
-        addWeekDayHeaders()
+        calendarGrid.removeAllViews()
 
-        // Set day to monday
+        // Add weekday headers row
+        val headerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = GridLayout.LayoutParams.MATCH_PARENT
+                height = GridLayout.LayoutParams.WRAP_CONTENT
+                columnSpec = GridLayout.spec(0, 2)
+            }
+        }
+
+        // Time column header (empty space)
+        headerRow.addView(TextView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(120, LinearLayout.LayoutParams.WRAP_CONTENT)
+        })
+
+        // Set calendar to week start (Monday)
         val weekStart = calendar.clone() as Calendar
         weekStart.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
 
-        // Add days of week
+        // Add day headers
         for (i in 0..6) {
             val currentCal = weekStart.clone() as Calendar
             currentCal.add(Calendar.DAY_OF_WEEK, i)
 
-            val dayContainer = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = GridLayout.LayoutParams.WRAP_CONTENT
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    setMargins(4, 4, 4, 4)
-                }
-            }
-
-            // Add date
-            val dateView = TextView(this).apply {
-                text = currentCal.get(Calendar.DAY_OF_MONTH).toString()
+            val dayHeader = TextView(this).apply {
+                val dayFormat = SimpleDateFormat("EE\ndd.MM.", Locale.GERMAN)
+                text = dayFormat.format(currentCal.time)
                 gravity = Gravity.CENTER
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                 setPadding(4, 8, 4, 8)
-                textSize = 16f
+                setTextColor(if (isCurrentDay(currentCal)) Color.WHITE else Color.GRAY)
 
                 when {
                     isCurrentDay(currentCal) -> {
                         setBackgroundResource(R.drawable.current_day_background)
-                        setTextColor(Color.WHITE)
                     }
                     currentCal.get(Calendar.DAY_OF_MONTH) == selectedDay -> {
                         setBackgroundResource(R.drawable.selected_day_background)
                     }
                 }
 
-                // OnclickListener for day selection
                 setOnClickListener {
                     selectedDay = if (selectedDay == currentCal.get(Calendar.DAY_OF_MONTH))
                         null
@@ -533,23 +532,89 @@ class CalendarActivity : AppCompatActivity() {
                     updateCalendarView()
                 }
             }
+            headerRow.addView(dayHeader)
+        }
+        calendarGrid.addView(headerRow)
 
-            dayContainer.addView(dateView)
+        // Create ScrollView for time grid
+        val scrollView = ScrollView(this).apply {
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = GridLayout.LayoutParams.MATCH_PARENT
+                height = 0
+                rowSpec = GridLayout.spec(1, 1f)
+                columnSpec = GridLayout.spec(0, 2)
+            }
+        }
 
-            // Events for this day
-            val eventsForDay = viewModel.events.value?.filter { event ->
-                val eventDate = event.dateTime.toLocalDate()
-                eventDate.year == currentCal.get(Calendar.YEAR) &&
-                        eventDate.monthValue == currentCal.get(Calendar.MONTH) + 1 &&
-                        eventDate.dayOfMonth == currentCal.get(Calendar.DAY_OF_MONTH)
-            }?.sortedBy { it.dateTime }
+        // Container for time grid
+        val timeGridContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
 
-            eventsForDay?.forEach { event ->
-                dayContainer.addView(createEventView(event))
+        // Create time slots for each hour
+        for (hour in 6..22) {
+            val hourRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
             }
 
-            calendarGrid.addView(dayContainer)
+            // Hour label
+            val hourLabel = TextView(this).apply {
+                text = String.format("%02d:00", hour)
+                gravity = Gravity.CENTER_VERTICAL or Gravity.END
+                layoutParams = LinearLayout.LayoutParams(120, 120).apply {
+                    marginEnd = 16
+                }
+                setTextColor(Color.GRAY)
+            }
+            hourRow.addView(hourLabel)
+
+            // Day columns
+            for (i in 0..6) {
+                val currentCal = weekStart.clone() as Calendar
+                currentCal.add(Calendar.DAY_OF_WEEK, i)
+                currentCal.set(Calendar.HOUR_OF_DAY, hour)
+
+                val daySlot = LinearLayout(this).apply {
+                    orientation = LinearLayout.VERTICAL
+                    layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    setPadding(4, 2, 4, 2)
+                    background = ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
+
+                    setOnClickListener {
+                        showAddEventDialog(hour, 0)
+                    }
+                }
+
+                // Add events for this time slot
+                val eventsForTimeSlot = viewModel.events.value?.filter { event ->
+                    val eventDate = event.dateTime.toLocalDate()
+                    val eventHour = event.dateTime.hour
+                    eventDate.year == currentCal.get(Calendar.YEAR) &&
+                            eventDate.monthValue == currentCal.get(Calendar.MONTH) + 1 &&
+                            eventDate.dayOfMonth == currentCal.get(Calendar.DAY_OF_MONTH) &&
+                            eventHour == hour
+                }?.sortedBy { it.dateTime }
+
+                eventsForTimeSlot?.forEach { event ->
+                    daySlot.addView(createEventView(event))
+                }
+
+                hourRow.addView(daySlot)
+            }
+
+            timeGridContainer.addView(hourRow)
         }
+
+        scrollView.addView(timeGridContainer)
+        calendarGrid.addView(scrollView)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
