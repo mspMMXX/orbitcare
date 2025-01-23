@@ -71,20 +71,22 @@ class CalendarViewModel() : ViewModel() {
     }
 
     @SuppressLint("NewApi")
-    fun saveEvent(title: String, dateStr: String, timeStr: String) {
+    fun saveEvent(title: String, date: String, time: String, eventType: String, notes: String, color: String) {
         try {
             // Parse date and time strings to LocalDate and LocalTime
             val dateFormatter = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")
             val timeFormatter = java.time.format.DateTimeFormatter.ofPattern("HH:mm")
 
-            val localDate = LocalDate.parse(dateStr, dateFormatter)
-            val localTime = LocalTime.parse(timeStr, timeFormatter)
+            val localDate = LocalDate.parse(date, dateFormatter)
+            val localTime = LocalTime.parse(time, timeFormatter)
 
             addEvent(
                 title = title,
                 date = localDate,
                 time = localTime,
-                eventType = "Default"
+                eventType = eventType,
+                notes = notes,
+                color = color
             )
         } catch (e: Exception) {
             // Handle parsing errors if needed

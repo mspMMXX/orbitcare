@@ -268,9 +268,19 @@ class CalendarActivity : AppCompatActivity() {
                 val eventTitle = titleEdit.text.toString()
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
+                val eventType = eventTypes[typeSpinner.selectedItemPosition]
+                val notes = notesEdit.text.toString()
+                val color = colors[typeSpinner.selectedItemPosition]
 
                 // Save event entries
-                viewModel.saveEvent(eventTitle, eventDate, eventTime) // Dummy Values
+                viewModel.saveEvent(
+                    title = eventTitle,
+                    date = eventDate,
+                    time = eventTime,
+                    eventType = eventType,
+                    notes = notes,
+                    color = color
+                )
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
