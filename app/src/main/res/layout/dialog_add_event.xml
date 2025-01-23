@@ -28,4 +28,24 @@
         android:hint="Zeit (HH:mm)"
         android:inputType="time"/>
 
+    <Spinner
+        android:id="@+id/eventTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/eventNotesEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Notizen"
+        android:inputType="textMultiLine"
+        android:minLines="2" />
+
+    <Spinner
+        android:id="@+id/eventColorSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
 </LinearLayout>

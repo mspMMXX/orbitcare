@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -201,7 +203,7 @@ class CalendarActivity : AppCompatActivity() {
         viewModel.switchView(CalendarView.DAY)
     }
 
-    private fun showAddEventDialog() {
+    private fun showAddEventDialog(presetHour: Int? = null, presetMinute: Int? = null, presetDate: Calendar? = null) {
         // Alert Dialog to add event
         val builder = AlertDialog.Builder(this)
         val inflater = layoutInflater
@@ -210,20 +212,46 @@ class CalendarActivity : AppCompatActivity() {
         val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
         val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
         val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
+        val typeSpinner = dialogView.findViewById<Spinner>(R.id.eventTypeSpinner)
+        val notesEdit = dialogView.findViewById<EditText>(R.id.eventNotesEdit)
+        val colorSpinner = dialogView.findViewById<Spinner>(R.id.eventColorSpinner)
 
-        // Add current date as default
-        val currentDate = if (selectedDay != null) {
-            Calendar.getInstance().apply {
-                set(calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    selectedDay!!)
-            }.time
-        } else {
-            Calendar.getInstance().time
-        }
+        // Set up event type spinner
+        val eventTypes = arrayOf("Arztbesuch", "Hausbesuch", "Bürozeit", "Wochenplanung", "Feedbackrunde")
+        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, eventTypes)
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        typeSpinner.adapter = typeAdapter
 
-        dateEdit.setText(SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(currentDate))
-        timeEdit.setText(SimpleDateFormat("HH:mm", Locale.GERMAN).format(currentDate))
+        // Set up color spinner
+        val colors = arrayOf("#FF4444", "#33B5E5", "#99CC00", "#FFBB33", "#AA66CC")
+        val colorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors.map {
+            when(it) {
+                "#FF4444" -> "Rot"
+                "#33B5E5" -> "Blau"
+                "#99CC00" -> "Grün"
+                "#FFBB33" -> "Orange"
+                "#AA66CC" -> "Lila"
+                else -> "Default"
+            }
+        })
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        colorSpinner.adapter = colorAdapter
+
+        // Use the calendar's current date instead of selectedDay or current date
+        val eventDate = (presetDate ?: Calendar.getInstance().apply {
+            set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+            set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+            set(Calendar.DAY_OF_MONTH, selectedDay?: calendar.get(Calendar.DAY_OF_MONTH))
+            if (presetHour != null) {
+                set(Calendar.HOUR_OF_DAY, presetHour)
+            }
+            if (presetMinute != null) {
+                set(Calendar.MINUTE, presetMinute)
+            }
+        }).time
+
+        dateEdit.setText(SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(eventDate))
+        timeEdit.setText(SimpleDateFormat("HH:mm", Locale.GERMAN).format(eventDate))
 
         builder.setView(dialogView)
             .setTitle("Neues Event")
@@ -231,9 +259,19 @@ class CalendarActivity : AppCompatActivity() {
                 val eventTitle = titleEdit.text.toString()
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
+                val eventType = eventTypes[typeSpinner.selectedItemPosition]
+                val notes = notesEdit.text.toString()
+                val color = colors[colorSpinner.selectedItemPosition]
 
                 // Save event entries
-                viewModel.saveEvent(eventTitle, eventDate, eventTime) // Dummy Values
+                viewModel.saveEvent(
+                    title = eventTitle,
+                    date = eventDate,
+                    time = eventTime,
+                    eventType = eventType,
+                    notes = notes,
+                    color = color
+                )
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
@@ -250,11 +288,41 @@ class CalendarActivity : AppCompatActivity() {
         val titleEdit = dialogView.findViewById<EditText>(R.id.eventTitleEdit)
         val dateEdit = dialogView.findViewById<EditText>(R.id.eventDateEdit)
         val timeEdit = dialogView.findViewById<EditText>(R.id.eventTimeEdit)
+        val typeSpinner = dialogView.findViewById<Spinner>(R.id.eventTypeSpinner)
+        val notesEdit = dialogView.findViewById<EditText>(R.id.eventNotesEdit)
+        val colorSpinner = dialogView.findViewById<Spinner>(R.id.eventColorSpinner)
+
+        // Set up event spinner
+        val eventTypes = arrayOf("Arztbesuch", "Hausbesuch", "Bürozeit", "Wochenplanung", "Feedbackrunde")
+        val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, eventTypes)
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        typeSpinner.adapter = typeAdapter
+
+        // Set up color spinner
+        val colors = arrayOf("#FF4444", "#33B5E5", "#99CC00", "#FFBB33", "#AA66CC")
+        val colorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors.map {
+            when(it) {
+                "#FF4444" -> "Rot"
+                "#33B5E5" -> "Blau"
+                "#99CC00" -> "Grün"
+                "#FFBB33" -> "Orange"
+                "#AA66CC" -> "Lila"
+                else -> "Default"
+            }
+        })
+        colorSpinner.adapter = colorAdapter
+        colorSpinner.setSelection(colors.indexOf(event.color).coerceAtLeast(0))
+        // Get color index for ui
+        val colorIndex = colors.indexOf(event.color)
+        if (colorIndex >= 0) {
+            colorSpinner.setSelection(colorIndex)
+        }
 
         // Insert Event data
         titleEdit.setText(event.title)
         dateEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
         timeEdit.setText(event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+        notesEdit.setText(event.notes)
 
         builder.setView(dialogView)
             .setTitle("Event bearbeiten")
@@ -262,8 +330,11 @@ class CalendarActivity : AppCompatActivity() {
                 val eventTitle = titleEdit.text.toString()
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
+                val eventType = eventTypes[typeSpinner.selectedItemPosition]
+                val notes = notesEdit.text.toString()
+                val color = colors[colorSpinner.selectedItemPosition]
 
-                updateEvent(event, eventTitle, eventDate, eventTime)
+                updateEvent(event, eventTitle, eventDate, eventTime, eventType, notes, color)
             }
             .setNegativeButton("Abbrechen") { dialog, _ ->
                 dialog.cancel()
@@ -288,7 +359,7 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NewApi")
-    private fun updateEvent(oldEvent: Event, title: String, date: String, time: String) {
+    private fun updateEvent(oldEvent: Event, title: String, date: String, time: String, eventType: String, notes: String, color: String) {
         // Parse date and time strings to LocalDate and LocalTime
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -301,9 +372,9 @@ class CalendarActivity : AppCompatActivity() {
             title = title,
             date = localDate,
             time = localTime,
-            eventType = "Default",
-            notes = oldEvent.notes,
-            color = oldEvent.color,
+            eventType = eventType,
+            notes = notes,
+            color = color,
         )
     }
 
@@ -362,7 +433,14 @@ class CalendarActivity : AppCompatActivity() {
         return TextView(this).apply {
             text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
             setTextColor(Color.WHITE)
-            setBackgroundResource(R.drawable.event_background)
+            background = ResourcesCompat.getDrawable(resources, R.drawable.event_background, null)?.also { drawable ->
+                try {
+                    val color = event.color?.let { Color.parseColor(it) } ?: Color.parseColor("#3F51B5")
+                    drawable.setTint(color)
+                } catch (e: Exception) {
+                    drawable.setTint(Color.parseColor("#3F51B5"))
+                }
+            }
             setPadding(4, 2, 4, 2)
             textSize = 12f
             maxLines = 1
@@ -469,66 +547,144 @@ class CalendarActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateWeekView() {
-        // Add Weekday Headers
-        addWeekDayHeaders()
+        calendarGrid.removeAllViews()
 
-        // Set day to monday
+        // Add weekday headers row
+        val headerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = GridLayout.LayoutParams.MATCH_PARENT
+                height = GridLayout.LayoutParams.WRAP_CONTENT
+                columnSpec = GridLayout.spec(0, 2)
+            }
+        }
+
+        // Time column header (empty space)
+        headerRow.addView(TextView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(120, LinearLayout.LayoutParams.WRAP_CONTENT)
+        })
+
+        // Set calendar to week start (Monday)
         val weekStart = calendar.clone() as Calendar
         weekStart.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
 
-        // Add days of week
+        // Add day headers
         for (i in 0..6) {
             val currentCal = weekStart.clone() as Calendar
             currentCal.add(Calendar.DAY_OF_WEEK, i)
 
-            val dayContainer = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = 0
-                    height = GridLayout.LayoutParams.WRAP_CONTENT
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    setMargins(4, 4, 4, 4)
-                }
-            }
-
-            // Add date
-            val dateView = TextView(this).apply {
-                text = currentCal.get(Calendar.DAY_OF_MONTH).toString()
+            val dayHeader = TextView(this).apply {
+                val dayFormat = SimpleDateFormat("EE\ndd.MM.", Locale.GERMAN)
+                text = dayFormat.format(currentCal.time)
                 gravity = Gravity.CENTER
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                 setPadding(4, 8, 4, 8)
-                textSize = 16f
+                setTextColor(if (isCurrentDay(currentCal)) Color.WHITE else Color.GRAY)
 
                 when {
                     isCurrentDay(currentCal) -> {
                         setBackgroundResource(R.drawable.current_day_background)
-                        setTextColor(Color.WHITE)
                     }
                     currentCal.get(Calendar.DAY_OF_MONTH) == selectedDay -> {
                         setBackgroundResource(R.drawable.selected_day_background)
                     }
                 }
+
+                setOnClickListener {
+                    selectedDay = if (selectedDay == currentCal.get(Calendar.DAY_OF_MONTH))
+                        null
+                    else
+                        currentCal.get(Calendar.DAY_OF_MONTH)
+                    calendar.set(Calendar.DAY_OF_MONTH, currentCal.get(Calendar.DAY_OF_MONTH))
+                    updateCalendarView()
+                }
             }
-
-            dayContainer.addView(dateView)
-
-            // Events for this day
-            val eventsForDay = viewModel.events.value?.filter { event ->
-                val eventDate = event.dateTime.toLocalDate()
-                eventDate.year == currentCal.get(Calendar.YEAR) &&
-                        eventDate.monthValue == currentCal.get(Calendar.MONTH) + 1 &&
-                        eventDate.dayOfMonth == currentCal.get(Calendar.DAY_OF_MONTH)
-            }?.sortedBy { it.dateTime }
-
-            eventsForDay?.forEach { event ->
-                dayContainer.addView(createEventView(event))
-            }
-
-            calendarGrid.addView(dayContainer)
+            headerRow.addView(dayHeader)
         }
+        calendarGrid.addView(headerRow)
+
+        // Create ScrollView for time grid
+        val scrollView = ScrollView(this).apply {
+            layoutParams = GridLayout.LayoutParams().apply {
+                width = GridLayout.LayoutParams.MATCH_PARENT
+                height = 0
+                rowSpec = GridLayout.spec(1, 1f)
+                columnSpec = GridLayout.spec(0, 2)
+            }
+        }
+
+        // Container for time grid
+        val timeGridContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        // Create time slots for each hour
+        for (hour in 6..22) {
+            val hourRow = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            // Hour label
+            val hourLabel = TextView(this).apply {
+                text = String.format("%02d:00", hour)
+                gravity = Gravity.CENTER_VERTICAL or Gravity.END
+                layoutParams = LinearLayout.LayoutParams(120, 120).apply {
+                    marginEnd = 16
+                }
+                setTextColor(Color.GRAY)
+            }
+            hourRow.addView(hourLabel)
+
+            // Day columns
+            for (i in 0..6) {
+                val currentCal = weekStart.clone() as Calendar
+                currentCal.add(Calendar.DAY_OF_WEEK, i)
+                currentCal.set(Calendar.HOUR_OF_DAY, hour)
+
+                val daySlot = LinearLayout(this).apply {
+                    orientation = LinearLayout.VERTICAL
+                    layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    setPadding(4, 2, 4, 2)
+                    background = ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
+
+                    setOnClickListener {
+                        val clickedDate = currentCal.clone() as Calendar
+                        clickedDate.set(Calendar.HOUR_OF_DAY, hour)
+                        clickedDate.set(Calendar.MINUTE, 0)
+                        showAddEventDialog(hour, 0, clickedDate)
+                    }
+                }
+
+                // Add events for this time slot
+                val eventsForTimeSlot = viewModel.events.value?.filter { event ->
+                    val eventDate = event.dateTime.toLocalDate()
+                    val eventHour = event.dateTime.hour
+                    eventDate.year == currentCal.get(Calendar.YEAR) &&
+                            eventDate.monthValue == currentCal.get(Calendar.MONTH) + 1 &&
+                            eventDate.dayOfMonth == currentCal.get(Calendar.DAY_OF_MONTH) &&
+                            eventHour == hour
+                }?.sortedBy { it.dateTime }
+
+                eventsForTimeSlot?.forEach { event ->
+                    daySlot.addView(createEventView(event))
+                }
+
+                hourRow.addView(daySlot)
+            }
+
+            timeGridContainer.addView(hourRow)
+        }
+
+        scrollView.addView(timeGridContainer)
+        calendarGrid.addView(scrollView)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -556,26 +712,6 @@ class CalendarActivity : AppCompatActivity() {
             setTextColor(Color.BLACK)
         }
         calendarGrid.addView(dateHeader)
-
-        // ScrollView for hours
-        /*val scrollView = ScrollView(this).apply {
-            layoutParams = GridLayout.LayoutParams().apply {
-                width = GridLayout.LayoutParams.MATCH_PARENT
-                height = GridLayout.LayoutParams.MATCH_PARENT
-                this.setGravity(Gravity.FILL_VERTICAL)
-                rowSpec = GridLayout.spec(1, 1f)
-                columnSpec = GridLayout.spec(0, 2)
-            }
-        }*/
-
-        // Maincontainer
-        val mainContainer = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
 
         // Container for Time and Events
         val timeContainer = LinearLayout(this).apply {
@@ -628,6 +764,17 @@ class CalendarActivity : AppCompatActivity() {
                 )
                 setPadding(8, 4, 8, 4)
                 background = ResourcesCompat.getDrawable(resources, R.drawable.timeslot_background, null)
+
+                // ClickListener for new event in timeslot
+                setOnClickListener {
+                    // Current Date with current Time
+                    val eventDateTime = calendar.clone() as Calendar
+                    eventDateTime.set(Calendar.HOUR_OF_DAY, hour)
+                    eventDateTime.set(Calendar.MINUTE, 0)
+
+                    // Show event dialog
+                    showAddEventDialog(hour, 0)
+                }
             }
 
             // Show Events for current hour
@@ -646,7 +793,7 @@ class CalendarActivity : AppCompatActivity() {
         val scrollView = ScrollView(this).apply {
             layoutParams = GridLayout.LayoutParams().apply {
                 width = GridLayout.LayoutParams.MATCH_PARENT
-                height = GridLayout.LayoutParams.MATCH_PARENT
+                height = 0
                 rowSpec = GridLayout.spec(1, 1f)
                 columnSpec = GridLayout.spec(0, 2)
             }
