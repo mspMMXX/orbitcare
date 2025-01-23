@@ -231,7 +231,20 @@ class CalendarActivity : AppCompatActivity() {
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         typeSpinner.adapter = typeAdapter
 
-
+        // Set up color spinner
+        val colors = arrayOf("#FF4444", "#33B5E5", "#99CC00", "#FFBB33", "#AA66CC")
+        val colorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors.map {
+            when(it) {
+                "#FF4444" -> "Rot"
+                "#33B5E5" -> "Blau"
+                "#99CC00" -> "Grün"
+                "#FFBB33" -> "Orange"
+                "#AA66CC" -> "Lila"
+                else -> "Default"
+            }
+        })
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        colorSpinner.adapter = colorAdapter
 
         // Use the calendar's current date instead of selectedDay or current date
         val eventDate = Calendar.getInstance().apply {
