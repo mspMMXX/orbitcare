@@ -15,8 +15,13 @@ import com.yama.orbitcare.R
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Organisation
 
+/**
+ * Handles the organisation sign-up process by validating user input
+ * and adding the organisation to Firestore if all checks pass.
+ */
 class SignUpOrganisationActivity : AppCompatActivity() {
 
+    // Firestore database instance for organisation data
     private val db = FirestoreDatabase()
 
     // UI components for organisation registration
@@ -34,21 +39,17 @@ class SignUpOrganisationActivity : AppCompatActivity() {
     // Flag to track if all required fields are filled
     private var textEditsFilled: Boolean = true
 
+    /**
+     * Called when the activity is created.
+     * Initializes Firebase, sets up the layout, and initializes UI components.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Initialize Firebase App and log the result
         FirebaseApp.initializeApp(this)?.let {
             Log.d("FirebaseInit", "FirebaseApp initialized")
         } ?: Log.e("FirebaseInit", "FirebaseApp Init-Error")
-
-        // Enable edge-to-edge display
         enableEdgeToEdge()
-
-        // Set the layout for the activity
         setContentView(R.layout.signup_organisation_activity)
-
-        // Handle window insets for proper padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -66,29 +67,32 @@ class SignUpOrganisationActivity : AppCompatActivity() {
         idError = findViewById(R.id.idError)
     }
 
-    // Navigate to the SignUpEmployeeActivity
+    /**
+     * Navigates to the SignUpEmployeeActivity when the employee sign-up button is clicked.
+     */
     fun employeeSignUpButton(view: View) {
         val employeeActivity = Intent(this, SignUpEmployeeActivity::class.java)
         startActivity(employeeActivity)
 
     }
-    // Navigate to the SignInActivity
+
+    /**
+     * Navigates to the SignInActivity when the sign-in button is clicked.
+     */
     fun signInButton(view: View) {
         val signInActivity = Intent(this, SignInActivity::class.java)
         startActivity(signInActivity)
     }
 
-    // Handle the organisationSignUpButton click
+    /**
+     * Handles the organisation sign-up process by validating inputs,
+     * checking for duplicate organisation IDs, and saving the organisation to Firestore.
+     */
     fun organisationSignUpButton(view:View) {
-        println("OrganisationSignUpButton-clicked")
-
-        // Check if the organisationID already exists in Firestor
         db.getOrganisationWithFieldValue("organisationID", organisationIDEditText.text.toString()) { org ->
             if(org != null){
-                // Display error if organisationID is already in use
                 idError.visibility = View.VISIBLE
             } else {
-                // Validate if all required fields are filled
                 if (organisationIDEditText.text.toString().isNotEmpty() &&
                     organisationNameEditText.text.toString().isNotEmpty() &&
                     streetEditText.text.toString().isNotEmpty() &&
@@ -101,7 +105,6 @@ class SignUpOrganisationActivity : AppCompatActivity() {
                     errorContainer.visibility = View.VISIBLE
                 }
                 if (textEditsFilled) {
-                    // Create a new Organisation object
                     val organisation = Organisation(
                         organisationID = organisationIDEditText.text.toString(),
                         name = organisationNameEditText.text.toString(),
@@ -110,7 +113,6 @@ class SignUpOrganisationActivity : AppCompatActivity() {
                         plz = plzEditText.text.toString(),
                         city = cityEditText.text.toString())
 
-                    // Add the organisation to Firestore
                     db.addOrganisation(organisation, onSuccess = {
                         val signInActivityIntent = Intent(this, SignInActivity::class.java)
                         val confirmDialog = ConfirmationDialog()

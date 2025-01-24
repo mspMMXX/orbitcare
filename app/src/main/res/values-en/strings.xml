@@ -15,14 +15,15 @@
     <string name="saveButton">Save</string>
     <string name="cancelButton">Cancel</string>
     <string name="clientsLabel">Clients</string>
-    <string name="clientOverview">Client Overview</string>
+    <string name="clientDetails">Client Details</string>
     <string name="closeButton">Close</string>
     <string name="incorrectSignInHint">Incorrect email or password!</string>
     <string name="unknownOrgId">Unknown Organization ID.</string>
     <string name="pwdNotMatch">The passwords do not match.</string>
-    <string name="notAllFieldsFilled">All fields must be filled out!</string>
+    <string name="notAllFieldsFilled">Fill out all fields and provide a valid email address!</string>
     <string name="orgIdAlreadyInUse">Organization ID is already in use.</string>
-    <string name="employeeOverview">Employee Overview</string>
+    <string name="employeeLabel">Employees</string>
+    <string name="employeeDetails">Employee Details</string>
 
     <string name="firstname_text">First Name</string>
     <string name="lastname_text">Last Name</string>

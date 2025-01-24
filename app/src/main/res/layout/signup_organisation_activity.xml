@@ -139,7 +139,7 @@
     <TextView
         android:id="@+id/errorContainer"
         android:layout_width="match_parent"
-        android:layout_height="15sp"
+        android:layout_height="20sp"
         android:gravity="center"
         android:visibility="gone"
         android:textColor="@color/errorRed"
@@ -149,7 +149,7 @@
     <TextView
         android:id="@+id/idError"
         android:layout_width="match_parent"
-        android:layout_height="15sp"
+        android:layout_height="20sp"
         android:gravity="center"
         android:visibility="gone"
         android:textColor="@color/errorRed"

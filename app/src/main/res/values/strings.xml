@@ -14,14 +14,15 @@
     <string name="saveButton">Speichern</string>
     <string name="cancelButton">Abbruch</string>
     <string name="clientsLabel">Klienten</string>
-    <string name="clientOverview">Klient Übersicht</string>
+    <string name="clientDetails">Klient Details</string>
     <string name="closeButton">Schließen</string>
     <string name="incorrectSignInHint">Falsche Email oder Passwort!</string>
     <string name="unknownOrgId">Unbekannte Organisation Id.</string>
     <string name="pwdNotMatch">Passwörter stimmen nicht überein.</string>
-    <string name="notAllFieldsFilled">Bitte alle Felder ausfüllen!</string>
+    <string name="notAllFieldsFilled">Alle Felder ausfüllen und gültige E-Mail angeben!</string>
     <string name="orgIdAlreadyInUse">OrganisationID bereits vergeben.</string>
-    <string name="employeeOverview">Mitarbeiter Übersicht</string>
+    <string name="employeeLabel">Mitarbeiter</string>
+    <string name="employeeDetails">Mitarbeiter Details</string>
 
     <string name="firstname_text">Vorname</string>
     <string name="lastname_text">Nachname</string>
