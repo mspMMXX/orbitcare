@@ -116,7 +116,7 @@ class SignUpOrganisationActivity : AppCompatActivity() {
                     db.addOrganisation(organisation, onSuccess = {
                         val signInActivityIntent = Intent(this, SignInActivity::class.java)
                         val confirmDialog = ConfirmationDialog()
-                        confirmDialog.showConfirmation(this, "Erfolgreich!", "Ihre Organisation wurde registriert.", onComplete = {
+                        confirmDialog.showConfirmation(this, getString(R.string.orgSignText), getString(R.string.orgDialog), onComplete = {
                             startActivity(signInActivityIntent)
                         })
                     }, onFailure = {

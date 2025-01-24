@@ -112,7 +112,7 @@ class SignUpEmployeeActivity : AppCompatActivity() {
                             Log.d(":Debugg", "Employee successfully registered.")
                             val signInActivityIntent = Intent(this, SignInActivity::class.java)
                             val confirmDialog = ConfirmationDialog()
-                            confirmDialog.showConfirmation(this, "Erfolgreich!", "Sie wurden registriert.", onComplete = {
+                            confirmDialog.showConfirmation(this, getString(R.string.employeeSignText), getString(R.string.employeeDialog), onComplete = {
                                 startActivity(signInActivityIntent)
                             })
                         }, onFailure = {

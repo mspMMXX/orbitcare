@@ -24,6 +24,15 @@
     <string name="employeeLabel">Mitarbeiter</string>
     <string name="employeeDetails">Mitarbeiter Details</string>
 
+    <string name="welcomeText">Hallo %1$s.</string>
+    <string name="welcomeDialog">WILLKOMMEN bei ORBITCARE</string>
+
+    <string name="employeeSignText">Erfolgreich!</string>
+    <string name="employeeDialog">Sie wurden registriert.</string>
+
+    <string name="orgSignText">Erfolgreich!</string>
+    <string name="orgDialog">Ihre Organisation wurde registriert.</string>
+
     <string name="firstname_text">Vorname</string>
     <string name="lastname_text">Nachname</string>
     <string name="phone_text">Telefonnummer</string>

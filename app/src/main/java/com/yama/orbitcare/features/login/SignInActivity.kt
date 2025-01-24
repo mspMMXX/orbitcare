@@ -76,11 +76,10 @@ class SignInActivity : AppCompatActivity() {
                 GlobalUser.currentUser = empl
                 val calendarActivity = Intent(this, CalendarActivity::class.java)
                 val confirmDialog = ConfirmationDialog()
-                confirmDialog.showConfirmation(this, "Hallo ${empl.firstName}.", "Willkommen bei ORBITCARE!", onComplete = {
+                confirmDialog.showConfirmation(this, getString(R.string.welcomeText, empl.firstName), getString(R.string.welcomeDialog), onComplete = {
                     startActivity(calendarActivity)
                 })
             } else {
-                // Display error message if authentication fails
                 Log.d("Debugg", "SignINButton failed")
                 signInError.visibility = View.VISIBLE
             }
