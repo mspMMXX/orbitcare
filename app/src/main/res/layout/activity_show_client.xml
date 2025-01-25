@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="50dp"
-        android:text="@string/clientOverview"
+        android:text="@string/clientDetails"
         android:textSize="20sp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"

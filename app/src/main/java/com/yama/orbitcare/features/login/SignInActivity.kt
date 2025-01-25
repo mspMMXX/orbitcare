@@ -16,8 +16,13 @@ import com.yama.orbitcare.features.calendar.CalendarActivity
 import com.yama.orbitcare.features.globalUser.GlobalUser
 import java.security.MessageDigest
 
+/**
+ * Handles user sign-in by authenticating credentials against Firestore data.
+ * Provides navigation to the sign-up screens and the main application upon successful sign-in.
+ */
 class SignInActivity : AppCompatActivity() {
 
+    // Firestore database instance for user authentication
     private val db = FirestoreDatabase()
 
     // UI components for user input and error messages
@@ -25,16 +30,13 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     private lateinit var signInError: TextView
 
+    /**
+     * Initializes the activity and sets up the UI components.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Enable edge-to-edge layout display
         enableEdgeToEdge()
-
-        // Set the layout for this activity
         setContentView(R.layout.signin_activity)
-
-        // Adjust UI padding for system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -47,43 +49,49 @@ class SignInActivity : AppCompatActivity() {
         signInError = findViewById(R.id.signInError)
     }
 
-    // Navigate to the SignUpOrganisationActivity
+    /**
+     * Navigates to the SignUpOrganisationActivity when the organisation sign-up button is clicked.
+     */
     fun organisationSignUpButton(view: View) {
         val organisationActivity = Intent(this, SignUpOrganisationActivity::class.java)
         startActivity(organisationActivity)
     }
 
-    // Navigate to the SignUpEmployeeActivity
+    /**
+     * Navigates to the SignUpEmployeeActivity when the employee sign-up button is clicked.
+     */
     fun employeeSignUpButton(view:View) {
         val employeeActivity = Intent(this, SignUpEmployeeActivity::class.java)
         startActivity(employeeActivity)
     }
 
-    //Authenticate the user bay verifying email and password against Firestore
+    /**
+     * Authenticates the user by verifying email and password against Firestore.
+     * If successful, navigates to the CalendarActivity.
+     * Displays an error message if authentication fails.
+     */
     fun signInButton(view: View) {
-
-        // Retrieve employee data based on the provided email
         db.getEmployeeWithFieldValue("email", emailEditText.text.toString()) { empl ->
-            // Check if email matches and the provided password (after hashing) matches the stored hash
             if(empl?.email.toString() == emailEditText.text.toString() && empl?.passwordHash == pwdHash(passwordEditText.text.toString())) {
-                //Create the currentUser
                 GlobalUser.currentUser = empl
-
-                // Navigate to the CalendarActivity
                 val calendarActivity = Intent(this, CalendarActivity::class.java)
                 val confirmDialog = ConfirmationDialog()
-                confirmDialog.showConfirmation(this, "Hallo ${empl.firstName}.", "Willkommen bei ORBITCARE!", onComplete = {
+                confirmDialog.showConfirmation(this, getString(R.string.welcomeText, empl.firstName), getString(R.string.welcomeDialog), onComplete = {
                     startActivity(calendarActivity)
                 })
             } else {
-                // Display error message if authentication fails
                 Log.d("Debugg", "SignINButton failed")
                 signInError.visibility = View.VISIBLE
             }
         }
     }
 
-    // Hash the input string using SHA-256 and return the hexadecimal string
+    /**
+     * Hashes the input string using SHA-256 and returns the resulting hexadecimal string.
+     *
+     * @param input The input string to be hashed.
+     * @return The hashed string in hexadecimal format.
+     */
     private fun pwdHash(input: String): String {
         val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
         return bytes.joinToString("") { "%02x".format(it) }

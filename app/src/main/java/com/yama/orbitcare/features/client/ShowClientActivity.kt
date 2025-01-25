@@ -13,10 +13,16 @@ import com.yama.orbitcare.R
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import org.w3c.dom.Text
 
+/**
+ * Displays detailed information about a specific client.
+ * Retrieves client data from the database and fills the UI fields.
+ */
 class ShowClientActivity : AppCompatActivity() {
 
+    // Instance of FirestoreDatabase for database operations
     private val db = FirestoreDatabase()
 
+    // UI elements for displaying client information
     private lateinit var firstNameText: TextView
     private lateinit var lastNameText: TextView
     private lateinit var streetText: TextView
@@ -25,6 +31,10 @@ class ShowClientActivity : AppCompatActivity() {
     private lateinit var emailText: TextView
     private lateinit var phoneText: TextView
 
+    /**
+     * Called when the activity is created.
+     * Sets up the UI, initializes views, and retrieves client information.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,6 +48,9 @@ class ShowClientActivity : AppCompatActivity() {
         setClientInformation()
     }
 
+    /**
+     * Links UI components to their corresponding properties.
+     */
     private fun initializeViews() {
         firstNameText = findViewById(R.id.firstNameText)
         lastNameText = findViewById(R.id.lastNameText)
@@ -48,6 +61,10 @@ class ShowClientActivity : AppCompatActivity() {
         phoneText = findViewById(R.id.phoneText)
     }
 
+    /**
+     * Retrieves client information from the database based on the provided client ID
+     * and populates the corresponding fields in the UI.
+     */
     private fun setClientInformation() {
         val clientId = intent.getStringExtra("CLIENT_ID")
         if (clientId.isNullOrEmpty()) {
@@ -68,9 +85,14 @@ class ShowClientActivity : AppCompatActivity() {
                 }
             })
         }
-
     }
 
+    /**
+     * Action for the exit button.
+     * Navigates back to the ClientActivity.
+     *
+     * @param view The view that triggered the action.
+     */
     fun exitButtonAction(view: View) {
         startActivity(Intent(this, ClientActivity::class.java))
     }

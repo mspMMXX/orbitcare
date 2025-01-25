@@ -16,7 +16,10 @@ class FirestoreDatabase {
 
     // ---------- Add Documents to Firestore ----------
 
-    // Adds an Organisation object to the Organisation Collection
+    /**
+     * Adds an Organisation object to the Organisation collection.
+     * Executes onSuccess on success or onFailure with an exception on failure.
+     */
     fun addOrganisation(organisation: Organisation, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Organisation")
             .add(organisation)
@@ -24,7 +27,10 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
-    // Adds an Employee object to the Employee Collection
+    /**
+     * Adds an Employee object to the Employee collection.
+     * Executes onSuccess on success or onFailure with an exception on failure.
+     */
     fun addEmployee(employee: Employee, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Employee")
             .document(employee.id)
@@ -33,7 +39,10 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
-    // Adds an Client object to the Client Collection
+    /**
+     * Adds a Client object to the Client collection.
+     * Executes onSuccess on success or onFailure with an exception on failure.
+     */
     fun addClient(client: Client, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Client")
             .document(client.id)
@@ -42,7 +51,10 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
-    // Adds an Event object to the Event Collection
+    /**
+     * Adds an Event object to the Event collection.
+     * Executes onSuccess on success or onFailure with an exception on failure.
+     */
     fun addEvent(event: Event, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Event")
             .document(event.id)
@@ -51,7 +63,7 @@ class FirestoreDatabase {
             .addOnFailureListener { e -> onFailure(e) }
     }
 
-    // ---------- Get All Documents from Firestore ----------
+    // ---------- Retrieve All Documents ----------
 
     /**
      * Retrieves all Organisation documents from the Organisation collection.
@@ -78,7 +90,6 @@ class FirestoreDatabase {
                 onComplete(null)
             }
     }
-
 
     /**
      * Retrieves all Client documents from the Client collection.
@@ -141,7 +152,6 @@ class FirestoreDatabase {
             onComplete(null)
             return
         }
-
         db.collection("Event")
             .whereEqualTo("employeeId", employeeId)
             .get()
@@ -185,7 +195,6 @@ class FirestoreDatabase {
                 Log.d("Organisation", "Loading organisation-doc failed", e)
                 onComplete(null)
             }
-
     }
 
     /**
@@ -409,7 +418,8 @@ class FirestoreDatabase {
     }
 
     /**
-     * Updates an Event document by its ID with the new Event data.
+     * Updates an existing Event document in the Event collection with new data.
+     * Executes onSuccess on success or onFailure with an exception on failure.
      */
     fun updateEvent(id: String, updateEvent: Event, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Event")
@@ -422,7 +432,8 @@ class FirestoreDatabase {
     // ---------- Delete Documents from Firestore ----------
 
     /**
-     * Deletes an Event document by its ID.
+     * Deletes an Event document from the Event collection by ID.
+     * Executes onSuccess on success or onFailure with an exception on failure.
      */
     fun deleteEvent(id: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("Event")

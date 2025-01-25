@@ -15,15 +15,25 @@ import com.yama.orbitcare.data.models.Employee
 import com.yama.orbitcare.features.client.ClientActivity
 import org.w3c.dom.Text
 
+/**
+ * Displays detailed information about a specific employee.
+ * Retrieves employee data from the database and fills the UI fields.
+ */
 class ShowEmployeeActivity : AppCompatActivity() {
 
+    // Instance of FirestoreDatabase for database operations
     private val db = FirestoreDatabase()
 
+    // UI elements for displaying employee information
     private lateinit var firstNameText: TextView
     private lateinit var lastNameText: TextView
     private lateinit var emailText: TextView
     private lateinit var phoneText: TextView
 
+    /**
+     * Called when the activity is created.
+     * Sets up the UI, initializes views, and retrieves employee information.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -37,6 +47,9 @@ class ShowEmployeeActivity : AppCompatActivity() {
         setEmployeeInformation()
     }
 
+    /**
+     * Links UI components to their corresponding properties.
+     */
     private fun initializeViews() {
         firstNameText = findViewById(R.id.firstNameText)
         lastNameText = findViewById(R.id.lastNameText)
@@ -44,6 +57,10 @@ class ShowEmployeeActivity : AppCompatActivity() {
         phoneText = findViewById(R.id.phoneText)
     }
 
+    /**
+     * Retrieves employee information from the database based on the provided employee ID
+     * and populates the corresponding fields in the UI.
+     */
     private fun setEmployeeInformation() {
         val employeeId = intent.getStringExtra("EmployeeId")
         if (employeeId.isNullOrEmpty()) {
@@ -58,9 +75,14 @@ class ShowEmployeeActivity : AppCompatActivity() {
                 }
             })
         }
-
     }
 
+    /**
+     * Action for the exit button.
+     * Navigates back to the EmployeeActivity.
+     *
+     * @param view The view that triggered the action.
+     */
     fun exitButtonAction(view: View) {
         startActivity(Intent(this, EmployeeActivity::class.java))
     }

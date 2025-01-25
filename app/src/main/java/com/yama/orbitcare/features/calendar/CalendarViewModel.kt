@@ -107,7 +107,6 @@ class CalendarViewModel() : ViewModel() {
                 eventType = eventType,
                 notes = notes,
                 color = color,
-                view = view
             )
 
             // Update event with id in Firestore

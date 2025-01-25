@@ -17,13 +17,26 @@ import com.yama.orbitcare.features.client.ClientActivity
 import com.yama.orbitcare.features.client.ShowClientActivity
 import com.yama.orbitcare.features.globalUser.GlobalUser
 
+/**
+ * Displays a list of employees and provides navigation options.
+ * Handles employee-related actions such as viewing details of an employee.
+ */
 class EmployeeActivity : AppCompatActivity() {
 
+    // Instance of FirestoreDatabase for database operations
     private val db = FirestoreDatabase()
+
+    // UI elements
     private lateinit var bottomNavigation: BottomNavigationView
-    private var employees = mutableListOf<Employee>()
     private lateinit var employeeListContainer: LinearLayout
 
+    // Local list of employees
+    private var employees = mutableListOf<Employee>()
+
+    /**
+     * Called when the activity is created.
+     * Sets up the UI, initializes views, and retrieves the list of employees.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,38 +51,44 @@ class EmployeeActivity : AppCompatActivity() {
         setEmployeeList()
     }
 
+    /**
+     * Links UI components to their corresponding properties.
+     */
     private fun initializeViews() {
         bottomNavigation = findViewById(R.id.bottomNavigation)
         employeeListContainer = findViewById(R.id.employeeListContainer)
     }
 
+    /**
+     * Configures the bottom navigation menu with click listeners for each menu item.
+     */
     private fun setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_calendar -> {
-                    // Start ClientActivity
                     startActivity(Intent(this, CalendarActivity::class.java))
-                    finish() // Close current Activity
+                    finish()
                     true
                 }
                 R.id.navigation_person -> {
                     // Start ClientView
                     startActivity(Intent(this, ClientActivity::class.java))
-                    finish() // Close current Activity
+                    finish()
                     true
                 }
                 R.id.navigation_group -> {
-                    // Already in EmployeeActivity
                     true
                 }
                 else -> false
             }
         }
-
-        // Set active menu button
         bottomNavigation.selectedItemId = R.id.navigation_group
     }
 
+    /**
+     * Retrieves the list of employees from the database and displays them as buttons in the UI.
+     * Filters employees based on the organisation ID of the current user.
+     */
     private fun setEmployeeList() {
         val currentUser = GlobalUser.currentUser
         if (currentUser != null) {
@@ -93,6 +112,11 @@ class EmployeeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Opens the details page for a specific employee.
+     *
+     * @param employeeId The ID of the employee to view.
+     */
     private fun showEmployee(employeeId: String) {
         val intent = Intent(this, ShowEmployeeActivity::class.java).apply {
             putExtra("EmployeeId", employeeId)

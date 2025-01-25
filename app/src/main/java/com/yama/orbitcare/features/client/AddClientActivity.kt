@@ -14,10 +14,16 @@ import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Client
 import com.yama.orbitcare.features.globalUser.GlobalUser
 
+/**
+ * Activity to add a new client to the system.
+ * Handles user input, saves the client to the Firestore database, and navigates between views.
+ */
 class AddClientActivity : AppCompatActivity() {
 
+    // Instance of FirestoreDatabase for database operations
     private val db = FirestoreDatabase()
 
+    // UI elements for client input
     private lateinit var firstNameText: EditText
     private lateinit var lastNameText: EditText
     private lateinit var streetText: EditText
@@ -26,6 +32,10 @@ class AddClientActivity : AppCompatActivity() {
     private lateinit var emailText: EditText
     private lateinit var phoneText: EditText
 
+    /**
+     * Called when the activity is first created.
+     * Sets up the UI, initializes the views, and applies edge-to-edge design.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,6 +48,10 @@ class AddClientActivity : AppCompatActivity() {
         initializeViews()
     }
 
+    /**
+     * Initializes the views for user input fields.
+     * Links XML elements to their corresponding properties in the class.
+     */
     private fun initializeViews() {
         firstNameText = findViewById(R.id.firstNameText)
         lastNameText = findViewById(R.id.lastNameText)
@@ -48,6 +62,13 @@ class AddClientActivity : AppCompatActivity() {
         phoneText = findViewById(R.id.phoneText)
     }
 
+    /**
+     * Action for the save button.
+     * Creates a Client object from user input and saves it to the database.
+     * Navigates back to the ClientActivity upon success or logs an error on failure.
+     *
+     * @param view The view that triggered the action.
+     */
     fun saveButtonAction(view: View) {
         val currentUser = GlobalUser.currentUser
         if (currentUser != null) {
@@ -61,7 +82,6 @@ class AddClientActivity : AppCompatActivity() {
                 email = emailText.text.toString(),
                 phone = phoneText.text.toString()
             )
-
             db.addClient(client, onSuccess = {
                 Log.d("Debugg", "Client saved!")
                 startActivity(Intent(this, ClientActivity::class.java))
@@ -71,6 +91,12 @@ class AddClientActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Action for the cancel button.
+     * Navigates back to the ClientActivity without saving any data.
+     *
+     * @param view The view that triggered the action.
+     */
     fun cancelButtonAction(view: View) {
         startActivity(Intent(this, ClientActivity::class.java))
     }

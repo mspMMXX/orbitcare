@@ -19,13 +19,26 @@ import com.yama.orbitcare.features.employee.EmployeeActivity
 import com.yama.orbitcare.features.globalUser.GlobalUser
 import com.yama.orbitcare.features.login.SignInActivity
 
+/**
+ * Displays a list of clients and provides navigation options.
+ * Handles client-related actions such as viewing details or adding new clients.
+ */
 class ClientActivity : AppCompatActivity() {
 
+    // UI elements
     private lateinit var bottomNavigation: BottomNavigationView
-    private val db = FirestoreDatabase()
     private lateinit var clientListContainer: LinearLayout
+
+    // Database instance for retrieving clients
+    private val db = FirestoreDatabase()
+
+    // Local list of clients
     private var clients = mutableListOf<Client>()
 
+    /**
+     * Called when the activity is created.
+     * Sets up the UI, initializes views, loads the client list, and configures bottom navigation.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -40,11 +53,17 @@ class ClientActivity : AppCompatActivity() {
         setupBottomNavigation()
     }
 
+    /**
+     * Links UI components to their corresponding properties.
+     */
     private fun initializeViews() {
         bottomNavigation = findViewById(R.id.bottomNavigation)
         clientListContainer = findViewById(R.id.clientListContainer)
     }
 
+    /**
+     * Configures the bottom navigation menu with click listeners for each menu item.
+     */
     private fun setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -72,6 +91,10 @@ class ClientActivity : AppCompatActivity() {
         bottomNavigation.selectedItemId = R.id.navigation_person
     }
 
+    /**
+     * Retrieves the list of clients from the database and displays them as buttons in the UI.
+     * Only clients associated with the current user's organisation are displayed.
+     */
     private fun setClientList() {
         val currentUser = GlobalUser.currentUser
         if (currentUser != null) {
@@ -97,14 +120,25 @@ class ClientActivity : AppCompatActivity() {
                 } else {
                     Log.d("Debugg", "No Clients found in DB")
                 }
-        }
+            }
         }
     }
 
+    /**
+     * Action for the "Add Client" button.
+     * Navigates to AddClientActivity to create a new client.
+     *
+     * @param view The view that triggered the action.
+     */
     fun addClientButton(view: View) {
         startActivity(Intent(this, AddClientActivity::class.java))
     }
 
+    /**
+     * Opens the details page for a specific client.
+     *
+     * @param clientId The ID of the client to view.
+     */
     private fun showClient(clientId: String) {
         val intent = Intent(this, ShowClientActivity::class.java).apply {
             putExtra("CLIENT_ID", clientId)
