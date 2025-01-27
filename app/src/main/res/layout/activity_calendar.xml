@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:layout_marginTop="22dp">
 
             <ImageButton
                 android:id="@+id/prevMonth"
@@ -65,7 +66,7 @@
             android:columnCount="7"
             android:paddingHorizontal="16dp"
             android:rowCount="6">
-            
+
         </GridLayout>
 
         <!-- Bottom Navigation -->
@@ -92,7 +93,7 @@
                 android:layout_gravity="bottom|start"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="122dp"
                 android:contentDescription="Settings Menu"
                 android:src="@drawable/ic_menu" />
             <!-- Floating Action Button - Add-->
@@ -103,7 +104,7 @@
                 android:layout_gravity="bottom|end"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="122dp"
                 android:contentDescription="Add Event"
                 android:src="@drawable/ic_add" />
         </FrameLayout>

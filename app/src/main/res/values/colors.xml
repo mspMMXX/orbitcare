@@ -4,4 +4,5 @@
     <color name="secondary">#FFFFFFFF</color>
     <color name="orbitBlue">#2A6BB7</color>
     <color name="errorRed">#FF0000</color>
+    <color name="arrow_tint">#000000</color>
 </resources>
