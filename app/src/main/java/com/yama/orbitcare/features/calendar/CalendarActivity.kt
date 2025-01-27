@@ -57,12 +57,10 @@ class CalendarActivity : AppCompatActivity() {
     private val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.GERMAN)
     private var selectedDay: Int? = null
 
-    // Calendar View enum
-    //private var currentView = CalendarView.MONTH
-
     // CalendarViewModel
     private val viewModel: CalendarViewModel by viewModels()
 
+    // Defines available calendar views
     enum class CalendarView {
         MONTH, WEEK, DAY
     }
@@ -73,8 +71,8 @@ class CalendarActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_calendar)
 
+        // Verify user authentication
         val employeeId = GlobalUser.currentUser?.id
-
         if (employeeId.isNullOrEmpty()) {
             val signInIntent = Intent(this, SignInActivity::class.java)
             startActivity(signInIntent)
@@ -92,15 +90,15 @@ class CalendarActivity : AppCompatActivity() {
         viewModel.initialize(employeeId)
         initializeViews()
         setupCalendar()
-        //updateCalendarView()
         setupEventButtons()
         setupObservers()
         setupBottomNavigation()
     }
 
-    // Observe Data
+    // Set up observers for LiveData from ViewModel to update UI accordingly
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
+        // Observe data changes
         viewModel.currentDate.observe(this) { newDateTime ->
             // Synchronize calendar variable with ViewModel
             calendar.set(newDateTime.year,
@@ -109,14 +107,17 @@ class CalendarActivity : AppCompatActivity() {
             updateCalendarView()
         }
 
+        // Observe events update
         viewModel.events.observe(this) { events ->
             updateCalendarView()
         }
 
+        // Observe view mode changes
         viewModel.currentView.observe(this) {
             updateCalendarView()
         }
 
+        // Observe selected day changes
         viewModel.selectedDay.observe(this) {
             updateCalendarView()
         }
@@ -206,11 +207,15 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun switchToDayView() {
-        /*currentView = CalendarView.DAY
-        updateCalendarView()*/
         viewModel.switchView(CalendarView.DAY)
     }
 
+    /**
+     * Displays dialog for adding new calendar events
+     * @param presetHour Optional hour to pre-fill in the dialog
+     * @param presetMinute Optional minute to pre-fill in the dialog
+     * @param presetDate Optional date to pre-fill in the dialog
+     */
     private fun showAddEventDialog(presetHour: Int? = null, presetMinute: Int? = null, presetDate: Calendar? = null) {
         // Alert Dialog to add event
         val builder = AlertDialog.Builder(this)
@@ -390,6 +395,7 @@ class CalendarActivity : AppCompatActivity() {
         viewModel.removeEvent(event)
     }
 
+    // Updates the calendar view based on current view mode (Month/Week/Day)
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateCalendarView() {
         // Update Month and Year in Header
@@ -420,6 +426,10 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Create a formatted TextView for displaying an event
+     * Handle click events for event editing
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createEventView(event: Event): TextView {
         return TextView(this).apply {
@@ -444,6 +454,10 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Update the month view showing a grid of days with events
+     * Handle day selection and event display
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateMonthView() {
         // Add Weekday Headers
@@ -531,6 +545,11 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Update the week view showing a grid of days with events
+     * Handle day selection and event display
+     * Show events in scrollview
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateWeekView() {
         calendarGrid.removeAllViews()
@@ -673,6 +692,10 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.addView(scrollView)
     }
 
+    /**
+     * Update the day view showing a scrollview with events and day times
+     * Handle time selection and event display
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateDayView() {
         calendarGrid.removeAllViews()
@@ -789,6 +812,7 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.addView(scrollView)
     }
 
+    // Add headers for month and week view
     private fun addWeekDayHeaders() {
         val weekDays = arrayOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
         for (day in weekDays) {
@@ -808,54 +832,7 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun addDay(dayOfMonth: Int) {
-        val dayView = TextView(this).apply {
-            text = dayOfMonth.toString()
-            gravity = Gravity.CENTER
-
-            // Variables for max height per day
-            val displayMetrics = resources.displayMetrics
-            val screenHeight = displayMetrics.heightPixels
-            val dayHeight = screenHeight / 8 // 6 Rows + Header + Week days
-
-            layoutParams = GridLayout.LayoutParams().apply {
-                width = 0
-                height = dayHeight
-                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                setMargins(8, 8, 8, 8)
-            }
-            setPadding(8, 16, 8, 16)
-            textSize = 16f
-
-            when {
-                isCurrentDay(dayOfMonth) -> {
-                    setBackgroundResource(R.drawable.current_day_background)
-                    setTextColor(Color.WHITE)
-                }
-                dayOfMonth == selectedDay -> {
-                    setBackgroundResource(R.drawable.selected_day_background)
-                }
-            }
-
-            setOnClickListener {
-                selectedDay = if (selectedDay == dayOfMonth) null else dayOfMonth
-
-                updateCalendarView()
-
-                val date = Calendar.getInstance().apply {
-                    set(calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        dayOfMonth)
-                }
-                Toast.makeText(context,
-                    SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(date.time),
-                    Toast.LENGTH_SHORT).show()
-            }
-        }
-        calendarGrid.addView(dayView)
-    }
-
+    // Calculate empty spaces for calendar grid to show days in correct spaces
     private fun addEmptyDay() {
         val emptyView = TextView(this).apply {
             layoutParams = GridLayout.LayoutParams().apply {
@@ -869,12 +846,26 @@ class CalendarActivity : AppCompatActivity() {
         calendarGrid.addView(emptyView)
     }
 
+    /**
+     * Check if a given day in the current month and year is today
+     * Use the class's calendar object for year and month context
+     *
+     * @param dayOfMonth The day to check
+     * @return true if the specified day is today
+     */
     private fun isCurrentDay(dayOfMonth: Int): Boolean {
         return calendar.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
                 calendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
                 dayOfMonth == currentDate.get(Calendar.DAY_OF_MONTH)
     }
 
+    /**
+     * Check if a given calendar date is today
+     * Compare all date components with the current date
+     *
+     * @param checkCalendar The calendar date to check
+     * @return true if the specified date is today
+     */
     private fun isCurrentDay(checkCalendar: Calendar): Boolean {
         return checkCalendar.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
                 checkCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
@@ -882,24 +873,6 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun setupCalendar() {
-        // Click Listener for Navigation
-        /*prevMonth.setOnClickListener {
-            when (currentView) {
-                CalendarView.MONTH -> calendar.add(Calendar.MONTH, -1)
-                CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, -1)
-                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, -1)
-            }
-            updateCalendarView()
-        }
-
-        nextMonth.setOnClickListener {
-            when (currentView) {
-                CalendarView.MONTH -> calendar.add(Calendar.MONTH, 1)
-                CalendarView.WEEK -> calendar.add(Calendar.WEEK_OF_YEAR, 1)
-                CalendarView.DAY -> calendar.add(Calendar.DAY_OF_YEAR, 1)
-            }
-            updateCalendarView()
-        }*/
         prevMonth.setOnClickListener {
             viewModel.navigatePrevious()
         }
