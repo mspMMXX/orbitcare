@@ -2,6 +2,7 @@ package com.yama.orbitcare.features.calendar
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -129,6 +130,10 @@ class CalendarActivity : AppCompatActivity() {
         addEventButton = findViewById(R.id.addEventButton)
         settingsButton = findViewById(R.id.settingsButton)
         bottomNavigation = findViewById(R.id.bottomNavigation)
+
+        // Darkmode for NavArrows
+        prevMonth.imageTintList = ColorStateList.valueOf(getColor(R.color.primary))
+        nextMonth.imageTintList = ColorStateList.valueOf(getColor(R.color.primary))
     }
 
     private fun setupBottomNavigation() {
@@ -385,22 +390,6 @@ class CalendarActivity : AppCompatActivity() {
         viewModel.removeEvent(event)
     }
 
-    // Present Event in view
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun addEventToView(event: Event, container: ViewGroup) {
-        val eventView = TextView(this).apply {
-            text = "${event.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${event.title}"
-            setPadding(8, 4, 8, 4)
-            setBackgroundResource(R.drawable.event_background)
-            setTextColor(Color.WHITE)
-
-            setOnClickListener {
-                showUpdateEventDialog(event)
-            }
-        }
-        container.addView(eventView)
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateCalendarView() {
         // Update Month and Year in Header
@@ -476,12 +465,6 @@ class CalendarActivity : AppCompatActivity() {
             addEmptyDay()
         }
 
-        // Add days of Month
-        /*for (dayOfMonth in 1..maxDaysInMonth) {
-            addDay(dayOfMonth)
-        }*/
-
-        // Days with events
         for (dayOfMonth in 1..maxDaysInMonth) {
             val dayContainer = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
@@ -712,7 +695,7 @@ class CalendarActivity : AppCompatActivity() {
             }
             setPadding(8, 16, 8, 16)
             textSize = 18f
-            setTextColor(Color.BLACK)
+            setTextColor(getColor(R.color.primary))
         }
         calendarGrid.addView(dateHeader)
 
