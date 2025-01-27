@@ -8,8 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.GridLayout
@@ -18,7 +16,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -65,7 +62,6 @@ class CalendarActivity : AppCompatActivity() {
         MONTH, WEEK, DAY
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -96,7 +92,6 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     // Set up observers for LiveData from ViewModel to update UI accordingly
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setupObservers() {
         // Observe data changes
         viewModel.currentDate.observe(this) { newDateTime ->
@@ -176,15 +171,16 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun showViewSelectionDialog() {
         // Create dialog for view selection
-        val items = arrayOf("Monatsansicht", "Wochenansicht", "Tagesansicht")
+        val items = arrayOf(getString(R.string.monthview),
+            getString(R.string.weekview), getString(R.string.dayview))
         var selectedView = 0 // Default = Monatsansicht
 
         AlertDialog.Builder(this)
-            .setTitle("Wähle Kalenderansicht")
+            .setTitle(getString(R.string.calendarview))
             .setSingleChoiceItems(items, selectedView) { dialog, which ->
                 selectedView = which
             }
-            .setPositiveButton("Bestätigen") { dialog, _ ->
+            .setPositiveButton(getString(R.string.confirm)) { dialog, _ ->
                 when (selectedView) {
                     0 -> switchToMonthView()
                     1 -> switchToWeekView()
@@ -192,7 +188,7 @@ class CalendarActivity : AppCompatActivity() {
                 }
                 dialog.dismiss()
             }
-            .setNegativeButton("Abbrechen") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
             .show()
@@ -230,7 +226,11 @@ class CalendarActivity : AppCompatActivity() {
         val colorSpinner = dialogView.findViewById<Spinner>(R.id.eventColorSpinner)
 
         // Set up event type spinner
-        val eventTypes = arrayOf("Arztbesuch", "Hausbesuch", "Bürozeit", "Wochenplanung", "Feedbackrunde")
+        val eventTypes = arrayOf(getString(R.string.doctorvisit),
+            getString(R.string.housevisit), getString(R.string.officetime),
+            getString(R.string.weekplanning), getString(
+            R.string.feedback
+        ))
         val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, eventTypes)
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         typeSpinner.adapter = typeAdapter
@@ -239,11 +239,11 @@ class CalendarActivity : AppCompatActivity() {
         val colors = arrayOf("#FF4444", "#33B5E5", "#99CC00", "#FFBB33", "#AA66CC")
         val colorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors.map {
             when(it) {
-                "#FF4444" -> "Rot"
-                "#33B5E5" -> "Blau"
-                "#99CC00" -> "Grün"
-                "#FFBB33" -> "Orange"
-                "#AA66CC" -> "Lila"
+                "#FF4444" -> getString(R.string.red)
+                "#33B5E5" -> getString(R.string.blue)
+                "#99CC00" -> getString(R.string.green)
+                "#FFBB33" -> getString(R.string.orange)
+                "#AA66CC" -> getString(R.string.purple)
                 else -> "Default"
             }
         })
@@ -267,8 +267,8 @@ class CalendarActivity : AppCompatActivity() {
         timeEdit.setText(SimpleDateFormat("HH:mm", Locale.GERMAN).format(eventDate))
 
         builder.setView(dialogView)
-            .setTitle("Neues Event")
-            .setPositiveButton("Hinzufügen") { _, _ ->
+            .setTitle(getString(R.string.new_event))
+            .setPositiveButton(getString(R.string.add)) { _, _ ->
                 val eventTitle = titleEdit.text.toString()
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
@@ -286,7 +286,7 @@ class CalendarActivity : AppCompatActivity() {
                     color = color
                 )
             }
-            .setNegativeButton("Abbrechen") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
             .show()
@@ -306,7 +306,11 @@ class CalendarActivity : AppCompatActivity() {
         val colorSpinner = dialogView.findViewById<Spinner>(R.id.eventColorSpinner)
 
         // Set up event spinner
-        val eventTypes = arrayOf("Arztbesuch", "Hausbesuch", "Bürozeit", "Wochenplanung", "Feedbackrunde")
+        val eventTypes = arrayOf(getString(R.string.doctorvisit),
+            getString(R.string.housevisit), getString(R.string.officetime),
+            getString(R.string.weekplanning), getString(
+                R.string.feedback
+            ))
         val typeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, eventTypes)
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         typeSpinner.adapter = typeAdapter
@@ -315,11 +319,11 @@ class CalendarActivity : AppCompatActivity() {
         val colors = arrayOf("#FF4444", "#33B5E5", "#99CC00", "#FFBB33", "#AA66CC")
         val colorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, colors.map {
             when(it) {
-                "#FF4444" -> "Rot"
-                "#33B5E5" -> "Blau"
-                "#99CC00" -> "Grün"
-                "#FFBB33" -> "Orange"
-                "#AA66CC" -> "Lila"
+                "#FF4444" -> getString(R.string.red)
+                "#33B5E5" -> getString(R.string.blue)
+                "#99CC00" -> getString(R.string.green)
+                "#FFBB33" -> getString(R.string.orange)
+                "#AA66CC" -> getString(R.string.purple)
                 else -> "Default"
             }
         })
@@ -338,8 +342,8 @@ class CalendarActivity : AppCompatActivity() {
         notesEdit.setText(event.notes)
 
         builder.setView(dialogView)
-            .setTitle("Event bearbeiten")
-            .setPositiveButton("Aktualisieren") { _, _ ->
+            .setTitle(getString(R.string.event_edit))
+            .setPositiveButton(getString(R.string.refresh)) { _, _ ->
                 val eventTitle = titleEdit.text.toString()
                 val eventDate = dateEdit.text.toString()
                 val eventTime = timeEdit.text.toString()
@@ -349,10 +353,10 @@ class CalendarActivity : AppCompatActivity() {
 
                 updateEvent(event, eventTitle, eventDate, eventTime, eventType, notes, color)
             }
-            .setNegativeButton("Abbrechen") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
-            .setNeutralButton("Löschen") { _, _ ->
+            .setNeutralButton(getString(R.string.delete)) { _, _ ->
                 showDeleteEventDialog(event)
             }
             .show()
@@ -360,12 +364,12 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun showDeleteEventDialog(event: Event) {
         AlertDialog.Builder(this)
-            .setTitle("Event löschen")
-            .setMessage("Möchten Sie das Event '${event.title}' wirklich löschen?")
-            .setPositiveButton("Löschen") { _, _ ->
+            .setTitle(getString(R.string.delete_event))
+            .setMessage(getString(R.string.delete_event_confirmation, event.title))
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 removeEvent(event)
             }
-            .setNegativeButton("Abbrechen") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
             .show()
@@ -814,7 +818,13 @@ class CalendarActivity : AppCompatActivity() {
 
     // Add headers for month and week view
     private fun addWeekDayHeaders() {
-        val weekDays = arrayOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
+        val weekDays = arrayOf(getString(R.string.monday),
+            getString(R.string.tuesday),
+            getString(R.string.wednesday),
+            getString(R.string.thursday),
+            getString(R.string.friday),
+            getString(R.string.saturday),
+            getString(R.string.sunday))
         for (day in weekDays) {
             val dayView = TextView(this).apply {
                 text = day
@@ -826,7 +836,7 @@ class CalendarActivity : AppCompatActivity() {
                     setMargins(8, 8, 8, 8)
                 }
                 setPadding(8, 16, 8, 16)
-                setTextColor(Color.GRAY) // Wochentage in Grau
+                setTextColor(Color.GRAY) // Weekday in grey
             }
             calendarGrid.addView(dayView)
         }
