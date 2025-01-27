@@ -7,12 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yama.orbitcare.data.database.FirestoreDatabase
 import com.yama.orbitcare.data.models.Event
-import com.yama.orbitcare.features.login.SignInActivity
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.util.UUID
-
 
 @SuppressLint("NewApi")
 class CalendarViewModel() : ViewModel() {
@@ -133,31 +130,6 @@ class CalendarViewModel() : ViewModel() {
         })
     }
 
-    // Get specific Events for specific dates
-    fun getEventsForDate(date: LocalDate): List<Event> {
-        return _events.value.orEmpty().filter {
-            it.dateTime.toLocalDate() == date
-        }
-    }
-
-    // Get specific Events for specific weeks
-    @SuppressLint("NewApi")
-    fun getEventsForWeek(weekStart: LocalDate): List<Event> {
-        val weekEnd = weekStart.plusDays(6)
-        return _events.value.orEmpty().filter { event ->
-            val eventDate = event.dateTime.toLocalDate()
-            !eventDate.isBefore(weekStart) && !eventDate.isAfter(weekEnd)
-        }
-    }
-
-    // Get specific Events for specific months
-    @SuppressLint("NewApi")
-    fun getEventsForMonth(year: Int, month: Int): List<Event> {
-        return _events.value.orEmpty().filter { event ->
-            event.dateTime.year == year && event.dateTime.monthValue == month
-        }
-    }
-
     // Navigate through views
     @SuppressLint("NewApi")
     fun navigateNext() {
@@ -169,6 +141,7 @@ class CalendarViewModel() : ViewModel() {
         }
     }
 
+    // Navigate through views
     @SuppressLint("NewApi")
     fun navigatePrevious() {
         when (_currentView.value) {
@@ -182,10 +155,6 @@ class CalendarViewModel() : ViewModel() {
     // View management
     fun switchView(view: CalendarActivity.CalendarView) {
         _currentView.value = view
-    }
-
-    fun selectDay(date: LocalDate) {
-        _selectedDay.value = date
     }
 
     private fun loadAllEvents() {
